@@ -32,7 +32,7 @@
 }
 
 .icon-button {
-  background-image: url("../../images/icons/menu-dots.svg");
+  background-image: url("../images/icons/menu-dots.svg");
   background-color: var(--bg-secondary-default);
   background-size: contain;
   background-position: center;
