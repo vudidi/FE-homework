@@ -30,3 +30,20 @@
 .page-button:hover {
   background-color: var(--bg-primary-hover);
 }
+
+.icon-button {
+  background-image: url("../../images/icons/menu-dots.svg");
+  background-color: var(--bg-secondary-default);
+  background-size: contain;
+  background-position: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  transition: all ease 0.5s;
+}
+
+.icon-button:hover {
+  background-color: var(--bg-secondary-hover);
+  border: 1px solid var(--border-hover);
+}
