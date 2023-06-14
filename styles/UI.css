@@ -1,0 +1,32 @@
+.button {
+  padding: 11.5px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 19px;
+  transition: all ease 0.5s;
+}
+
+.nav-button {
+  background-color: transparent;
+  border: 1px solid var(--bg-secondary-default);
+  color: var(--font-secondary);
+}
+
+.nav-button:hover {
+  background-color: var(--bg-secondary-hover);
+  color: var(--font-primary);
+}
+
+.nav-button_active {
+  background-color: var(--bg-secondary-default);
+  color: var(--font-primary);
+}
+
+.page-button {
+  background-color: var(--bg-primary-default);
+  color: var(--font-secondary);
+}
+
+.page-button:hover {
+  background-color: var(--bg-primary-hover);
+}

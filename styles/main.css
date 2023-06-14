@@ -1,0 +1,49 @@
+:root {
+  --bg-primary-default: #1f75cb;
+  --bg-primary-hover: #1068bf;
+  --bg-primary-active: #0b5cad;
+  --bg-disabled: #dcdcde;
+
+  --bg-secondary-default: #ffffff;
+  --bg-secondary-hover: #ececef;
+  --bg-secondary-active: #dcdcde;
+
+  --border-default: rgba(0, 0, 0, 0.15);
+  --border-hover: rgba(18, 19, 22, 0.5);
+  --border-active: #1c1c1c;
+  --border-error: #ee4222;
+  --border-disabled: rgba(0, 0, 0, 0.15);
+  --border-bronze: #9e6955;
+
+  --font-primary: #1c1c1c;
+  --font-secondary: #ffffff;
+  --font-disabled: #8e8e8e;
+  --font-error: #ee4222;
+  --font-placeholder: #d9d9d9;
+}
+
+body {
+  height: auto;
+  width: 100%;
+  font-family: "Open Sans", sans-serif;
+  font-size: 100%;
+  line-height: 1;
+  font-size: 14px;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
