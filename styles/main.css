@@ -25,6 +25,7 @@
 body {
   height: auto;
   width: 100%;
+  margin: 0;
   font-family: "Open Sans", sans-serif;
   font-size: 100%;
   line-height: 1;

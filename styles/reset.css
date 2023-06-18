@@ -1,3 +1,12 @@
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+main {
+  display: block;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -18,14 +27,12 @@ a:focus,
 a:active {
   outline: none;
 }
-
 nav,
 footer,
 header,
 aside {
   display: block;
 }
-
 input,
 button,
 textarea {
@@ -34,7 +41,6 @@ textarea {
 fieldset {
   padding: 0;
 }
-
 input::-ms-clear {
   display: none;
 }
@@ -45,6 +51,27 @@ button::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+button,
+input {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+a {
+  background-color: transparent;
+}
 a,
 a:visited {
   text-decoration: none;
@@ -52,13 +79,17 @@ a:visited {
 a:hover {
   text-decoration: none;
 }
+b,
+strong {
+  font-weight: bolder;
+}
 ul li {
   list-style: none;
 }
 img {
   vertical-align: top;
+  border-style: none;
 }
-
 h1,
 h2,
 h3,
@@ -67,4 +98,11 @@ h5,
 h6 {
   font-size: inherit;
   font-weight: 400;
+}
+template {
+  display: none;
+}
+
+[hidden] {
+  display: none;
 }
