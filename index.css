@@ -1,9 +1,0 @@
-@import url(./styles/reset.css);
-@import url(./vendor/fonts/openSans.css);
-@import url(./styles/main.css);
-@import url(./styles/UI.css);
-@import url(./styles/list.css);
-@import url(./pages/nav/style.css);
-@import url(./pages/noContent/style.css);
-@import url(./pages/projectEl/style.css);
-@import url(./pages/taskEl/style.css);
