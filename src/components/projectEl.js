@@ -19,7 +19,7 @@ function createProjectEl(data) {
 
   menuBtn.addEventListener("click", () => {
     dropDownMenu.classList.toggle("dropdown-menu_visible");
-    menuBtn.classList.toggle("list-project-btn_active");
+    menuBtn.classList.toggle("list-task-btn_active");
   });
 
   document.addEventListener("click", (e) => {

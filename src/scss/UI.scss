@@ -39,10 +39,12 @@
 .icon-button {
   position: relative;
   background-color: $bgSecondaryDefault;
-  padding: 5px 7px;
+  padding: 5px;
   border: 1px solid $borderDefault;
   border-radius: 4px;
   transition: all ease 0.5s;
+  display: flex;
+
   &:hover {
     background-color: $bgSecondaryHover;
     border: 1px solid $borderHover;

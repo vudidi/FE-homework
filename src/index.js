@@ -1,7 +1,7 @@
 import "@/index.html";
 import "@/scss/index.scss";
 import "@/utils/register.js";
-import { getOverflowValue } from "./utils/showTooltip.js";
+import getItemsList from "@/utils/getItemsList.js";
 import createHeader from "@/components/nav.js";
 import createNoContentBlock from "@/components/noContent.js";
 import receiveProjectEl from "@/components/projectEl.js";
@@ -22,21 +22,8 @@ function initApp() {
 
 initApp();
 
-projects.forEach((project) => {
-  receiveProjectEl(project);
-  getOverflowValue(".list-title");
-  getOverflowValue(".list-projectCode");
-  getOverflowValue(".list-create");
-  getOverflowValue(".list-update");
-});
-
-tasks.forEach((task) => {
-  receiveTaskEl(task);
-  getOverflowValue(".list-title");
-  getOverflowValue(".list-projectCode");
-  getOverflowValue(".list-create");
-  getOverflowValue(".list-update");
-});
+getItemsList(projects, receiveProjectEl);
+getItemsList(tasks, receiveTaskEl);
 
 const buttons = document.querySelectorAll(".button");
 const btnsId = [];
