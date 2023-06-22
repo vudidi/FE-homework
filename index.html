@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FE school</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+  </head>
+
+  <body>
+    <header class="header">
+      <nav class="header__nav">
+        <ul class="header__nav-items">
+          <li class="header__nav-item">
+            <a
+              id="projects-btn"
+              href="#projects"
+              class="button nav-button nav-button_active"
+              >Проекты</a
+            >
+          </li>
+          <li class="header__nav-item">
+            <a id="tasks-btn" href="#tasks" class="button nav-button">Задачи</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <div class="page">
+      <main class="content">
+        <section id="projects" class="list-section list-section_active">
+          <h1 class="list-title">Проекты</h1>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="project-create-XML" class="list-button button">
+                Создать с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-create-Fetch" class="list-button button">
+                Создать с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-create-Axios" class="list-button button">
+                Создать с Axios
+              </button>
+            </li>
+          </ul>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="project-get-XML" class="list-button button">
+                Получить с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-get-Fetch" class="list-button button">
+                Получить с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-get-Axios" class="list-button button">
+                Получить с Axios
+              </button>
+            </li>
+          </ul>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="project-update-XML" class="list-button button">
+                Редактировать с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-update-Fetch" class="list-button button">
+                Редактировать с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-update-Axios" class="list-button button">
+                Редактировать с Axios
+              </button>
+            </li>
+          </ul>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="project-delete-XML" class="list-button button">
+                Удалить с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-delete-Fetch" class="list-button button">
+                Удалить с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="project-delete-Axios" class="list-button button">
+                Удалить с Axios
+              </button>
+            </li>
+          </ul>
+        </section>
+        <section id="tasks" class="list-section">
+          <h1 class="list-title">Задачи</h1>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="task-create-XML" class="list-button button">
+                Создать с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-create-Fetch" class="list-button button">
+                Создать с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-create-Axios" class="list-button button">
+                Создать с Axios
+              </button>
+            </li>
+          </ul>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="task-get-XML" class="list-button button">
+                Получить с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-get-Fetch" class="list-button button">
+                Получить с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-get-Axios" class="list-button button">
+                Получить с Axios
+              </button>
+            </li>
+          </ul>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="task-update-XML" class="list-button button">
+                Редактировать с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-update-Fetch" class="list-button button">
+                Редактировать с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-update-Axios" class="list-button button">
+                Редактировать с Axios
+              </button>
+            </li>
+          </ul>
+          <ul class="list-items">
+            <li class="list-item">
+              <button id="task-delete-XML" class="list-button button">
+                Удалить с XML
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-delete-Fetch" class="list-button button">
+                Удалить с Fetch
+              </button>
+            </li>
+            <li class="list-item">
+              <button id="task-delete-Axios" class="list-button button">
+                Удалить с Axios
+              </button>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
