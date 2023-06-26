@@ -1,0 +1,108 @@
+.list {
+  &-item {
+    z-index: 1;
+    padding: 0 0 8px;
+    margin: 0 50px 30px;
+    border-bottom: 1px solid $borderActive;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &:hover .list-menu {
+      display: block;
+    }
+  }
+  &-wrapper {
+    width: 100%;
+  }
+  &-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  &-title {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontPrimary;
+    margin: 0 16px 6px 0;
+    display: block;
+    display: -webkit-box;
+    height: 38px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+  &-userAvatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    margin: 0 0 0 auto;
+  }
+  &-code {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontPrimary;
+    max-width: 215px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+  &-create {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontDisabled;
+    margin: 0 16px;
+    max-width: 320px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+  &-update {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontDisabled;
+    margin: 0 0 0 auto;
+    max-width: 320px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+  &-status {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontSecondary;
+    padding: 0 8px;
+    border-radius: 4px;
+    margin: 0 16px 0 0;
+    &_type {
+      &_draft {
+        background-color: $borderBronze;
+      }
+    }
+  }
+  &-menu {
+    display: none;
+    position: relative;
+  }
+  &-button {
+    margin: 0 0 0 16px;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .list {
+    &-create {
+      max-width: 220px;
+    }
+    &-update {
+      max-width: 220px;
+    }
+  }
+}

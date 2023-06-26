@@ -1,0 +1,36 @@
+.field {
+  width: 200px;
+  margin: 0 auto 20px;
+  &__input {
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid $borderDefault;
+    background-color: $bgSecondaryDefault;
+    color: $fontPrimary;
+    font-size: 14px;
+    transition: all ease 0.5s;
+    &::placeholder {
+      color: $fontPlaceholder;
+      font-size: 14px;
+    }
+    &:focus {
+      border: 1px solid $borderActive;
+    }
+    &_type {
+      &_error {
+        border: 1px solid $borderError;
+        &:focus {
+          border: 1px solid $borderError;
+        }
+      }
+      &_disabled {
+        pointer-events: none;
+        border: 1px solid $borderDisabled;
+        background-color: $bgSecondaryActive;
+        &::placeholder {
+          color: transparent;
+        }
+      }
+    }
+  }
+}

@@ -2,38 +2,42 @@
   <header class="header">
     <nav class="header__nav">
       <ul class="header__nav-items">
-        <li class="header__nav-item">
+        <li
+          v-for="(navBtn, index) in navBtns"
+          :key="index"
+          class="header__nav-item"
+        >
           <Link
-            id="projects"
-            v-bind:class="['button', 'nav-button']"
-            title="Проекты"
+            v-on:click-link="selectNavBtn"
+            v-bind:link="navBtn"
+            v-bind:class="[
+              'button',
+              'nav-button',
+              { 'nav-button_active': navBtn.isActive },
+            ]"
           />
         </li>
         <li class="header__nav-item">
-          <Link
-            id="tasks"
-            v-bind:class="['button', 'nav-button']"
-            title="Задачи"
-          />
-        </li>
-        <li class="header__nav-item">
-          <Link
-            id="users"
-            v-bind:class="['button', 'nav-button']"
-            title="Пользователи"
-          />
-        </li>
-        <li class="header__nav-item">
-          <button id="account" class="button user-button">
+          <Button
+            v-on:click-btn="selectUserBtn"
+            v-bind:button="userBtn"
+            v-bind:class="[
+              'button',
+              'user-button',
+              { 'user-button_active': userBtn.isActive },
+            ]"
+          >
             <img
               class="user-button__avatar"
               src="@/assets/images/avatar.png"
-              alt="Аватар пользователя"
-            />
-            <svg-icon iconClass="arrow-down"></svg-icon>
-          </button>
+              alt="Аватар пользователя" />
+            <svg-icon
+              v-bind:class="['user-button__icon']"
+              name="arrow-down"
+            ></svg-icon
+          ></Button>
 
-          <ul class="dropdown-menu">
+          <ul v-bind:class="['dropdown-menu']" v-if="isDropdownVisible">
             <li class="dropdown-menu__item">
               <a class="dropdown-menu__link" href="#">Профиль</a>
             </li>
@@ -48,13 +52,64 @@
 </template>
 
 <script>
-import Link from '@/components/Link/Link.vue';
-// import VueLogo from '@/assets/icons/arrow-down.svg';
-// import SvgIcon from '@/components/SvgIcon/SvgIcon.vue';
+import Link from '@/UI/Link/Link.vue';
+import Button from '@/UI/Button/Button.vue';
 
 export default {
+  props: {},
   components: {
     Link,
+    Button,
+  },
+  data() {
+    return {
+      navBtns: [
+        {
+          id: 'projects',
+          title: 'Проекты',
+          isActive: false,
+        },
+        {
+          id: 'tasks',
+          title: 'Задачи',
+          isActive: false,
+        },
+        {
+          id: 'users',
+          title: 'Пользователи',
+          isActive: false,
+        },
+      ],
+      userBtn: {
+        id: 'account',
+        isActive: false,
+      },
+    };
+  },
+  methods: {
+    selectNavBtn(event) {
+      this.userBtn.isActive = false;
+
+      this.navBtns.forEach((btn) => {
+        if (btn.id === event.target.id) {
+          btn.isActive = true;
+        } else {
+          btn.isActive = false;
+        }
+      });
+    },
+    selectUserBtn() {
+      this.userBtn.isActive = !this.userBtn.isActive;
+
+      this.navBtns.forEach((btn) => {
+        btn.isActive = false;
+      });
+    },
+  },
+  computed: {
+    isDropdownVisible() {
+      return this.userBtn.isActive;
+    },
   },
 };
 </script>

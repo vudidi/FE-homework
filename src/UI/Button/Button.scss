@@ -1,0 +1,59 @@
+.button {
+  display: block;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 19px;
+  transition: all ease 0.5s;
+}
+
+.nav-button {
+  background-color: transparent;
+  border: 1px solid $bgSecondaryDefault;
+  color: $fontSecondary;
+  &:hover {
+    background-color: $bgSecondaryHover;
+    color: $fontPrimary;
+  }
+  &_active {
+    pointer-events: none;
+    background-color: $bgSecondaryDefault;
+    color: $fontPrimary;
+  }
+}
+
+.page-button {
+  background-color: $bgPrimaryDefault;
+  color: $fontSecondary;
+  &:hover {
+    background-color: $bgPprimaryHover;
+  }
+}
+
+.icon-button {
+  position: relative;
+  background-color: $bgSecondaryDefault;
+  padding: 5px;
+  border: 1px solid $borderDefault;
+  border-radius: 4px;
+  transition: all ease 0.5s;
+  display: flex;
+  &:hover {
+    background-color: $bgSecondaryHover;
+    border: 1px solid $borderHover;
+  }
+  &_active {
+    background-color: $bgSecondaryActive;
+    border: 1px solid $borderHover;
+  }
+  &__icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+.list-project-btn_active,
+.list-task-btn_active {
+  background-color: $bgSecondaryActive;
+  border: 1px solid $borderActive;
+}

@@ -1,5 +1,15 @@
 @import '@/assets/fonts/openSans.css';
 @import 'variables.scss';
 @import 'main.scss';
+@import 'list.scss';
+@import 'tooltip.scss';
+@import 'dropdown.scss';
 @import '@/components/Navigation/Navigation.scss';
-@import '@/components/Link/Link.scss';
+@import '@/components/ProjectItem/ProjectItem.scss';
+@import '@/components/TaskItem/TaskItem.scss';
+@import '@/components/noContent/noContent.scss';
+@import '@/UI/Button/Button.scss';
+@import '@/UI/Input/Input.scss';
+@import '@/views/Profile/Profile.scss';
+@import '@/views/Projects/Projects.scss';
+@import '@/views/Tasks/Tasks.scss';

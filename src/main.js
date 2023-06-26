@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import '@/icons';
+import './helpers/register.js';
 
 Vue.config.productionTip = false;
 

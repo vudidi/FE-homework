@@ -14,7 +14,7 @@
 }
 
 .user-button {
-  padding: 9px 16px;
+  padding: 9px 16px !important;
   display: flex;
   align-items: center;
   border-radius: 4px;
@@ -24,8 +24,9 @@
   &:hover {
     border: 1px solid $bgSecondaryDefault;
   }
-  &:disabled {
-    cursor: default;
+  &_active {
+    background-color: $bgSecondaryDefault;
+    color: $fontPrimary;
     border: 1px solid $bgSecondaryDefault;
   }
   &__icon {
@@ -44,11 +45,7 @@
   }
 }
 
-.account_active {
-  background-color: $bgSecondaryDefault;
-}
-
-.account_active .user-button__icon {
+.user-button_active .user-button__icon {
   color: $fontDisabled;
   transform: rotate(180deg);
 }
