@@ -2,7 +2,7 @@
   <div class="tasks">
     <TaskItem
       v-for="task in tasks"
-      :key="task.id"
+      v-bind:key="task.id"
       v-bind:task="task"
       v-on:open-dropdown="openDropdownMenu"
     />

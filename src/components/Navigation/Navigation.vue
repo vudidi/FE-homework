@@ -33,7 +33,7 @@
               alt="Аватар пользователя" />
             <svg-icon
               v-bind:class="['user-button__icon']"
-              name="arrow-down"
+              name="arrow"
             ></svg-icon
           ></Button>
 
@@ -52,15 +52,8 @@
 </template>
 
 <script>
-import Link from '@/UI/Link/Link.vue';
-import Button from '@/UI/Button/Button.vue';
-
 export default {
   props: {},
-  components: {
-    Link,
-    Button,
-  },
   data() {
     return {
       navBtns: [

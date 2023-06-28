@@ -9,11 +9,7 @@
 </template>
 
 <script>
-import Button from '@/UI/Button/Button.vue';
 export default {
-  components: {
-    Button,
-  },
   data() {
     return {
       text: 'Не создан ни один проект',

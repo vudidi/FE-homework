@@ -1,7 +1,6 @@
 import Vue from 'vue';
-import SvgIcon from '@/UI/SvgIcon/SvgIcon.vue'; // svg component
+import SvgIcon from '@/components/UI/SvgIcon/SvgIcon.vue';
 
-// register globally
 Vue.component('svg-icon', SvgIcon);
 
 const req = require.context('../assets/icons/svg', false, /\.svg$/);

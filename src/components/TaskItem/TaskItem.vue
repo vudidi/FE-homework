@@ -14,24 +14,36 @@
           />
         </div>
         <div class="list-container">
-          <p class="list-code">{{ task.code }}</p>
-          <div class="tooltip tooltip__code">
-            <div class="tooltip__content">{{ task.code }}</div>
+          <div class="list-tooltip">
+            <p class="list-code">{{ task.code }}</p>
+            <div class="tooltip tooltip__code">
+              <div class="tooltip__content">{{ task.code }}</div>
+            </div>
           </div>
-          <p class="list-create">{{ task.create }}</p>
-          <div class="tooltip tooltip__create">
-            <div class="tooltip__content">{{ task.create }}</div>
+
+          <div class="list-tooltip">
+            <p class="list-create">{{ task.create }}</p>
+            <div class="tooltip tooltip__create">
+              <div class="tooltip__content">{{ task.create }}</div>
+            </div>
           </div>
-          <p
-            class="list-update"
-            v-on:mouseover="mouseOver"
-            v-on:mouseleave="mouseLeave"
-          >
-            {{ task.update }}
-          </p>
-          <div class="tooltip tooltip__update" v-if="isHover">
-            <div class="tooltip__content">
+
+          <div :class="['list-status', computedStatusClass]">
+            {{ task.status }}
+          </div>
+
+          <div class="list-tooltip">
+            <p
+              class="list-update"
+              v-on:mouseover="mouseOver"
+              v-on:mouseleave="mouseLeave"
+            >
               {{ task.update }}
+            </p>
+            <div class="tooltip tooltip__update">
+              <div class="tooltip__content">
+                {{ task.update }}
+              </div>
             </div>
           </div>
         </div>
@@ -70,22 +82,11 @@
 </template>
 
 <script>
-import Button from '@/UI/Button/Button.vue';
-
 export default {
-  components: { Button },
   props: {
     task: {
       type: Object,
       required: true,
-    },
-  },
-  methods: {
-    mouseOver() {
-      this.isHover = true;
-    },
-    mouseLeave() {
-      this.isHover = false;
     },
   },
   data() {
@@ -96,6 +97,36 @@ export default {
         isActive: false,
       },
     };
+  },
+  methods: {
+    mouseOver() {
+      this.isHover = true;
+    },
+    mouseLeave() {
+      this.isHover = false;
+    },
+  },
+  computed: {
+    computedStatusClass() {
+      if (
+        this.task.status === 'Черновик' ||
+        this.task.status === 'В работе' ||
+        this.task.status === 'Тестирование'
+      ) {
+        return 'list-status_type_draft';
+      } else if (
+        this.task.status === 'Завершена' ||
+        this.task.status === 'Выполнена' ||
+        this.task.status === 'Закрыта' ||
+        this.task.status === 'Активен'
+      ) {
+        return 'list-status_type_main';
+      } else if (this.task.status === 'Удалена') {
+        return 'list-status_type_error';
+      } else {
+        return 'list-status_type_off';
+      }
+    },
   },
 };
 </script>

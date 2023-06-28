@@ -11,7 +11,8 @@
     "node-sass": "^9.0.0",
     "sass-loader": "^13.3.2",
     "svg-sprite-loader": "^6.0.11",
-    "vue": "^2.6.14"
+    "vue": "^2.6.14",
+    "vue-lodash": "^2.1.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",

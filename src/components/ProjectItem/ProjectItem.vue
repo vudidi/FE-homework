@@ -65,10 +65,7 @@
 </template>
 
 <script>
-import Button from '@/UI/Button/Button.vue';
-
 export default {
-  components: { Button },
   props: {
     project: {
       type: Object,
