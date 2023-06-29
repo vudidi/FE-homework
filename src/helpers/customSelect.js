@@ -1,15 +1,15 @@
-export default function customSelect(
-  elSelectNative,
-  elSelectCustom,
-  elSelectIcon,
-  elTrigger,
-  elSelectCustomBox,
-  elSelectCustomOpts,
-  customOptsList,
-  optionsCount
-) {
+export default function customSelect(select) {
   let optionChecked = '';
   let optionHoveredIndex = -1;
+
+  const elSelectNative = select.getElementsByClassName('select__native')[0];
+  const elSelectCustom = select.getElementsByClassName('select__custom')[0];
+  const elSelectIcon = select.querySelector('.select__icon');
+  const elTrigger = select.querySelector('.select__custom-trigger');
+  const elSelectCustomBox = elSelectCustom.children[0];
+  const elSelectCustomOpts = elSelectCustom.children[1];
+  const customOptsList = Array.from(elSelectCustomOpts.children);
+  const optionsCount = customOptsList.length;
 
   elSelectCustomBox.addEventListener('click', () => {
     const isClosed = !elSelectCustom.classList.contains('isActive');
@@ -96,17 +96,17 @@ export default function customSelect(
 
   function supportKeyboardNavigation(event) {
     if (event.keyCode === 40 && optionHoveredIndex < optionsCount - 1) {
-      e.preventDefault();
+      event.preventDefault();
       updateCustomSelectHovered(optionHoveredIndex + 1);
     }
 
     if (event.keyCode === 38 && optionHoveredIndex > 0) {
-      e.preventDefault();
+      event.preventDefault();
       updateCustomSelectHovered(optionHoveredIndex - 1);
     }
 
     if (event.keyCode === 13 || event.keyCode === 32) {
-      e.preventDefault();
+      event.preventDefault();
 
       const option = elSelectCustomOpts.children[optionHoveredIndex];
       const value = option && option.getAttribute('data-value');
@@ -141,7 +141,7 @@ export default function customSelect(
       closeSelectCustom();
     });
 
-    elOption.addEventListener('mouseenter', (e) => {
+    elOption.addEventListener('mouseenter', () => {
       updateCustomSelectHovered(index);
     });
   });

@@ -69,7 +69,7 @@ export default {
   props: {
     project: {
       type: Object,
-      required: true,
+      default: {},
     },
   },
   methods: {

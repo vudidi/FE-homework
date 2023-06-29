@@ -1,9 +1,8 @@
 <template>
   <div id="app" class="page">
-    <Navigation />
+    <Navigation v-on:toggle-page="togglePage" />
     <main class="content">
-      <Select />
-      <Input placeholder="Введите текст..." type="text" :defaultInput="true" />
+      <!-- <Input placeholder="Введите текст..." type="text" :defaultInput="true" />
       <Input placeholder="Поиск..." type="search" :defaultInput="true">
         <svg-icon
           v-bind:class="['field__icon']"
@@ -14,18 +13,14 @@
       <Input placeholder="Поиск..." type="search" :flushedInput="true">
         <svg-icon v-bind:class="['field__icon']" name="search"></svg-icon
       ></Input>
-      <!-- <Profile /> -->
-      <Projects
-        v-if="projects.length"
-        v-bind:projects="projects"
-        v-on:open-dropdown="openProjectDropdown"
-      />
-      <Tasks
-        v-else-if="tasks.length"
-        v-bind:tasks="tasks"
-        v-on:open-dropdown="openTaskDropdown"
-      />
-      <noContent v-else />
+      <component
+        v-if="currentProps.items.length"
+        v-bind:is="tab"
+        v-bind:items="currentProps.items"
+        v-on:open-dropdown="currentProps.method"
+      ></component>
+      <noContent v-else /> -->
+      <CreateTask />
     </main>
   </div>
 </template>
@@ -35,6 +30,7 @@ import Navigation from '@/components/Navigation/Navigation.vue';
 import Profile from '@/views/Profile/Profile.vue';
 import Projects from '@/views/Projects/Projects.vue';
 import Tasks from '@/views/Tasks/Tasks.vue';
+import CreateTask from '@/views/CreateTask/CreateTask.vue';
 import noContent from '@/components/noContent/noContent.vue';
 import { getOverflowValue } from '@/helpers/showTooltip';
 
@@ -50,54 +46,56 @@ export default {
   components: {
     Navigation,
     Profile,
+    noContent,
     Projects,
     Tasks,
-    noContent,
+    CreateTask,
   },
   data() {
     return {
+      keyTab: 'projects',
       projects: [
-        // {
-        //   id: 'e90d4288c2098a0f027691d115b688cd',
-        //   title:
-        //     'Проект: Описание задачи далеко-далеко за словесными горами в стране  гласных и согласных живут рыбные тексты. Вдали от всех живут  они в буквенных домах на берегу Семантика большого языковогоокеана. Маленький ручеек Даль журчит по всей стране иобеспечивает ее всеми необходимыми правилами',
-        //   code: '22398742#12345',
-        //   create: 'Климов-Петров И.И. создал(а) 17 сен 2022 в 13:55',
-        //   update: 'Иванов В.В. изменил(а) 1 минуту назад',
-        //   isDropdownOpen: false,
-        // },
-        // {
-        //   id: '088ab8d8f1ce519871dae89a31ef9ee5',
-        //   title: 'Название проекта',
-        //   code: '22398742#1234545637458273658972635872635876245786',
-        //   create: 'Петров И.И. создал(а) 17 сен 2022 в 13:55',
-        //   update: 'Иванов В.В. изменил(а) 1 минуту назад',
-        //   isDropdownOpen: false,
-        // },
-        // {
-        //   id: '61f12dd4fe8b2b94dce10016cb66e79a',
-        //   title: 'Название проекта',
-        //   code: 'кодпроекта#3',
-        //   create: 'Иванов И.И. создал(а) 1 час назад',
-        //   update: 'Сазонова В.В. изменил(а) 1 минуту назад',
-        //   isDropdownOpen: false,
-        // },
-        // {
-        //   id: 'd226b104c34473cfbc272a7d91b5df6f',
-        //   title: 'Название проекта',
-        //   code: 'кодпроекта#3',
-        //   create: 'Иванов И.И. создал(а) 1 час назад',
-        //   update: 'Сазонова В.В. изменил(а) 1 минуту назад',
-        //   isDropdownOpen: false,
-        // },
-        // {
-        //   id: '24063f2a495c28888c5e0df7d123deed',
-        //   title: 'Название проекта',
-        //   code: 'кодпроекта#3',
-        //   create: 'Иванов И.И. создал(а) 1 час назад',
-        //   update: 'Сазонова В.В. изменил(а) 1 минуту назад',
-        //   isDropdownOpen: false,
-        // },
+        {
+          id: 'e90d4288c2098a0f027691d115b688cd',
+          title:
+            'Проект: Описание задачи далеко-далеко за словесными горами в стране  гласных и согласных живут рыбные тексты. Вдали от всех живут  они в буквенных домах на берегу Семантика большого языковогоокеана. Маленький ручеек Даль журчит по всей стране иобеспечивает ее всеми необходимыми правилами',
+          code: '22398742#12345',
+          create: 'Климов-Петров И.И. создал(а) 17 сен 2022 в 13:55',
+          update: 'Иванов В.В. изменил(а) 1 минуту назад',
+          isDropdownOpen: false,
+        },
+        {
+          id: '088ab8d8f1ce519871dae89a31ef9ee5',
+          title: 'Название проекта',
+          code: '22398742#1234545637458273658972635872635876245786',
+          create: 'Петров И.И. создал(а) 17 сен 2022 в 13:55',
+          update: 'Иванов В.В. изменил(а) 1 минуту назад',
+          isDropdownOpen: false,
+        },
+        {
+          id: '61f12dd4fe8b2b94dce10016cb66e79a',
+          title: 'Название проекта',
+          code: 'кодпроекта#3',
+          create: 'Иванов И.И. создал(а) 1 час назад',
+          update: 'Сазонова В.В. изменил(а) 1 минуту назад',
+          isDropdownOpen: false,
+        },
+        {
+          id: 'd226b104c34473cfbc272a7d91b5df6f',
+          title: 'Название проекта',
+          code: 'кодпроекта#3',
+          create: 'Иванов И.И. создал(а) 1 час назад',
+          update: 'Сазонова В.В. изменил(а) 1 минуту назад',
+          isDropdownOpen: false,
+        },
+        {
+          id: '24063f2a495c28888c5e0df7d123deed',
+          title: 'Название проекта',
+          code: 'кодпроекта#3',
+          create: 'Иванов И.И. создал(а) 1 час назад',
+          update: 'Сазонова В.В. изменил(а) 1 минуту назад',
+          isDropdownOpen: false,
+        },
       ],
       tasks: [
         {
@@ -154,8 +152,32 @@ export default {
       ],
     };
   },
-
+  computed: {
+    tab() {
+      return this.keyTab === 'projects' ? Projects : Tasks;
+    },
+    currentProps() {
+      if (this.keyTab === 'projects') {
+        return {
+          items: this.projects,
+          method: this.openProjectDropdown,
+        };
+      } else {
+        return {
+          items: this.tasks,
+          method: this.openTaskDropdown,
+        };
+      }
+    },
+  },
   methods: {
+    togglePage(id) {
+      if (id === 'projects') {
+        this.keyTab = 'projects';
+      } else {
+        this.keyTab = 'tasks';
+      }
+    },
     openProjectDropdown(id) {
       this.projects.forEach((project) => {
         if (project.id === id) {
@@ -175,7 +197,6 @@ export default {
       });
     },
   },
-
   mounted() {
     getOverflowValue(tooltipClasses);
   },

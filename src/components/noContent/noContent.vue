@@ -3,7 +3,7 @@
     <p class="noContent__text">{{ text }}</p>
     <Button
       v-bind:button="noContentBtn"
-      v-bind:class="['button', 'page-button']"
+      v-bind:class="['button', 'primary-button']"
     />
   </div>
 </template>

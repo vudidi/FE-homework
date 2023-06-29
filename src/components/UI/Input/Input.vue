@@ -1,15 +1,18 @@
 <template>
   <div :class="['field', { field_disabled: isDisabledInput }]">
     <input
-      :class="[
+      v-bind:class="[
         'field__input',
         { field__input_type_error: isErrorInput },
         { field__input_type_disabled: isDisabledInput },
         { field__input_default: defaultInput },
         { field__input_flushed: flushedInput },
       ]"
-      :type="type"
-      :placeholder="placeholder"
+      v-bind:type="type"
+      v-bind:placeholder="placeholder"
+      v-bind="$attrs"
+      v-on:input="onInput"
+      v-model="input"
     />
     <slot />
   </div>
@@ -37,6 +40,7 @@ export default {
   },
   data() {
     return {
+      input: '',
       isError: false,
       isDisabled: false,
     };
@@ -47,6 +51,11 @@ export default {
     },
     isDisabledInput() {
       return this.isDisabled;
+    },
+  },
+  methods: {
+    onInput() {
+      this.$emit('onInput', this.input);
     },
   },
 };

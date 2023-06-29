@@ -1,7 +1,7 @@
 <template>
   <div class="tasks">
     <TaskItem
-      v-for="task in tasks"
+      v-for="task in items"
       v-bind:key="task.id"
       v-bind:task="task"
       v-on:open-dropdown="openDropdownMenu"
@@ -17,9 +17,9 @@ export default {
     TaskItem,
   },
   props: {
-    tasks: {
+    items: {
       type: Array,
-      required: true,
+      default: [],
     },
   },
   methods: {

@@ -22,11 +22,21 @@
   }
 }
 
-.page-button {
+.primary-button {
   background-color: $bgPrimaryDefault;
   color: $fontSecondary;
   &:hover {
     background-color: $bgPprimaryHover;
+  }
+}
+
+.secondary-button {
+  background-color: $bgSecondaryDefault;
+  border: 1px solid $borderDefault;
+  color: $fontPrimary;
+  &:hover {
+    border: 1px solid $borderHover;
+    background-color: $bgSecondaryHover;
   }
 }
 

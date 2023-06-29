@@ -10,7 +10,7 @@ export default {
   props: {
     button: {
       type: Object,
-      required: true,
+      default: {},
     },
   },
 };

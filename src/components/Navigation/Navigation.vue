@@ -60,7 +60,7 @@ export default {
         {
           id: 'projects',
           title: 'Проекты',
-          isActive: false,
+          isActive: true,
         },
         {
           id: 'tasks',
@@ -90,6 +90,8 @@ export default {
           btn.isActive = false;
         }
       });
+
+      this.$emit('toggle-page', event.target.id);
     },
     selectUserBtn() {
       this.userBtn.isActive = !this.userBtn.isActive;

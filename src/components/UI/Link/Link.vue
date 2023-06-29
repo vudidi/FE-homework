@@ -9,7 +9,7 @@ export default {
   props: {
     link: {
       type: Object,
-      required: true,
+      default: {},
     },
   },
 };

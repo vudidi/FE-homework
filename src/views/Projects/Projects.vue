@@ -1,8 +1,8 @@
 <template>
   <div class="projects">
     <ProjectItem
-      v-for="project in projects"
-      :key="project.id"
+      v-for="project in items"
+      v-bind:key="project.id"
       v-bind:project="project"
       v-on:open-dropdown="openDropdownMenu"
     />
@@ -17,9 +17,9 @@ export default {
     ProjectItem,
   },
   props: {
-    projects: {
+    items: {
       type: Array,
-      required: true,
+      default: [],
     },
   },
   methods: {
