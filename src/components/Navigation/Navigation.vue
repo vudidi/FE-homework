@@ -17,35 +17,6 @@
             ]"
           />
         </li>
-        <li class="header__nav-item">
-          <Button
-            v-on:click-btn="selectUserBtn"
-            v-bind:button="userBtn"
-            v-bind:class="[
-              'button',
-              'user-button',
-              { 'user-button_active': userBtn.isActive },
-            ]"
-          >
-            <img
-              class="user-button__avatar"
-              src="@/assets/images/avatar.png"
-              alt="Аватар пользователя" />
-            <svg-icon
-              v-bind:class="['user-button__icon']"
-              name="arrow-down"
-            ></svg-icon
-          ></Button>
-
-          <ul v-bind:class="['dropdown-menu']" v-if="isDropdownVisible">
-            <li class="dropdown-menu__item">
-              <a class="dropdown-menu__link" href="#">Профиль</a>
-            </li>
-            <li class="dropdown-menu__item">
-              <a class="dropdown-menu__link" href="#">Выход</a>
-            </li>
-          </ul>
-        </li>
       </ul>
     </nav>
   </header>
@@ -53,22 +24,15 @@
 
 <script>
 import Link from '@/UI/Link/Link.vue';
-import Button from '@/UI/Button/Button.vue';
 
 export default {
   props: {},
   components: {
     Link,
-    Button,
   },
   data() {
     return {
       navBtns: [
-        {
-          id: 'projects',
-          title: 'Проекты',
-          isActive: false,
-        },
         {
           id: 'tasks',
           title: 'Задачи',
@@ -80,16 +44,10 @@ export default {
           isActive: false,
         },
       ],
-      userBtn: {
-        id: 'account',
-        isActive: false,
-      },
     };
   },
   methods: {
     selectNavBtn(event) {
-      this.userBtn.isActive = false;
-
       this.navBtns.forEach((btn) => {
         if (btn.id === event.target.id) {
           btn.isActive = true;
@@ -97,18 +55,6 @@ export default {
           btn.isActive = false;
         }
       });
-    },
-    selectUserBtn() {
-      this.userBtn.isActive = !this.userBtn.isActive;
-
-      this.navBtns.forEach((btn) => {
-        btn.isActive = false;
-      });
-    },
-  },
-  computed: {
-    isDropdownVisible() {
-      return this.userBtn.isActive;
     },
   },
 };
