@@ -11,8 +11,9 @@
       v-bind:type="type"
       v-bind:placeholder="placeholder"
       v-bind="$attrs"
-      v-on:input="onInput"
-      v-model="input"
+      v-on:input="onInput($event)"
+      v-on:change="onInput($event)"
+      v-bind:value="value"
     />
     <slot />
   </div>
@@ -21,6 +22,10 @@
 <script>
 export default {
   props: {
+    value: {
+      type: [String, Number],
+      default: '',
+    },
     placeholder: {
       type: String,
       required: true,
@@ -40,7 +45,6 @@ export default {
   },
   data() {
     return {
-      input: '',
       isError: false,
       isDisabled: false,
     };
@@ -54,8 +58,8 @@ export default {
     },
   },
   methods: {
-    onInput() {
-      this.$emit('onInput', this.input);
+    onInput($event) {
+      this.$emit('input', $event.target.value);
     },
   },
 };

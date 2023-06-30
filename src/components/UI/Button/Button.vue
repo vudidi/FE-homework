@@ -1,5 +1,5 @@
 <template>
-  <button :id="button.id" v-on:click="$emit('click-btn', $event)">
+  <button :id="button.id" v-on:click.prevent="$emit('click-btn', $event)">
     {{ button.title }}
     <slot />
   </button>

@@ -19,7 +19,7 @@
             v-bind:class="['action-page__input']"
             :maxlength="256"
             :minlength="3"
-            v-on:onInput="updateTitle"
+            v-model="model.titleValue"
           />
         </div>
         <div class="action-page__line">
@@ -39,11 +39,14 @@
 
           <Select
             v-bind:items="selectProjects"
-            defaultValue="Выберете значение..."
+            defaultValue="Выберите значение..."
             v-bind:class="['action-page__select']"
             selectID="projectSelect"
+            v-on:onSelectClick="updateProjectValue"
+            v-on:onSelectEnter="updateProjectValue"
           />
         </div>
+
         <div class="action-page__line">
           <div class="action-page__label">Исполнитель</div>
           <Select
@@ -51,6 +54,8 @@
             defaultValue="Не назначен"
             v-bind:class="['action-page__select']"
             selectID="executorSelect"
+            v-on:onSelectClick="updateExecutortValue"
+            v-on:onSelectEnter="updateExecutortValue"
           />
         </div>
       </div>
@@ -79,6 +84,8 @@ export default {
       model: {
         titleValue: '',
         descriptionValue: '',
+        projectValue: '',
+        executorValue: '',
       },
       createBtn: {
         id: 'create-project',
@@ -135,22 +142,18 @@ export default {
     };
   },
   methods: {
-    updateTitle(value) {
-      this.model.titleValue = value;
+    updateProjectValue(value) {
+      this.model.selectValue = value;
+    },
+    updateExecutortValue(value) {
+      this.model.executorValue = value;
     },
     getFormData() {
-      const projectValue = document
-        .getElementById('projectSelect')
-        .firstElementChild.textContent.trim();
-      const executorValue = document
-        .getElementById('executorSelect')
-        .firstElementChild.textContent.trim();
-
       console.log({
         title: this.model.titleValue,
         description: this.model.descriptionValue,
-        project: `${projectValue}`,
-        executor: `${executorValue}`,
+        project: this.model.selectValue,
+        executor: this.model.executorValue,
       });
     },
   },

@@ -12,15 +12,16 @@
       ></Input>
       <Input placeholder="Поиск..." type="search" :flushedInput="true">
         <svg-icon v-bind:class="['field__icon']" name="search"></svg-icon
-      ></Input>
+      ></Input> -->
       <component
         v-if="currentProps.items.length"
         v-bind:is="tab"
         v-bind:items="currentProps.items"
         v-on:open-dropdown="currentProps.method"
+        v-on:click-outside="currentProps.clickOutside"
       ></component>
-      <noContent v-else /> -->
-      <CreateTask />
+      <noContent v-else />
+      <!-- <CreateTask /> -->
     </main>
   </div>
 </template>
@@ -53,7 +54,7 @@ export default {
   },
   data() {
     return {
-      keyTab: 'projects',
+      keyTab: 'tasks',
       projects: [
         {
           id: 'e90d4288c2098a0f027691d115b688cd',
@@ -161,11 +162,13 @@ export default {
         return {
           items: this.projects,
           method: this.openProjectDropdown,
+          clickOutside: this.clickOutsideProjectDropdown,
         };
       } else {
         return {
           items: this.tasks,
           method: this.openTaskDropdown,
+          clickOutside: this.clickOutsideTaskDropdown,
         };
       }
     },
@@ -192,6 +195,20 @@ export default {
         if (task.id === id) {
           task.isDropdownOpen = !task.isDropdownOpen;
         } else {
+          task.isDropdownOpen = false;
+        }
+      });
+    },
+    clickOutsideProjectDropdown(id) {
+      this.projects.forEach((project) => {
+        if (project.id === id) {
+          project.isDropdownOpen = false;
+        }
+      });
+    },
+    clickOutsideTaskDropdown(id) {
+      this.tasks.forEach((task) => {
+        if (task.id === id) {
           task.isDropdownOpen = false;
         }
       });

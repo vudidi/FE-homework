@@ -9,29 +9,37 @@
           </div>
         </div>
         <div class="list-container">
-          <p class="list-code">{{ project.code }}</p>
-          <div class="tooltip tooltip__code">
-            <div class="tooltip__content">{{ project.code }}</div>
+          <div class="list-tooltip">
+            <p class="list-code">{{ project.code }}</p>
+            <div class="tooltip tooltip__code">
+              <div class="tooltip__content">{{ project.code }}</div>
+            </div>
           </div>
-          <p class="list-create">{{ project.create }}</p>
-          <div class="tooltip tooltip__create">
-            <div class="tooltip__content">{{ project.create }}</div>
+
+          <div class="list-tooltip">
+            <p class="list-create">{{ project.create }}</p>
+            <div class="tooltip tooltip__create">
+              <div class="tooltip__content">{{ project.create }}</div>
+            </div>
           </div>
-          <p
-            class="list-update"
-            v-on:mouseover="mouseOver"
-            v-on:mouseleave="mouseLeave"
-          >
-            {{ project.update }}
-          </p>
-          <div class="tooltip tooltip__update" v-if="isHover">
-            <div class="tooltip__content">
+
+          <div class="list-tooltip">
+            <p
+              class="list-update"
+              v-on:mouseover="mouseOver"
+              v-on:mouseleave="mouseLeave"
+            >
               {{ project.update }}
+            </p>
+            <div class="tooltip tooltip__update" v-if="isHover">
+              <div class="tooltip__content">
+                {{ project.update }}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="list-menu">
+      <div class="list-menu" v-click-outside="clickOutside">
         <Button
           v-bind:button="dropdownBtn"
           v-bind:class="[
@@ -78,6 +86,9 @@ export default {
     },
     mouseLeave() {
       this.isHover = false;
+    },
+    clickOutside() {
+      this.$emit('click-outside', this.project.id);
     },
   },
   data() {

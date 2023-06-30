@@ -1,8 +1,11 @@
 import Vue from 'vue';
 import App from './App.vue';
-import './helpers/register.js';
+import './helpers/SvgRegister.js';
 import upperFirst from 'lodash/upperFirst';
 import camelCase from 'lodash/camelCase';
+import vClickOutside from 'v-click-outside';
+
+Vue.use(vClickOutside);
 
 Vue.config.productionTip = false;
 

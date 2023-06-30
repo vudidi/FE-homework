@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div class="list-menu">
+      <div class="list-menu" v-click-outside="clickOutside">
         <Button
           v-bind:button="dropdownBtn"
           v-bind:class="[
@@ -104,6 +104,9 @@ export default {
     },
     mouseLeave() {
       this.isHover = false;
+    },
+    clickOutside() {
+      this.$emit('click-outside', this.task.id);
     },
   },
   computed: {

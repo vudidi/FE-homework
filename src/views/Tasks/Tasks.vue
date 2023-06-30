@@ -5,6 +5,7 @@
       v-bind:key="task.id"
       v-bind:task="task"
       v-on:open-dropdown="openDropdownMenu"
+      v-on:click-outside="clickOutside"
     />
   </div>
 </template>
@@ -25,6 +26,9 @@ export default {
   methods: {
     openDropdownMenu(id) {
       this.$emit('open-dropdown', id);
+    },
+    clickOutside(id) {
+      this.$emit('click-outside', id);
     },
   },
 };

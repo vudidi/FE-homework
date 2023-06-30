@@ -6,12 +6,12 @@ export default function customSelect(select) {
   const elSelectCustom = select.getElementsByClassName('select__custom')[0];
   const elSelectIcon = select.querySelector('.select__icon');
   const elTrigger = select.querySelector('.select__custom-trigger');
-  const elSelectCustomBox = elSelectCustom.children[0];
+  const elSelectCustomInput = elSelectCustom.children[0];
   const elSelectCustomOpts = elSelectCustom.children[1];
   const customOptsList = Array.from(elSelectCustomOpts.children);
   const optionsCount = customOptsList.length;
 
-  elSelectCustomBox.addEventListener('click', () => {
+  elSelectCustomInput.addEventListener('click', () => {
     const isClosed = !elSelectCustom.classList.contains('isActive');
     if (isClosed) {
       openSelectCustom();
@@ -75,7 +75,7 @@ export default function customSelect(select) {
       elOption.classList.add('isActive');
     }
 
-    elSelectCustomBox.textContent = text;
+    elSelectCustomInput.value = text;
     optionChecked = value;
   }
 
@@ -112,8 +112,8 @@ export default function customSelect(select) {
       const value = option && option.getAttribute('data-value');
 
       if (value) {
-        elSelectNative.value = value;
-        updateCustomSelectChecked(value, option.textContent);
+        // elSelectNative.value = value;
+        updateCustomSelectChecked(value, option.value);
       }
       closeSelectCustom();
     }
@@ -123,21 +123,21 @@ export default function customSelect(select) {
     }
   }
 
-  elSelectNative.addEventListener('change', (e) => {
-    const value = e.target.value;
-    const elRespectiveCustomOption = elSelectCustomOpts.querySelectorAll(
-      `[data-value="${value}"]`
-    )[0];
+  // elSelectNative.addEventListener('change', (e) => {
+  //   const value = e.target.value;
+  //   const elRespectiveCustomOption = elSelectCustomOpts.querySelectorAll(
+  //     `[data-value="${value}"]`
+  //   )[0];
 
-    updateCustomSelectChecked(value, elRespectiveCustomOption.textContent);
-  });
+  //   updateCustomSelectChecked(value, elRespectiveCustomOption.textContent);
+  // });
 
   customOptsList.forEach(function (elOption, index) {
     elOption.addEventListener('click', (e) => {
       const value = e.target.getAttribute('data-value');
 
-      elSelectNative.value = value;
-      updateCustomSelectChecked(value, e.target.textContent);
+      // elSelectNative.value = value;
+      updateCustomSelectChecked(value, e.target.value);
       closeSelectCustom();
     });
 
