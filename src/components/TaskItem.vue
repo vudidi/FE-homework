@@ -1,6 +1,10 @@
 <template>
   <li class="list-item">
-    <a href="#" class="list-title">{{ task.title }}</a>
+    <router-link
+      :to="{ name: 'task-detail', params: { id: task.id, title: task.title } }"
+      class="list-title"
+      >{{ task.title }}</router-link
+    >
   </li>
 </template>
 

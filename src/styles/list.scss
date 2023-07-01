@@ -20,6 +20,7 @@
 }
 
 .user {
+  pointer-events: none;
   cursor: default;
   text-align: center;
   &:hover {

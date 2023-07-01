@@ -52,6 +52,15 @@
   }
 }
 
+.back-button {
+  margin: 30px 0;
+  background-color: $bgPrimaryDefault;
+  color: $fontSecondary;
+  &:hover {
+    background-color: $bgPprimaryHover;
+  }
+}
+
 .list-project-btn_active,
 .list-task-btn_active {
   background-color: $bgSecondaryActive;

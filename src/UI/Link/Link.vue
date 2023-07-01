@@ -1,7 +1,7 @@
 <template>
-  <a href="#" :id="link.id" v-on:click="$emit('click-link', $event)">{{
+  <router-link :to="link.path" :id="link.id" v-on:click.native="clickLink">{{
     link.title
-  }}</a>
+  }}</router-link>
 </template>
 
 <script>
@@ -10,6 +10,11 @@ export default {
     link: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    clickLink($event) {
+      this.$emit('click-link', $event);
     },
   },
 };

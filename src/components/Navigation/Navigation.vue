@@ -34,14 +34,22 @@ export default {
     return {
       navBtns: [
         {
+          id: 'main',
+          title: 'Главная',
+          isActive: true,
+          path: '/',
+        },
+        {
           id: 'tasks',
           title: 'Задачи',
           isActive: false,
+          path: '/tasks',
         },
         {
           id: 'users',
           title: 'Пользователи',
           isActive: false,
+          path: '/users',
         },
       ],
     };

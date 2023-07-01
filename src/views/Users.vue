@@ -11,12 +11,31 @@ export default {
   components: {
     UserItem,
   },
-  props: {
-    users: {
-      type: Array,
-      required: true,
-    },
+  data() {
+    return {
+      users: [
+        {
+          id: '1',
+          name: 'Акунин Иван Иванович',
+        },
+        {
+          id: '2',
+          name: 'Котов Семен Васильевич',
+        },
+        {
+          id: '3',
+          name: 'Львов Петр Ибрагимович',
+        },
+        {
+          id: '4',
+          name: 'Сазонова Вера Владимировна',
+        },
+        {
+          id: '5',
+          name: 'Баранов Виктор Витальевич',
+        },
+      ],
+    };
   },
-  methods: {},
 };
 </script>
