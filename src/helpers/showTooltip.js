@@ -1,4 +1,4 @@
-export function getOverflowValue(classes) {
+export default function getOverflowValue(classes) {
   classes.forEach((elClass) => {
     const textElments = document.querySelectorAll(`.${elClass}`);
 

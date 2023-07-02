@@ -20,6 +20,9 @@
     flex-direction: row;
     width: 100%;
   }
+  &__user-container {
+    align-items: center;
+  }
   &-tooltip {
     position: relative;
     &:last-child {
@@ -40,6 +43,10 @@
     text-overflow: ellipsis;
     cursor: default;
   }
+  &__user-title {
+    margin: 0 32px 0 0;
+    height: 19px;
+  }
   &-userAvatar {
     width: 24px;
     height: 24px;
@@ -47,6 +54,9 @@
     object-fit: cover;
     object-position: center;
     margin: 0 0 0 auto;
+  }
+  &__user-userAvatar {
+    margin: 0 8px 0 0;
   }
   &-code {
     font-size: 14px;
@@ -105,6 +115,9 @@
     display: none;
     position: relative;
   }
+  &__user-menu {
+    display: block;
+  }
   &-button {
     margin: 0 0 0 16px;
   }
@@ -119,4 +132,8 @@
       max-width: 220px;
     }
   }
+}
+
+.users {
+  width: 100%;
 }

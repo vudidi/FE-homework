@@ -61,8 +61,8 @@
       </div>
 
       <div class="action-page__buttons">
-        <Button
-          v-bind:button="cancelBtn"
+        <Link
+          v-bind:link="cancelBtn"
           v-bind:class="['button', 'secondary-button', 'action-page__button']"
         />
         <Button
@@ -94,6 +94,7 @@ export default {
       cancelBtn: {
         id: 'cancel-project',
         title: 'Отмена',
+        to: '/tasks',
       },
       selectProjects: [
         {

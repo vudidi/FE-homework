@@ -1,8 +1,9 @@
 <template>
   <div class="noContent">
     <p class="noContent__text">{{ text }}</p>
-    <Button
-      v-bind:button="noContentBtn"
+    <Link
+      v-on:click-link="$emit('click-link')"
+      v-bind:link="noContentBtn"
       v-bind:class="['button', 'primary-button']"
     />
   </div>
@@ -10,12 +11,22 @@
 
 <script>
 export default {
+  props: {
+    to: {
+      type: String,
+      default: '',
+    },
+    text: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
-      text: 'Не создан ни один проект',
       noContentBtn: {
         id: 'no-content',
         title: 'Добавить',
+        to: this.to,
       },
     };
   },

@@ -37,7 +37,11 @@
             ></svg-icon
           ></Button>
 
-          <ul v-bind:class="['dropdown-menu']" v-if="isDropdownVisible">
+          <ul
+            v-bind:class="['dropdown-menu']"
+            v-if="userBtn.isDropdownVisible"
+            v-click-outside="clickOutsideDropdown"
+          >
             <li class="dropdown-menu__item">
               <a class="dropdown-menu__link" href="#">Профиль</a>
             </li>
@@ -60,24 +64,41 @@ export default {
         {
           id: 'projects',
           title: 'Проекты',
-          isActive: true,
+          isActive: false,
+          to: '/projects',
         },
         {
           id: 'tasks',
           title: 'Задачи',
           isActive: false,
+          to: '/tasks',
         },
         {
           id: 'users',
           title: 'Пользователи',
           isActive: false,
+          to: '/users',
         },
       ],
       userBtn: {
         id: 'account',
         isActive: false,
+        isDropdownVisible: false,
       },
     };
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name === 'projects') {
+        this.navBtns.forEach((btn) => {
+          if (btn.id === 'projects') {
+            btn.isActive = true;
+          } else {
+            btn.isActive = false;
+          }
+        });
+      }
+    },
   },
   methods: {
     selectNavBtn(event) {
@@ -90,21 +111,25 @@ export default {
           btn.isActive = false;
         }
       });
-
-      this.$emit('toggle-page', event.target.id);
     },
     selectUserBtn() {
       this.userBtn.isActive = !this.userBtn.isActive;
-
-      this.navBtns.forEach((btn) => {
-        btn.isActive = false;
-      });
+      this.userBtn.isDropdownVisible = !this.userBtn.isDropdownVisible;
+    },
+    clickOutsideDropdown() {
+      this.userBtn.isActive = false;
+      this.userBtn.isDropdownVisible = false;
     },
   },
-  computed: {
-    isDropdownVisible() {
-      return this.userBtn.isActive;
-    },
+  mounted() {
+    const path = this.$router.history.current.name;
+    this.navBtns.forEach((btn) => {
+      if (path.includes(btn.id)) {
+        btn.isActive = true;
+      } else {
+        btn.isActive = false;
+      }
+    });
   },
 };
 </script>
