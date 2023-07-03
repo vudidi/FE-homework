@@ -4,7 +4,9 @@
 @import 'list.scss';
 @import 'tooltip.scss';
 @import 'dropdown.scss';
+@import 'action-page.scss';
 @import '@/components/Navigation/Navigation.scss';
+@import '@/components/SearchPanel/SearchPanel.scss';
 @import '@/components/ProjectItem/ProjectItem.scss';
 @import '@/components/TaskItem/TaskItem.scss';
 @import '@/components/noContent/noContent.scss';
@@ -15,4 +17,3 @@
 @import '@/views/Profile/Profile.scss';
 @import '@/views/Projects/Projects.scss';
 @import '@/views/Tasks/Tasks.scss';
-@import '@/views/CreateTask/CreateTask.scss';

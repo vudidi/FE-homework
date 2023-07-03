@@ -13,13 +13,7 @@ export default {
   components: {
     Navigation,
   },
-  mounted() {
-    // const path = this.$router.history.current.path;
-    // if (path !== '/projects') {
-    //   this.$router.push('/projects');
-    // }
-    // console.log(this.$router);
-  },
+  mounted() {},
 };
 </script>
 

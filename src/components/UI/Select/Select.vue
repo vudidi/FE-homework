@@ -1,25 +1,19 @@
 <template>
-  <div class="select">
+  <div :class="['select', inputClass]">
     <div class="select__wrapper">
-      <svg-icon v-bind:class="['select__icon']" name="arrow"></svg-icon>
-      <select class="select__native">
-        <!-- <option value="default">{{ defaultValue }}</option>
-
-        <option
-          v-for="item in items"
-          v-bind:key="item.name"
-          v-bind:data-value="item.value"
-        >
-          {{ item.name }}
-        </option> -->
-      </select>
+      <svg-icon
+        v-bind:class="['select__icon', iconClass]"
+        name="arrow"
+      ></svg-icon>
+      <slot />
+      <select class="select__native"></select>
       <div
         :id="selectID"
         class="select__custom"
         aria-hidden="true"
         v-on:keyup.enter="onSelectEnter"
       >
-        <input class="select__custom-trigger" readonly />
+        <input class="select__custom-trigger" :value="defaultValue" readonly />
         <div class="select__custom-options">
           <input
             class="select__custom-option"
@@ -41,8 +35,13 @@ export default {
     return {};
   },
   props: {
-    selectRef: {
+    iconClass: {
       type: String,
+      default: '',
+    },
+    inputClass: {
+      type: String,
+      default: '',
     },
     selectID: {
       type: String,

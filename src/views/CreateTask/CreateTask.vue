@@ -2,61 +2,63 @@
   <div class="action-page">
     <h1 class="action-page__title">Создание задачи</h1>
     <form class="action-page__form">
-      <div class="action-page__container">
-        <div class="action-page__line">
-          <div class="action-page__label">
-            Название
-            <svg-icon
-              v-bind:class="['action-page__icon']"
-              name="require"
-            ></svg-icon>
+      <div class="action-page__wrapper">
+        <div class="action-page__container">
+          <div class="action-page__line">
+            <div class="action-page__label">
+              Название
+              <svg-icon
+                v-bind:class="['action-page__icon']"
+                name="require"
+              ></svg-icon>
+            </div>
+
+            <Input
+              placeholder="Введите текст..."
+              type="text"
+              :defaultInput="true"
+              v-bind:class="['action-page__input']"
+              :maxlength="256"
+              :minlength="3"
+              v-model="model.titleValue"
+            />
+          </div>
+          <div class="action-page__line">
+            <div class="action-page__label">Описание</div>
+            <textarea
+              class="action-page__textarea"
+              v-model="model.descriptionValue"
+            ></textarea>
+          </div>
+          <div class="action-page__line">
+            <div class="action-page__label">
+              Проект<svg-icon
+                v-bind:class="['action-page__icon']"
+                name="require"
+              ></svg-icon>
+            </div>
+
+            <Select
+              v-bind:items="selectProjects"
+              defaultValue="Выберите значение..."
+              v-bind:class="['action-page__select']"
+              selectID="projectSelect"
+              v-on:onSelectClick="updateProjectValue"
+              v-on:onSelectEnter="updateProjectValue"
+            />
           </div>
 
-          <Input
-            placeholder="Введите текст..."
-            type="text"
-            :defaultInput="true"
-            v-bind:class="['action-page__input']"
-            :maxlength="256"
-            :minlength="3"
-            v-model="model.titleValue"
-          />
-        </div>
-        <div class="action-page__line">
-          <div class="action-page__label">Описание</div>
-          <textarea
-            class="action-page__textarea"
-            v-model="model.descriptionValue"
-          ></textarea>
-        </div>
-        <div class="action-page__line">
-          <div class="action-page__label">
-            Проект<svg-icon
-              v-bind:class="['action-page__icon']"
-              name="require"
-            ></svg-icon>
+          <div class="action-page__line">
+            <div class="action-page__label">Исполнитель</div>
+            <Select
+              v-bind:items="selectExecutors"
+              defaultValue="Не назначен"
+              v-bind:class="['action-page__select']"
+              selectID="executorSelect"
+              v-on:onSelectClick="updateExecutortValue"
+              v-on:onSelectEnter="updateExecutortValue"
+            />
           </div>
-
-          <Select
-            v-bind:items="selectProjects"
-            defaultValue="Выберите значение..."
-            v-bind:class="['action-page__select']"
-            selectID="projectSelect"
-            v-on:onSelectClick="updateProjectValue"
-            v-on:onSelectEnter="updateProjectValue"
-          />
-        </div>
-
-        <div class="action-page__line">
-          <div class="action-page__label">Исполнитель</div>
-          <Select
-            v-bind:items="selectExecutors"
-            defaultValue="Не назначен"
-            v-bind:class="['action-page__select']"
-            selectID="executorSelect"
-            v-on:onSelectClick="updateExecutortValue"
-            v-on:onSelectEnter="updateExecutortValue"
-          />
         </div>
       </div>
 
@@ -77,6 +79,7 @@
 
 <script>
 import customSelect from '@/helpers/customSelect';
+
 export default {
   components: {},
   data() {

@@ -1,4 +1,4 @@
-// .select__native,
+.select__native,
 .select__custom {
   position: relative;
   width: 100%;
@@ -75,19 +75,20 @@
   }
 }
 
-.select__native,
+// .select__native,
 .select__custom-trigger {
   font-size: 14px;
+  line-height: 19px;
   color: $fontPrimary;
   border: 1px solid $borderDefault;
   border-radius: 4px;
-  padding: 12px 12px 10px;
+  padding: 10px 12px;
   &::placeholder {
     color: $fontPlaceholder;
   }
 }
 
-.select__native,
+// .select__native,
 .isDisabled {
   border: 1px solid $borderDisabled;
   color: $fontDisabled;
@@ -95,7 +96,7 @@
   pointer-events: none;
 }
 
-.select__native,
+// .select__native,
 .isFocused {
   border: 1px solid $borderActive;
 }

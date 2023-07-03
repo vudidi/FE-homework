@@ -4,6 +4,7 @@ import Projects from '@/views/Projects/Projects.vue';
 import Tasks from '@/views/Tasks/Tasks.vue';
 import CreateTask from '@/views/CreateTask/CreateTask.vue';
 import Users from '@/views/Users/Users.vue';
+import CreateUser from '@/views/CreateUser/CreateUser.vue';
 import NotFound from '@/views/NotFound/NotFound.vue';
 import TaskLayout from '@/components/Layouts/TaskLayout.vue';
 import ProjectLayout from '@/components/Layouts/ProjectLayout.vue';
@@ -42,7 +43,14 @@ const routes = [
   {
     path: '/users',
     component: UserLayout,
-    children: [{ path: '', name: 'users', component: Users }],
+    children: [
+      { path: '', name: 'users', component: Users },
+      {
+        path: 'create',
+        name: 'user-create',
+        component: CreateUser,
+      },
+    ],
   },
 
   {

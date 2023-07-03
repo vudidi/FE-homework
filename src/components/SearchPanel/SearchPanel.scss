@@ -1,0 +1,36 @@
+.search-panel {
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  &__input {
+    width: 100% !important;
+  }
+  &__select {
+    max-width: 230px;
+    width: 100% !important;
+    margin: 0 24px;
+  }
+  &__sortBtn {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+  }
+  &__icon {
+    width: 24px;
+    height: 24px;
+    color: $fontPrimary;
+  }
+  &__select-icon {
+    right: 50px !important;
+  }
+  &__addBtn {
+    padding: 10.5px 16px !important;
+  }
+  &__filtertBtn {
+    margin: 0 0 0 24px;
+  }
+  &__addUserBtn {
+    margin: 0 0 0 120px;
+  }
+}

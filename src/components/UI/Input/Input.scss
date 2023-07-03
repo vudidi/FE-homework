@@ -1,12 +1,13 @@
 .field {
-  width: 200px;
   position: relative;
+  display: flex;
+  align-items: center;
   &_disabled {
     pointer-events: none;
   }
   &__icon {
     position: absolute;
-    top: 6px;
+    top: 8px;
     right: 8px;
     width: 24px;
     height: 24px;
@@ -16,10 +17,11 @@
   }
   &__input {
     width: 100%;
-    padding: 10px 34px 10px 12px;
+    padding: 11px 34px 11px 12px;
     background-color: $bgSecondaryDefault;
     color: $fontPrimary;
     font-size: 14px;
+    line-height: 18px;
     transition: all ease 0.5s;
     &_default {
       border-radius: 4px;

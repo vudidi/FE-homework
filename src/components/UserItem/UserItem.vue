@@ -8,7 +8,7 @@
           alt="Аватар пользователя"
         />
         <h3 class="list-title list__user-title">{{ user.name }}</h3>
-        <div class="list-status list-status_type_off" v-if="isAdmin">
+        <div class="list-status list-status_type_off" v-if="!user.isActive">
           Не активен
         </div>
       </div>
