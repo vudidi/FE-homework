@@ -1,0 +1,34 @@
+input[type='radio'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: $bgSecondaryDefault;
+  margin: 0;
+  color: $bgPrimaryDefault;
+  width: 22px;
+  height: 22px;
+  border: 2px solid $borderDefault;
+  border-radius: 50%;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+input[type='radio']::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform ease 120ms;
+  box-shadow: inset 1em 1em $bgPrimaryDefault;
+  background-color: CanvasText;
+}
+
+input[type='radio']:checked::before {
+  transform: scale(1);
+}
+
+input[type='radio']:checked {
+  transform: scale(1);
+  border: 2px solid $bgPrimaryDefault;
+}

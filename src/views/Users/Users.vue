@@ -25,7 +25,6 @@
         </Button>
         <Link
           v-if="isAdmin"
-          v-on:click-link="addUser"
           v-bind:link="addUserBtn"
           v-bind:class="[
             'button',
@@ -104,9 +103,6 @@ export default {
     };
   },
   methods: {
-    addUser(e) {
-      console.log(e);
-    },
     openDropdown(id) {
       this.users.forEach((user) => {
         if (user.id === id) {

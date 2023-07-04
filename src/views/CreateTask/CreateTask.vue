@@ -2,16 +2,16 @@
   <div class="action-page">
     <h1 class="action-page__title">Создание задачи</h1>
     <form class="action-page__form">
-      <div class="action-page__wrapper">
+      <fieldset class="action-page__fieldset">
         <div class="action-page__container">
           <div class="action-page__line">
-            <div class="action-page__label">
+            <label class="action-page__label">
               Название
               <svg-icon
                 v-bind:class="['action-page__icon']"
                 name="require"
               ></svg-icon>
-            </div>
+            </label>
 
             <Input
               placeholder="Введите текст..."
@@ -24,19 +24,19 @@
             />
           </div>
           <div class="action-page__line">
-            <div class="action-page__label">Описание</div>
+            <label class="action-page__label">Описание</label>
             <textarea
               class="action-page__textarea"
               v-model="model.descriptionValue"
             ></textarea>
           </div>
           <div class="action-page__line">
-            <div class="action-page__label">
+            <label class="action-page__label">
               Проект<svg-icon
                 v-bind:class="['action-page__icon']"
                 name="require"
               ></svg-icon>
-            </div>
+            </label>
 
             <Select
               v-bind:items="selectProjects"
@@ -49,7 +49,7 @@
           </div>
 
           <div class="action-page__line">
-            <div class="action-page__label">Исполнитель</div>
+            <label class="action-page__label">Исполнитель</label>
             <Select
               v-bind:items="selectExecutors"
               defaultValue="Не назначен"
@@ -60,7 +60,7 @@
             />
           </div>
         </div>
-      </div>
+      </fieldset>
 
       <div class="action-page__buttons">
         <Link
