@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
+import store from './store';
 import router from './router/router';
 import './helpers/SvgRegister.js';
 import upperFirst from 'lodash/upperFirst';
@@ -30,4 +31,4 @@ requireComponent.keys().forEach((fileName) => {
   Vue.component(componentName, componentConfig.default || componentConfig);
 });
 
-new Vue({ router, render: (h) => h(App) }).$mount('#app');
+new Vue({ store, router, render: (h) => h(App) }).$mount('#app');

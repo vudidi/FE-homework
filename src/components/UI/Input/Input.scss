@@ -5,6 +5,17 @@
   &_disabled {
     pointer-events: none;
   }
+  &__error {
+    display: none;
+    position: absolute;
+    top: 46px;
+    left: 0;
+    color: $fontError;
+    font-size: 11px;
+    &_visible {
+      display: block;
+    }
+  }
   &__icon {
     position: absolute;
     top: 8px;
@@ -28,6 +39,12 @@
       border: 1px solid $borderDefault;
       &:focus {
         border: 1px solid $borderActive;
+      }
+      &-error {
+        border: 1px solid $borderError;
+        &:focus {
+          border: 1px solid $borderError;
+        }
       }
     }
     &_flushed {

@@ -148,6 +148,7 @@
 <script>
 import login from '@/api/login';
 import { uploadAvatar } from '@/api/admin/user';
+import { getUsers } from '@/api/users';
 import formatFileSize from '@/helpers/formatFileSize';
 import validateFile from '@/helpers/validateFile';
 
@@ -204,17 +205,17 @@ export default {
       this.isDragover = false;
     },
     getFormData() {
-      console.log({
-        role: this.model.role,
-        isActive: this.model.isActive,
-        fullname: this.model.fullname,
-        login: this.model.login,
-        password: this.model.password,
-        about: this.model.about,
-      });
+      // console.log({
+      //   role: this.model.role,
+      //   isActive: this.model.isActive,
+      //   fullname: this.model.fullname,
+      //   login: this.model.login,
+      //   password: this.model.password,
+      //   about: this.model.about,
+      // });
       // uploadAvatar(TOKEN, ID, this.model.avatar);
-
-      this.$refs.createUserForm.reset();
+      // getUsers(TOKEN);
+      // this.$refs.createUserForm.reset();
     },
   },
   computed: {

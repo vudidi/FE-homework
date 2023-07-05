@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Login from '@/views/Login/Login.vue';
 import Projects from '@/views/Projects/Projects.vue';
 import Tasks from '@/views/Tasks/Tasks.vue';
 import CreateTask from '@/views/CreateTask/CreateTask.vue';
-import Users from '@/views/Users/Users.vue';
+// import Users from '@/views/Users/Users.vue';
+import UsersVuex from '@/views/UsersVuex/UsersVuex.vue';
 import CreateUser from '@/views/CreateUser/CreateUser.vue';
 import NotFound from '@/views/NotFound/NotFound.vue';
 import TaskLayout from '@/components/Layouts/TaskLayout.vue';
@@ -44,7 +46,7 @@ const routes = [
     path: '/users',
     component: UserLayout,
     children: [
-      { path: '', name: 'users', component: Users },
+      { path: '', name: 'users', component: UsersVuex },
       {
         path: 'create',
         name: 'user-create',
@@ -52,7 +54,11 @@ const routes = [
       },
     ],
   },
-
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+  },
   {
     path: '*',
     name: 'not-found',

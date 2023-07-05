@@ -1,6 +1,7 @@
 <template>
   <div :class="['field', { field_disabled: isDisabledInput }]">
     <input
+      v-bind="$attrs"
       v-bind:class="[
         'field__input',
         { field__input_type_error: isErrorInput },
@@ -10,16 +11,18 @@
       ]"
       v-bind:type="type"
       v-bind:placeholder="placeholder"
-      v-bind="$attrs"
       v-on:input="onInput($event)"
       v-on:change="onInput($event)"
       v-bind:value="value"
     />
+    <span :class="['field__error', inputErrorClass]"></span>
     <slot />
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   props: {
     value: {
@@ -42,6 +45,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    inputErrorClass: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -58,8 +65,10 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['updateError']),
     onInput($event) {
       this.$emit('input', $event.target.value);
+      this.updateError('');
     },
   },
 };
