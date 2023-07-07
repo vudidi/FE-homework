@@ -41,6 +41,7 @@
       v-on:click-link="$emit('click-link')"
       v-bind:link="addBtn"
       v-bind:class="['button', 'secondary-button', 'search-panel__addBtn']"
+      :to="addBtn.to"
     />
   </div>
 </template>

@@ -1,25 +1,42 @@
 .profile {
+  position: relative;
   display: flex;
   margin: 0 0 30px;
+  &__menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
   &__imgContainer {
+    position: relative;
     padding: 12px 10px;
     margin: 0 24px 0 0;
   }
   &__image {
     width: 300px;
     height: 300px;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
+  }
+  &__image-menu {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
   }
   &__textContainer {
     padding: 0 24px;
+  }
+  &__titleContainer {
+    display: flex;
+    align-items: center;
+    margin: 0 0 24px;
   }
   &__title {
     color: $fontPrimary;
     font-size: 24px;
     line-height: 32px;
     font-weight: 600;
-    margin: 0 0 24px;
+    margin: 0 16px 0 0;
   }
   &__subtitle {
     color: $fontDisabled;

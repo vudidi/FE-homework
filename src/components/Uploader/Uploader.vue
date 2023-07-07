@@ -63,7 +63,7 @@ export default {
       default: false,
     },
     isLoaded: {
-      type: [File, null],
+      type: [File, Boolean],
       default: false,
     },
     file: { type: Object },

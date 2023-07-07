@@ -1,7 +1,7 @@
 <template>
   <div :class="['modal', { modal_opened: isOpen }]">
     <div :class="['modal__container', type]">
-      <h2 class="modal__title">Создание проекта</h2>
+      <h2 class="modal__title">{{ modalTitle }}</h2>
       <div class="modal__wrapper"><slot /></div>
       <div class="modal__buttons">
         <Button
@@ -10,6 +10,7 @@
           v-bind:class="['button', 'secondary-button', 'modal__button']"
         />
         <Button
+          v-on:click-btn="$emit('click-accept-btn')"
           v-bind:button="acceptBtn"
           v-bind:class="['button', 'primary-button', 'modal__button']"
         />
@@ -26,6 +27,10 @@ export default {
     },
     type: {
       type: String,
+    },
+    modalTitle: {
+      type: String,
+      default: '',
     },
     cancelBtnTitle: {
       type: String,

@@ -4,17 +4,19 @@ import Login from '@/views/Login/Login.vue';
 import Projects from '@/views/Projects/Projects.vue';
 import Tasks from '@/views/Tasks/Tasks.vue';
 import CreateTask from '@/views/CreateTask/CreateTask.vue';
-// import Users from '@/views/Users/Users.vue';
-import UsersVuex from '@/views/UsersVuex/UsersVuex.vue';
+import Users from '@/views/Users/Users.vue';
+import Profile from '@/views/Profile/Profile.vue';
 import CreateUser from '@/views/CreateUser/CreateUser.vue';
 import NotFound from '@/views/NotFound/NotFound.vue';
 import TaskLayout from '@/components/Layouts/TaskLayout.vue';
 import ProjectLayout from '@/components/Layouts/ProjectLayout.vue';
-import UserLayout from '@/components/Layouts/UserLayout.vue';
+import UsersLayout from '@/components/Layouts/UsersLayout.vue';
+import store from '@/store';
 
 Vue.use(VueRouter);
 
 const routes = [
+  { path: '/', redirect: '/projects' },
   {
     path: '/projects',
     component: ProjectLayout,
@@ -44,9 +46,15 @@ const routes = [
   },
   {
     path: '/users',
-    component: UserLayout,
+    component: UsersLayout,
     children: [
-      { path: '', name: 'users', component: UsersVuex },
+      { path: '', name: 'users', component: Users },
+      {
+        path: 'profile/:id',
+        name: 'user-profile',
+        component: Profile,
+        props: true,
+      },
       {
         path: 'create',
         name: 'user-create',
@@ -58,6 +66,13 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+    beforeEnter: (to, from, next) => {
+      store.dispatch('fetchCurrentUser');
+      const isAuth = localStorage.getItem('isAuth');
+      if (to.name === 'login' && isAuth === 'true') {
+        next({ name: 'projects' });
+      } else next();
+    },
   },
   {
     path: '*',
@@ -71,11 +86,11 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   const isAuth = localStorage.getItem('auth');
-
-//   if (to.name === 'users' && isAuth === 'false') next({ name: 'auth' });
-//   else next();
-// });
+router.beforeEach((to, from, next) => {
+  store.dispatch('fetchCurrentUser');
+  const isAuth = localStorage.getItem('isAuth');
+  if (to.name !== 'login' && isAuth === 'false') next({ name: 'login' });
+  else next();
+});
 
 export default router;

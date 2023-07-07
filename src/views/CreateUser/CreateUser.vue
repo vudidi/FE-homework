@@ -134,6 +134,7 @@
         <Link
           v-bind:link="cancelBtn"
           v-bind:class="['button', 'secondary-button', 'action-page__button']"
+          to="/users"
         />
         <Button
           v-bind:button="createBtn"
@@ -146,15 +147,13 @@
 </template>
 
 <script>
-import login from '@/api/login';
 import { uploadAvatar } from '@/api/admin/user';
-import { getUsers } from '@/api/users';
 import formatFileSize from '@/helpers/formatFileSize';
 import validateFile from '@/helpers/validateFile';
 
 const TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OGFmMGQ1MDNjOGZmNGE0MDYwNzE3NyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTY4ODQ3ODI2NSwiZXhwIjoxNjg4NTY0NjY1fQ.1kVX7309goWN40zYu6gZzHrrs78t-dEyHTD07MXvyl4';
-const ID = '648af1a17287972ce8676ee6';
+const ID = '648af15b7287972ce8676eca';
 
 export default {
   components: {},
@@ -178,7 +177,6 @@ export default {
       cancelBtn: {
         id: 'cancel-user',
         title: 'Отмена',
-        to: '/users',
       },
     };
   },
@@ -213,7 +211,7 @@ export default {
       //   password: this.model.password,
       //   about: this.model.about,
       // });
-      // uploadAvatar(TOKEN, ID, this.model.avatar);
+      uploadAvatar(ID, this.model.avatar);
       // getUsers(TOKEN);
       // this.$refs.createUserForm.reset();
     },

@@ -3,6 +3,7 @@
     <Modal
       v-on:click-cancel-btn="closeCreateModal"
       v-bind:isOpen="isCreateModalOpen"
+      modalTitle="Создание проекта"
       type="modal__container_type_create"
       cancelBtnTitle="Отмена"
       acceptBtnTitle="Создать проект"
@@ -79,6 +80,10 @@ import SearchPanel from '@/components/SearchPanel/SearchPanel.vue';
 import getOverflowValue from '@/helpers/showTooltip';
 import { tooltipClasses } from '@/helpers/constants';
 import customSelect from '@/helpers/customSelect';
+import store from '@/store';
+import { mapGetters, mapActions } from 'vuex';
+
+const select = document.querySelectorAll('.select');
 
 export default {
   components: {
@@ -196,10 +201,17 @@ export default {
   mounted() {
     getOverflowValue(tooltipClasses);
 
-    const select = document.querySelectorAll('.select');
     select.forEach((el) => {
       customSelect(el);
     });
+  },
+  beforeRouteEnter(to, from, next) {
+    if (from.name === 'login') {
+      store.dispatch('fetchCurrentUser');
+      next();
+    } else {
+      next();
+    }
   },
 };
 </script>

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const url = 'http://45.12.239.156:8081/api';
 
-export function uploadAvatar(token, id, FormData) {
+export function uploadAvatar(id, FormData) {
   return axios
     .put(
       `${url}/users/picture`,
@@ -12,7 +12,7 @@ export function uploadAvatar(token, id, FormData) {
       },
       {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'multipart/form-data',
         },
       }

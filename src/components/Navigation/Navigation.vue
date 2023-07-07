@@ -8,6 +8,7 @@
           class="header__nav-item"
         >
           <Link
+            v-bind:to="navBtn.to"
             v-on:click-link="selectNavBtn"
             v-bind:link="navBtn"
             v-bind:class="[
@@ -29,7 +30,7 @@
           >
             <img
               class="user-button__avatar"
-              src="@/assets/images/avatar.png"
+              :src="currentUser.picture"
               alt="Аватар пользователя" />
             <svg-icon
               v-bind:class="['user-button__icon']"
@@ -43,10 +44,19 @@
             v-click-outside="clickOutsideDropdown"
           >
             <li class="dropdown-menu__item">
-              <a class="dropdown-menu__link" href="#">Профиль</a>
+              <Link
+                v-on:click-link="goToProfile"
+                v-bind:link="profileLink"
+                v-bind:class="['dropdown-menu__link']"
+                :to="{ name: 'user-profile', params: { id: currentUser.id } }"
+              />
             </li>
             <li class="dropdown-menu__item">
-              <a class="dropdown-menu__link" href="#">Выход</a>
+              <Link
+                v-on:click-link="signOut"
+                v-bind:link="signOutLink"
+                v-bind:class="['dropdown-menu__link']"
+              />
             </li>
           </ul>
         </li>
@@ -56,10 +66,19 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
-  props: {},
   data() {
     return {
+      profileLink: {
+        id: 'profile-link',
+        title: 'Профиль',
+      },
+      signOutLink: {
+        id: 'signOut-link',
+        title: 'Выход',
+      },
       navBtns: [
         {
           id: 'projects',
@@ -100,7 +119,36 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapGetters(['currentUser', 'updatedUserProfile']),
+  },
   methods: {
+    ...mapActions(['fetchCurrentUser']),
+    goToProfile() {
+      const currentPath = this.$router.history.current.name;
+      const userProfileId = this.$router.history.current.params.id;
+
+      this.userBtn.isDropdownVisible = false;
+
+      if (
+        currentPath === 'user-profile' &&
+        userProfileId === this.currentUser.id
+      ) {
+        this.userBtn.isActive = true;
+        this.navBtns.forEach((btn) => {
+          btn.isActive = false;
+        });
+      }
+    },
+    //
+    signOut() {
+      localStorage.removeItem('isAuth');
+      localStorage.removeItem('token');
+      this.$router.push('/login');
+
+      this.userBtn.isActive = false;
+      this.userBtn.isDropdownVisible = false;
+    },
     selectNavBtn(event) {
       this.userBtn.isActive = false;
 
@@ -117,11 +165,39 @@ export default {
       this.userBtn.isDropdownVisible = !this.userBtn.isDropdownVisible;
     },
     clickOutsideDropdown() {
-      this.userBtn.isActive = false;
-      this.userBtn.isDropdownVisible = false;
+      const currentPath = this.$router.history.current.name;
+      const userProfileId = this.$router.history.current.params.id;
+
+      if (
+        currentPath === 'user-profile' &&
+        userProfileId === this.currentUser.id
+      ) {
+        this.userBtn.isActive = true;
+        this.userBtn.isDropdownVisible = false;
+      } else {
+        this.userBtn.isActive = false;
+        this.userBtn.isDropdownVisible = false;
+      }
+    },
+  },
+  watch: {
+    $route(to, from) {
+      if (
+        to.name.includes('profile') &&
+        this.currentUser.id === this.$route.params.id
+      ) {
+        this.userBtn.isActive = true;
+        this.navBtns.forEach((btn) => {
+          btn.isActive = false;
+        });
+      } else {
+        this.userBtn.isActive = false;
+      }
     },
   },
   mounted() {
+    this.fetchCurrentUser();
+    //
     const path = this.$router.history.current.name;
     this.navBtns.forEach((btn) => {
       if (path.includes(btn.id)) {

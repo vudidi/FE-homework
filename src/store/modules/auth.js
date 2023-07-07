@@ -15,8 +15,8 @@ export default {
     },
   },
   actions: {
-    loginAction(context, login, password) {
-      loginUser(context, login, password);
+    loginAction(context, user) {
+      loginUser(context, user);
     },
   },
 };

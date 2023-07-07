@@ -31,7 +31,7 @@ export default {
     },
     placeholder: {
       type: String,
-      required: true,
+      required: false,
     },
     type: {
       type: String,
@@ -47,7 +47,7 @@ export default {
     },
     inputErrorClass: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   data() {

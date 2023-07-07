@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <form
+      autocomplete="off"
       v-on:submit.prevent="login"
       ref="loginForm"
       id="login-form"
@@ -22,8 +23,7 @@
           <Input
             pattern="^[A-Za-z0-9@_\-\.]+$"
             id="login"
-            name="login"
-            autocomplete="new-login"
+            autocomplete="off"
             inputErrorClass="login-error"
             placeholder=""
             type="text"
@@ -47,7 +47,6 @@
           <Input
             pattern="^[A-Za-z0-9@_\-\.]+$"
             id="password"
-            name="password"
             autocomplete="new-password"
             inputErrorClass="password-error"
             placeholder=""
@@ -94,6 +93,7 @@
 import enableValidation from '@/helpers/validation';
 import { validationSet } from '@/helpers/constants';
 import { mapGetters, mapActions } from 'vuex';
+import { getCurrentUser } from '@/api/users';
 
 export default {
   data() {
@@ -123,7 +123,9 @@ export default {
     login() {
       const formValidity = this.$refs.loginForm.checkValidity();
       if (formValidity) {
-        this.loginAction(this.model.login, this.model.password);
+        this.loginAction(this.model);
+      } else {
+        enableValidation(validationSet);
       }
     },
   },

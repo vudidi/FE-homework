@@ -4,19 +4,23 @@
       <div class="list-container list__user-container">
         <img
           class="list-userAvatar list__user-userAvatar"
-          :src="user.avatar"
+          :src="user.picture"
           alt="Аватар пользователя"
         />
-        <h3 class="list-title list__user-title">{{ user.name }}</h3>
-        <div class="list-status list-status_type_off" v-if="!user.isActive">
+        <Link
+          v-bind:link="userLink"
+          :to="{ name: 'user-profile', params: { id: user.id } }"
+          ><h3 class="list-title list__user-title">{{ user.name }}</h3></Link
+        >
+        <div class="list-status list-status_type_off" v-if="!userStatus">
           Не активен
         </div>
       </div>
 
       <div
-        class="list-menu list__user-menu"
+        class="list-menu list-menu_visible"
         v-click-outside="clickOutside"
-        v-if="isAdmin"
+        v-if="currentUserRole"
       >
         <Button
           v-bind:button="dropdownBtn"
@@ -53,13 +57,18 @@
 <script>
 export default {
   props: {
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
     user: {
       type: Object,
       default: {},
+    },
+    currentUserRole: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    userStatus() {
+      return this.user.status === 'ACTIVE' ? true : false;
     },
   },
   methods: {
@@ -72,6 +81,9 @@ export default {
       dropdownBtn: {
         id: 'list-user-btn',
         isActive: false,
+      },
+      userLink: {
+        id: 'user-link',
       },
     };
   },

@@ -46,6 +46,10 @@
   &__user-title {
     margin: 0 32px 0 0;
     height: 19px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.6;
+    }
   }
   &-userAvatar {
     width: 24px;
@@ -114,10 +118,11 @@
   &-menu {
     display: none;
     position: relative;
+    &_visible {
+      display: block;
+    }
   }
-  &__user-menu {
-    display: block;
-  }
+
   &-button {
     margin: 0 0 0 16px;
   }

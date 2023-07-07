@@ -1,14 +1,15 @@
 import axios from 'axios';
+import router from '@/router/router';
 
 const url = 'http://45.12.239.156:8081/api';
 
-export function loginUser(context, login, password) {
+export function loginUser(context, user) {
   return axios
     .post(
       `${url}/login`,
       {
-        login: login,
-        password: password,
+        login: user.login,
+        password: user.password,
       },
       {
         headers: {
@@ -18,6 +19,10 @@ export function loginUser(context, login, password) {
     )
     .then((res) => {
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('isAuth', true);
+      router.push('/projects').catch((err) => {
+        throw new Error(`Problem handling something: ${err}.`);
+      });
     })
     .catch((err) => {
       console.log('error', err);

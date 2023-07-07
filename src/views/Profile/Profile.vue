@@ -1,29 +1,316 @@
 <template>
   <section class="profile">
+    <Modal
+      v-on:click-accept-btn="updateAvatar"
+      v-on:click-cancel-btn="closeImageModal"
+      v-bind:isOpen="isImageModalOpen"
+      modalTitle="Редактирование фото"
+      type="modal__container_type_create"
+      cancelBtnTitle="Отмена"
+      acceptBtnTitle="Сохранить изменения"
+    >
+      <Uploader
+        v-on:upload-file="uploadFile"
+        v-on:dragover="dragoverFile"
+        v-on:dragleave="dragleaveFile"
+        v-on:drop="dropFile"
+        v-on:delete-photo="deletePhoto"
+        :isDragover="isDragover"
+        :isLoaded="isFileLoaded"
+        :isInvalidFile="isInvalidFile"
+        :errorText="errorText"
+        :file="currentImage"
+      />
+    </Modal>
+
+    <div
+      class="list-menu list-menu_visible profile__menu"
+      v-click-outside="clickOutsideDropdown"
+      v-if="currentUserRole"
+    >
+      <Button
+        v-bind:button="dropdownBtn"
+        v-bind:class="[
+          'button',
+          'icon-button',
+          'list-button',
+          { 'icon-button_active': isDropdownOpen },
+        ]"
+        v-on:click-btn="toggleDropdown"
+      >
+        <svg-icon
+          v-bind:class="['icon-button__icon']"
+          name="menu-dots"
+        ></svg-icon>
+      </Button>
+      <ul class="dropdown-menu" v-if="isDropdownOpen">
+        <li class="dropdown-menu__item">
+          <Link
+            v-bind:link="profileUpdateBtn"
+            v-bind:class="['dropdown-menu__link']"
+            to="#"
+          ></Link>
+        </li>
+
+        <li class="dropdown-menu__item">
+          <Button
+            v-bind:button="updPasswordBtn"
+            v-bind:class="['dropdown-menu__link']"
+            >Изменить пароль</Button
+          >
+        </li>
+        <li class="dropdown-menu__item">
+          <Link
+            v-bind:link="getUserTasksBtn"
+            v-bind:class="['dropdown-menu__link']"
+            to="#"
+          ></Link>
+        </li>
+
+        <li class="dropdown-menu__item">
+          <Button
+            v-bind:button="profileDeleteBtn"
+            v-bind:class="[
+              'dropdown-menu__link',
+              'dropdown-menu__link_type_delete',
+            ]"
+            >Удалить</Button
+          >
+        </li>
+      </ul>
+    </div>
     <div class="profile__imgContainer">
-      <img class="profile__image" :src="image" alt="Фото пользователя" />
+      <img
+        ref="userImage"
+        class="profile__image"
+        :src="updatedUserProfile.picture"
+        alt="Фото пользователя"
+      />
+      <div
+        class="list-menu list-menu_visible profile__image-menu"
+        v-click-outside="clickOutsideImageDropdown"
+        v-if="currentUserRole"
+      >
+        <Button
+          v-bind:button="imageDropdownBtn"
+          v-bind:class="[
+            'button',
+            'icon-button',
+            'list-button',
+            { 'icon-button_active': isImageDropdownOpen },
+          ]"
+          v-on:click-btn="toggleImageDropdown"
+        >
+          <svg-icon
+            v-bind:class="['icon-button__icon']"
+            name="menu-dots"
+          ></svg-icon>
+        </Button>
+        <ul class="dropdown-menu" v-if="isImageDropdownOpen">
+          <li class="dropdown-menu__item">
+            <Button
+              v-on:click-btn="openImageModal"
+              v-bind:button="imageUpdateBtn"
+              v-bind:class="['dropdown-menu__link']"
+              >Редактировать</Button
+            >
+          </li>
+          <li class="dropdown-menu__item">
+            <Button
+              v-bind:button="imageDeleteBtn"
+              v-bind:class="[
+                'dropdown-menu__link',
+                'dropdown-menu__link_type_delete',
+              ]"
+              >Удалить</Button
+            >
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="profile__textContainer">
-      <h1 class="profile__title">{{ title }}</h1>
-      <h2 class="profile__subtitle">{{ subtitle }}</h2>
-      <p class="profile__about">{{ about }}</p>
+      <div class="profile__titleContainer">
+        <h1 class="profile__title">{{ updatedUserProfile.name }}</h1>
+        <div v-bind:class="['list-status', userStatusClass]">
+          {{ userStatus }}
+        </div>
+      </div>
+      <h2 class="profile__subtitle">О себе&#58;</h2>
+      <p class="profile__about">
+        {{
+          updatedUserProfile.descripton ||
+          'Пользователь пока ничего не рассказал о себе'
+        }}
+      </p>
     </div>
   </section>
 </template>
 
 <script>
+import Modal from '@/components/UI/Modal/Modal.vue';
+import { mapGetters, mapActions } from 'vuex';
+import { uploadAvatar } from '@/api/admin/user';
+import formatFileSize from '@/helpers/formatFileSize';
+import validateFile from '@/helpers/validateFile';
+
 export default {
+  components: {
+    Modal,
+  },
   data() {
     return {
-      image: require('@/assets/images/avatar.png'),
-      title: 'Котов Семен Васильевич',
-      subtitle: 'О себе:',
-      about:
-        'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Вдали от всех живут они в буквенных домах на берегу Семантика большого языкового океана. Маленький ручеек Даль журчит по всей стране и обеспечивает ее всеми необходимыми правилами. Эта парадигматическая страна, в которой жаренные члены предложения залетают прямо в рот. Даже всемогущая пунктуация не имеет власти над рыбными текстами, ведущими безорфографичный образ жизни. Однажды одна маленькая строчка рыбного текста по имени Lorem ipsum решила выйти в большой мир грамматики. Великий Оксмокс предупреждал ее о злых запятых, диких знаках вопроса и коварных точках с запятой, но текст не дал сбить себя с толку. Он собрал семь своих заглавных букв, подпоясал инициал за пояс и пустился в дорогу. Взобравшись на первую вершину курсивных гор, бросил он последний взгляд назад, на силуэт своего родного города Буквоград, на заголовок деревни Алфавит и на подзаголовок своего переулка Строчка. Грустный риторический вопрос скатился по его щеке и он продолжил свой путь. По дороге встретил текст рукопись. Она предупредила его: «В моей стране все переписывается по несколько раз. Единственное, что от меня осталось, это приставка «и». Возвращайся ты лучше в свою безопасную страну». Не послушавшись рукописи, наш текст продолжил свой путь. Вскоре ему повстречался коварный составитель рекламных текстов, напоивший его языком и речью и заманивший в свое агенство, которое использовало его снова и снова в своих проектах. И если его не переписали, то живет он там до сих пор. Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Вдали от всех живут они в буквенных домах на берегу Семантика большого языкового океана. Маленький ручеек Даль журчит по всей стране и обеспечивает ее всеми необходимыми правилами. Эта парадигматическая страна, в которой жаренные члены предложения залетают прямо в рот. Даже всемогущая пунктуация не имеет власти над рыбными текстами, ведущими безорфографичный образ жизни. Однажды одна маленькая строчка р.',
+      isDragover: false,
+      isImageModalOpen: false,
+      isFileLoaded: false,
+      isDropdownOpen: false,
+      currentImage: {
+        name: '',
+        type: '',
+        size: '',
+      },
+      model: {
+        avatar: null,
+      },
+      dropdownBtn: {
+        id: 'profile-menu-btn',
+        isActive: false,
+      },
+      isImageDropdownOpen: false,
+      imageDropdownBtn: {
+        id: 'img-menu-btn',
+        isActive: false,
+      },
+      profileUpdateBtn: {
+        id: 'update-profile-btn',
+        title: 'Редактировать',
+      },
+      updPasswordBtn: {
+        id: 'update-password-btn',
+      },
+      getUserTasksBtn: {
+        id: 'get-tasks-btn',
+        title: 'Просмотр задач пользователя',
+      },
+      profileDeleteBtn: {
+        id: 'delete-profile-btn',
+      },
+      imageUpdateBtn: {
+        id: 'update-image-btn',
+      },
+      imageDeleteBtn: {
+        id: 'delete-image-btn',
+      },
     };
   },
-  components: {},
+  computed: {
+    ...mapGetters(['updatedUserProfile', 'currentUser']),
+
+    currentUserRole() {
+      if (
+        this.currentUser.role === 'ADMIN' ||
+        this.updatedUserProfile.id === this.currentUser.id
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    userStatus() {
+      return this.updatedUserProfile.status === 'ACTIVE'
+        ? 'Активен'
+        : 'Не активен';
+    },
+    userStatusClass() {
+      return this.updatedUserProfile.status === 'ACTIVE'
+        ? 'list-status_type_main'
+        : 'list-status_type_off';
+    },
+    /////
+    errorText() {
+      if (this.model.avatar) {
+        return validateFile(this.model.avatar.size, this.model.avatar.type);
+      }
+    },
+    isInvalidFile() {
+      if (this.model.avatar) {
+        return !!validateFile(this.model.avatar.size, this.model.avatar.type);
+      }
+    },
+  },
+  methods: {
+    ...mapActions(['fetchUserProfile']),
+    updateAvatar() {
+      uploadAvatar(this.updatedUserProfile.id, this.model.avatar);
+
+      console.log('updateAvatar', this.model.avatar);
+    },
+    async openImageModal() {
+      this.isImageModalOpen = true;
+      this.isImageDropdownOpen = false;
+
+      const URL_TO_IMG = this.$refs.userImage.currentSrc;
+      const fileImg = await fetch(URL_TO_IMG).then((r) => r.blob());
+
+      this.currentImage.name = 'FileName';
+      this.currentImage.type = fileImg.type;
+      this.currentImage.size = formatFileSize(fileImg.size);
+    },
+    closeImageModal() {
+      this.isImageModalOpen = false;
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+    },
+    clickOutsideDropdown() {
+      this.isDropdownOpen = false;
+    },
+    toggleImageDropdown() {
+      this.isImageDropdownOpen = !this.isImageDropdownOpen;
+    },
+    clickOutsideImageDropdown() {
+      this.isImageDropdownOpen = false;
+    },
+    //////
+    deletePhoto() {
+      this.isFileLoaded = false;
+    },
+    uploadFile(event) {
+      this.model.avatar = event.target.files[0];
+
+      this.currentImage.name = `${event.target.files[0].name}`;
+      this.currentImage.type = `${event.target.files[0].type}`;
+      this.currentImage.size = `${formatFileSize(event.target.files[0].size)}`;
+
+      this.isFileLoaded = true;
+    },
+    dragoverFile() {
+      this.isDragover = true;
+    },
+    dropFile(event) {
+      this.model.avatar = event.dataTransfer.files[0];
+
+      this.currentImage.name = `${event.dataTransfer.files[0].name}`;
+      this.currentImage.type = `${event.dataTransfer.files[0].type}`;
+      this.currentImage.size = `${formatFileSize(
+        event.dataTransfer.files[0].size
+      )}`;
+
+      this.isFileLoaded = true;
+    },
+    dragleaveFile() {
+      this.isDragover = false;
+    },
+  },
+  mounted() {
+    this.fetchUserProfile(this.$route.params.id);
+
+    if (this.updatedUserProfile.picture !== null) {
+      this.isFileLoaded = true;
+    } else {
+      this.isFileLoaded = false;
+    }
+  },
 };
 </script>
 

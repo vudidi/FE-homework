@@ -1,25 +1,27 @@
 .dropdown-menu {
   z-index: 3;
   position: absolute;
-  top: 48px;
+  top: 42px;
   right: 0;
   padding: 16px;
   background-color: $bgSecondaryDefault;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
   &__item {
-    &:first-child {
-      margin: 0 0 16px;
+    margin: 0 0 16px;
+    &:last-child {
+      margin: 0 0 0;
     }
   }
   &__link {
-    cursor: default;
     font-size: 14px;
     line-height: 19px;
     color: $fontPrimary;
+    background-color: transparent;
+    white-space: nowrap;
     transition: all ease 0.5s;
-    // &:hover {
-    //   opacity: 0.8;
-    // }
+    &:hover {
+      opacity: 0.8;
+    }
     &_type {
       &_delete {
         color: $fontError;

@@ -7,13 +7,19 @@
 
 <script>
 import Navigation from '@/components/Navigation/Navigation.vue';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
   components: {
     Navigation,
   },
-  mounted() {},
+  methods: {
+    ...mapActions(['fetchCurrentUser']),
+  },
+  mounted() {
+    this.fetchCurrentUser();
+  },
 };
 </script>
 
