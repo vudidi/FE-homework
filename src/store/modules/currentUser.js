@@ -1,4 +1,5 @@
 import { getCurrentUser } from '@/api/users';
+import { uploadCurrentAvatar } from '@/api/admin/user';
 
 const url = 'http://45.12.239.156:8081';
 
@@ -10,7 +11,7 @@ export default {
       name: '',
       description: '',
       status: '',
-      picture: `${require('@/assets/images/avatar.png')}`,
+      picture: null,
     },
   },
   getters: {
@@ -28,13 +29,16 @@ export default {
       if (payload.picture) {
         state.user.picture = `${url}/${payload.picture}`;
       } else {
-        state.user.picture = require('@/assets/images/avatar.png');
+        state.user.picture = null;
       }
     },
   },
   actions: {
     fetchCurrentUser(context) {
       getCurrentUser(context);
+    },
+    updateCurrentUserAvatar(context, data) {
+      uploadCurrentAvatar(context, data);
     },
   },
 };

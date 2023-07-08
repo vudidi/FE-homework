@@ -51,7 +51,7 @@ export function getUsers(context) {
           name: '',
           description: '',
           status: '',
-          picture: '',
+          picture: null,
           isDropdownOpen: false,
         };
         user.id = el._id;
@@ -62,9 +62,8 @@ export function getUsers(context) {
         if (el.picture) {
           user.picture = `http://45.12.239.156:8081/${el.picture}`;
         } else {
-          user.picture = require('@/assets/images/avatar.png');
+          user.picture = null;
         }
-
         users.push(user);
       });
       context.commit('updateAllUsers', users);

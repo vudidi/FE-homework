@@ -28,10 +28,18 @@
               { 'user-button_active': userBtn.isActive },
             ]"
           >
+            <div v-if="!isUserAvatar" class="user__defaultImg">
+              <div class="user__defaultImg-initials">
+                {{ defaultUserAvatar }}
+              </div>
+            </div>
+
             <img
+              v-else
               class="user-button__avatar"
               :src="currentUser.picture"
               alt="Аватар пользователя" />
+
             <svg-icon
               v-bind:class="['user-button__icon']"
               name="arrow"
@@ -67,6 +75,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import getUserInitials from '@/helpers/getUserInitials';
 
 export default {
   data() {
@@ -121,6 +130,16 @@ export default {
   },
   computed: {
     ...mapGetters(['currentUser', 'updatedUserProfile']),
+    defaultUserAvatar() {
+      return getUserInitials(this.currentUser.name);
+    },
+    isUserAvatar() {
+      if (this.currentUser.picture !== null) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     ...mapActions(['fetchCurrentUser']),

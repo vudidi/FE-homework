@@ -15,7 +15,7 @@ export default {
     Navigation,
   },
   methods: {
-    ...mapActions(['fetchCurrentUser']),
+    ...mapActions(['fetchCurrentUser', 'fetchProjects']),
   },
   mounted() {
     this.fetchCurrentUser();

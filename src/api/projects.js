@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const url = 'http://45.12.239.156:8081/api';
 
-export function getProjectsAxios(token) {
+export function getProjects(context) {
   return axios
     .post(
       `${url}/projects/search`,
@@ -12,20 +12,45 @@ export function getProjectsAxios(token) {
       },
       {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
       }
     )
     .then((res) => {
-      console.log('ProjectsAxios', res.data);
+      const projects = [];
+
+      res.data.projects.forEach((el) => {
+        const project = {
+          id: '',
+          name: '',
+          author: '',
+          authorEdited: '',
+          code: '',
+          dateCreated: '',
+          dateEdited: '',
+          isDropdownOpen: false,
+        };
+
+        project.id = el._id;
+        project.name = el.name;
+        project.author = el.author;
+        project.authorEdited = el.authorEdited;
+        project.code = el.code;
+        project.dateCreated = el.dateCreated;
+        project.dateEdited = el.dateEdited;
+
+        projects.push(project);
+      });
+
+      context.commit('updateAllProjects', projects);
     })
     .catch((err) => {
       console.log('error', err);
     });
 }
 
-export function addProjectAxios(token) {
+export function addProject() {
   return axios
     .post(
       `${url}/projects`,
@@ -35,7 +60,7 @@ export function addProjectAxios(token) {
       },
       {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
       }
@@ -49,7 +74,7 @@ export function addProjectAxios(token) {
     });
 }
 
-export function updateProjectAxios(token, id) {
+export function updateProject(id) {
   return axios
     .put(
       `${url}/projects`,
@@ -60,7 +85,7 @@ export function updateProjectAxios(token, id) {
       },
       {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
       }
@@ -73,11 +98,11 @@ export function updateProjectAxios(token, id) {
     });
 }
 
-export function deleteProjectAxios(token, id) {
+export function deleteProject(token, id) {
   return axios
     .delete(`${url}/projects/${id}`, {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',
       },
     })

@@ -2,7 +2,13 @@
   <div class="user">
     <li class="list-item">
       <div class="list-container list__user-container">
+        <div v-if="!isUserAvatar" class="user__defaultImg">
+          <div class="user__defaultImg-initials">
+            {{ defaultUserAvatar }}
+          </div>
+        </div>
         <img
+          v-else
           class="list-userAvatar list__user-userAvatar"
           :src="user.picture"
           alt="Аватар пользователя"
@@ -55,6 +61,8 @@
 </template>
 
 <script>
+import getUserInitials from '@/helpers/getUserInitials';
+
 export default {
   props: {
     user: {
@@ -69,6 +77,16 @@ export default {
   computed: {
     userStatus() {
       return this.user.status === 'ACTIVE' ? true : false;
+    },
+    defaultUserAvatar() {
+      return getUserInitials(this.user.name);
+    },
+    isUserAvatar() {
+      if (this.user.picture !== null) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   methods: {

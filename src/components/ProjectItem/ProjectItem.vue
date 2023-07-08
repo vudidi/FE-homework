@@ -3,9 +3,9 @@
     <li class="list-item">
       <div class="list-wrapper">
         <div class="list-container">
-          <h3 class="list-title">{{ project.title }}</h3>
+          <h3 class="list-title">{{ project.name }}</h3>
           <div class="tooltip tooltip__title">
-            <div class="tooltip__content">{{ project.title }}</div>
+            <div class="tooltip__content">{{ project.name }}</div>
           </div>
         </div>
         <div class="list-container">
@@ -17,9 +17,13 @@
           </div>
 
           <div class="list-tooltip">
-            <p class="list-create">{{ project.create }}</p>
+            <p class="list-create">
+              {{ project.author }} {{ project.dateCreated }}
+            </p>
             <div class="tooltip tooltip__create">
-              <div class="tooltip__content">{{ project.create }}</div>
+              <div class="tooltip__content">
+                {{ project.author }} {{ project.dateCreated }}
+              </div>
             </div>
           </div>
 
@@ -29,11 +33,11 @@
               v-on:mouseover="mouseOver"
               v-on:mouseleave="mouseLeave"
             >
-              {{ project.update }}
+              {{ project.authorEdited }} {{ project.dateEdited }}
             </p>
             <div class="tooltip tooltip__update" v-if="isHover">
               <div class="tooltip__content">
-                {{ project.update }}
+                {{ project.authorEdited }} {{ project.dateEdited }}
               </div>
             </div>
           </div>

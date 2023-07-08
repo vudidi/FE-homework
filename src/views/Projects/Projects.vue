@@ -45,7 +45,7 @@
         />
       </div>
     </Modal>
-    <div class="list projects" v-if="projects.length">
+    <div class="list projects" v-if="allProjects.length">
       <SearchPanel
         v-bind:items="sortProjectsSelect"
         selectID="sortProjectsSelect"
@@ -58,7 +58,7 @@
       />
 
       <ProjectItem
-        v-for="project in projects"
+        v-for="project in allProjects"
         v-bind:key="project.id"
         v-bind:project="project"
         v-on:open-dropdown="openDropdown"
@@ -126,52 +126,13 @@ export default {
           value: 'update',
         },
       ],
-      projects: [
-        {
-          id: 'e90d4288c2098a0f027691d115b688cd',
-          title:
-            'Проект: Описание задачи далеко-далеко за словесными горами в стране  гласных и согласных живут рыбные тексты. Вдали от всех живут  они в буквенных домах на берегу Семантика большого языковогоокеана. Маленький ручеек Даль журчит по всей стране иобеспечивает ее всеми необходимыми правилами',
-          code: '22398742#12345',
-          create: 'Климов-Петров И.И. создал(а) 17 сен 2022 в 13:55',
-          update: 'Иванов В.В. изменил(а) 1 минуту назад',
-          isDropdownOpen: false,
-        },
-        {
-          id: '088ab8d8f1ce519871dae89a31ef9ee5',
-          title: 'Название проекта',
-          code: '22398742#1234545637458273658972635872635876245786',
-          create: 'Петров И.И. создал(а) 17 сен 2022 в 13:55',
-          update: 'Иванов В.В. изменил(а) 1 минуту назад',
-          isDropdownOpen: false,
-        },
-        {
-          id: '61f12dd4fe8b2b94dce10016cb66e79a',
-          title: 'Название проекта',
-          code: 'кодпроекта#3',
-          create: 'Иванов И.И. создал(а) 1 час назад',
-          update: 'Сазонова В.В. изменил(а) 1 минуту назад',
-          isDropdownOpen: false,
-        },
-        {
-          id: 'd226b104c34473cfbc272a7d91b5df6f',
-          title: 'Название проекта',
-          code: 'кодпроекта#3',
-          create: 'Иванов И.И. создал(а) 1 час назад',
-          update: 'Сазонова В.В. изменил(а) 1 минуту назад',
-          isDropdownOpen: false,
-        },
-        {
-          id: '24063f2a495c28888c5e0df7d123deed',
-          title: 'Название проекта',
-          code: 'кодпроекта#3',
-          create: 'Иванов И.И. создал(а) 1 час назад',
-          update: 'Сазонова В.В. изменил(а) 1 минуту назад',
-          isDropdownOpen: false,
-        },
-      ],
     };
   },
+  computed: {
+    ...mapGetters(['allProjects']),
+  },
   methods: {
+    ...mapActions(['fetchProjects']),
     updateSortValue(value) {
       this.model.sortValue = value;
     },
@@ -182,7 +143,7 @@ export default {
       this.isCreateModalOpen = false;
     },
     openDropdown(id) {
-      this.projects.forEach((project) => {
+      this.allProjects.forEach((project) => {
         if (project.id === id) {
           project.isDropdownOpen = !project.isDropdownOpen;
         } else {
@@ -191,7 +152,7 @@ export default {
       });
     },
     clickOutsideDropdown(id) {
-      this.projects.forEach((project) => {
+      this.allProjects.forEach((project) => {
         if (project.id === id) {
           project.isDropdownOpen = false;
         }
@@ -199,6 +160,8 @@ export default {
     },
   },
   mounted() {
+    this.fetchProjects();
+
     getOverflowValue(tooltipClasses);
 
     select.forEach((el) => {

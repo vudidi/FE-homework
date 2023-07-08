@@ -1,4 +1,5 @@
 import { getUserProfile } from '@/api/users';
+import { uploadAvatar } from '@/api/admin/user';
 
 const url = 'http://45.12.239.156:8081';
 
@@ -10,7 +11,7 @@ export default {
       name: '',
       description: '',
       status: '',
-      picture: '',
+      picture: null,
     },
   },
   getters: {
@@ -28,13 +29,16 @@ export default {
       if (payload.picture) {
         state.userProfile.picture = `${url}/${payload.picture}`;
       } else {
-        state.userProfile.picture = require('@/assets/images/avatar.png');
+        state.userProfile.picture = null;
       }
     },
   },
   actions: {
     fetchUserProfile(context, userID) {
       getUserProfile(context, userID);
+    },
+    updateUserAvatar(context, data) {
+      uploadAvatar(context, data);
     },
   },
 };
