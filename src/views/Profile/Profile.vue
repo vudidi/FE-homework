@@ -281,23 +281,37 @@ export default {
     ]),
     updateAvatar() {
       if (this.model.avatar) {
-        this.updateUserAvatar({
-          id: this.updatedUserProfile.id,
-          formData: this.model.avatar,
-        });
-        this.updateCurrentUserAvatar({
-          id: this.updatedUserProfile.id,
-          formData: this.model.avatar,
-        });
+        if (this.currentUser.id === this.$route.params.id) {
+          this.updateUserAvatar({
+            id: this.updatedUserProfile.id,
+            formData: this.model.avatar,
+          });
+          this.updateCurrentUserAvatar({
+            id: this.updatedUserProfile.id,
+            formData: this.model.avatar,
+          });
+        } else {
+          this.updateUserAvatar({
+            id: this.updatedUserProfile.id,
+            formData: this.model.avatar,
+          });
+        }
       } else {
-        this.updateUserAvatar({
-          id: this.updatedUserProfile.id,
-          formData: 'null',
-        });
-        this.updateCurrentUserAvatar({
-          id: this.updatedUserProfile.id,
-          formData: 'null',
-        });
+        if (this.currentUser.id === this.$route.params.id) {
+          this.updateUserAvatar({
+            id: this.updatedUserProfile.id,
+            formData: 'null',
+          });
+          this.updateCurrentUserAvatar({
+            id: this.updatedUserProfile.id,
+            formData: 'null',
+          });
+        } else {
+          this.updateUserAvatar({
+            id: this.updatedUserProfile.id,
+            formData: 'null',
+          });
+        }
       }
       this.isImageModalOpen = false;
     },
@@ -333,14 +347,21 @@ export default {
     },
     //////
     deletePhotoInDropdown() {
-      this.updateUserAvatar({
-        id: this.updatedUserProfile.id,
-        formData: 'null',
-      });
-      this.updateCurrentUserAvatar({
-        id: this.updatedUserProfile.id,
-        formData: 'null',
-      });
+      if (this.currentUser.id === this.$route.params.id) {
+        this.updateUserAvatar({
+          id: this.updatedUserProfile.id,
+          formData: 'null',
+        });
+        this.updateCurrentUserAvatar({
+          id: this.updatedUserProfile.id,
+          formData: 'null',
+        });
+      } else {
+        this.updateUserAvatar({
+          id: this.updatedUserProfile.id,
+          formData: 'null',
+        });
+      }
       this.isImageDropdownOpen = false;
       this.model.avatar = null;
       this.isPreviewImage = false;

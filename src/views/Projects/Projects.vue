@@ -79,11 +79,9 @@ import ProjectItem from '@/components/ProjectItem/ProjectItem.vue';
 import SearchPanel from '@/components/SearchPanel/SearchPanel.vue';
 import getOverflowValue from '@/helpers/showTooltip';
 import { tooltipClasses } from '@/helpers/constants';
-import customSelect from '@/helpers/customSelect';
+import renderSelect from '@/helpers/renderSelect';
 import store from '@/store';
 import { mapGetters, mapActions } from 'vuex';
-
-const select = document.querySelectorAll('.select');
 
 export default {
   components: {
@@ -132,7 +130,7 @@ export default {
     ...mapGetters(['allProjects']),
   },
   methods: {
-    ...mapActions(['fetchProjects']),
+    ...mapActions(['fetchProjects', 'fetchUsers']),
     updateSortValue(value) {
       this.model.sortValue = value;
     },
@@ -159,15 +157,18 @@ export default {
       });
     },
   },
+  // ---------------------------------------------
+  beforeMount() {
+    this.fetchUsers();
+  },
   mounted() {
     this.fetchProjects();
-
-    getOverflowValue(tooltipClasses);
-
-    select.forEach((el) => {
-      customSelect(el);
-    });
   },
+  updated() {
+    getOverflowValue(tooltipClasses);
+    renderSelect();
+  },
+  // ---------------------------------------------
   beforeRouteEnter(to, from, next) {
     if (from.name === 'login') {
       store.dispatch('fetchCurrentUser');

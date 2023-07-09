@@ -201,6 +201,13 @@ export default {
   },
   watch: {
     $route(to, from) {
+      this.navBtns.forEach((btn) => {
+        if (to.name.includes(btn.id)) {
+          btn.isActive = true;
+        } else {
+          btn.isActive = false;
+        }
+      });
       if (
         to.name.includes('profile') &&
         this.currentUser.id === this.$route.params.id
@@ -209,10 +216,32 @@ export default {
         this.navBtns.forEach((btn) => {
           btn.isActive = false;
         });
+      } else if (
+        to.name.includes('profile') &&
+        this.currentUser.id !== this.$route.params.id
+      ) {
+        this.userBtn.isActive = false;
+        this.navBtns.forEach((btn) => {
+          if (btn.id === 'users') {
+            btn.isActive = true;
+          }
+        });
       } else {
         this.userBtn.isActive = false;
       }
     },
+  },
+  beforeUpdate() {
+    const path = this.$router.history.current.name;
+    if (
+      path.includes('profile') &&
+      this.currentUser.id === this.$route.params.id
+    ) {
+      this.userBtn.isActive = true;
+      this.navBtns.forEach((btn) => {
+        btn.isActive = false;
+      });
+    }
   },
   mounted() {
     this.fetchCurrentUser();
@@ -220,6 +249,8 @@ export default {
     const path = this.$router.history.current.name;
     this.navBtns.forEach((btn) => {
       if (path.includes(btn.id)) {
+        btn.isActive = true;
+      } else if (btn.id === 'users' && path.includes('profile')) {
         btn.isActive = true;
       } else {
         btn.isActive = false;

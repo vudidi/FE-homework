@@ -3,28 +3,36 @@
     <li class="list-item">
       <div class="list-wrapper">
         <div class="list-container">
-          <h3 class="list-title">{{ task.title }}</h3>
+          <h3 class="list-title">{{ task.name }}</h3>
           <div class="tooltip tooltip__title">
-            <div class="tooltip__content">{{ task.title }}</div>
+            <div class="tooltip__content">{{ task.name }}</div>
+          </div>
+          <div v-if="!isUserAvatar" class="list__defaultAvatar">
+            <div class="list__defaultAvatar-initials">
+              {{ defaultUserAvatar }}
+            </div>
           </div>
           <img
+            v-else
             class="list-userAvatar"
-            :src="task.avatar"
+            :src="task.authorAvatar"
             alt="Аватар пользователя"
           />
         </div>
         <div class="list-container">
           <div class="list-tooltip">
-            <p class="list-code">{{ task.code }}</p>
+            <p class="list-code">{{ task.number }}</p>
             <div class="tooltip tooltip__code">
               <div class="tooltip__content">{{ task.code }}</div>
             </div>
           </div>
 
           <div class="list-tooltip">
-            <p class="list-create">{{ task.create }}</p>
+            <p class="list-create">{{ task.author }} {{ dateCreated }}</p>
             <div class="tooltip tooltip__create">
-              <div class="tooltip__content">{{ task.create }}</div>
+              <div class="tooltip__content">
+                {{ task.author }} {{ fullDateCreated }}
+              </div>
             </div>
           </div>
 
@@ -38,11 +46,11 @@
               v-on:mouseover="mouseOver"
               v-on:mouseleave="mouseLeave"
             >
-              {{ task.update }}
+              {{ task.authorEdited }} {{ dateEdited }}
             </p>
             <div class="tooltip tooltip__update">
               <div class="tooltip__content">
-                {{ task.update }}
+                {{ task.authorEdited }} {{ fullDateEdited }}
               </div>
             </div>
           </div>
@@ -82,6 +90,9 @@
 </template>
 
 <script>
+import { getDateAndTime, getFullDateAndTime } from '@/helpers/formatDate';
+import getUserInitials from '@/helpers/getUserInitials';
+
 export default {
   props: {
     task: {
@@ -120,14 +131,41 @@ export default {
       } else if (
         this.task.status === 'Завершена' ||
         this.task.status === 'Выполнена' ||
-        this.task.status === 'Закрыта' ||
-        this.task.status === 'Активен'
+        this.task.status === 'Закрыта'
       ) {
         return 'list-status_type_main';
       } else if (this.task.status === 'Удалена') {
         return 'list-status_type_error';
+      }
+    },
+    defaultUserAvatar() {
+      return getUserInitials(this.task.author);
+    },
+    isUserAvatar() {
+      if (this.task.authorAvatar !== null) {
+        return true;
       } else {
-        return 'list-status_type_off';
+        return false;
+      }
+    },
+    dateCreated() {
+      return getDateAndTime(this.task.dateCreated);
+    },
+    fullDateCreated() {
+      return getFullDateAndTime(this.task.dateCreated);
+    },
+    dateEdited() {
+      if (this.task.dateEdited) {
+        return getDateAndTime(this.task.dateEdited);
+      } else {
+        return '';
+      }
+    },
+    fullDateEdited() {
+      if (this.task.dateEdited) {
+        return getFullDateAndTime(this.task.dateEdited);
+      } else {
+        return '';
       }
     },
   },

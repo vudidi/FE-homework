@@ -52,6 +52,23 @@
       opacity: 0.6;
     }
   }
+  &__defaultAvatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $bgSecondaryActive;
+    margin: 0 0 0 auto;
+    &-initials {
+      color: $fontDisabled;
+      font-size: 10.24px;
+      font-weight: 600;
+      letter-spacing: 0.205px;
+      text-transform: uppercase;
+    }
+  }
   &-userAvatar {
     width: 24px;
     height: 24px;

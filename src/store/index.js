@@ -3,11 +3,12 @@ import Vuex from 'vuex';
 import auth from './modules/auth';
 import users from './modules/users';
 import projects from './modules/projects';
+import tasks from './modules/tasks';
 import currentUser from './modules/currentUser';
 import userProfile from './modules/userProfile';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules: { auth, users, projects, currentUser, userProfile },
+  modules: { auth, users, projects, tasks, currentUser, userProfile },
 });

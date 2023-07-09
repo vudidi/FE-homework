@@ -1,31 +1,85 @@
 import axios from 'axios';
+import store from '@/store';
+import {
+  getItemAuthor,
+  getItemAuthorAvatar,
+  getItemAuthorEdited,
+} from '@/helpers/getItemAuthorInfo';
+import formatTaskStatus from '@/helpers/formatTaskStatus';
 
 const url = 'http://45.12.239.156:8081/api';
 
-export function getTasksAxios(token) {
-  return axios
+export function getTasks(context) {
+  axios
     .post(
       `${url}/tasks/search`,
       {
         page: 1,
         limit: 10,
+        sort: {
+          field: 'dateCreated',
+          type: 'desc',
+        },
       },
       {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
       }
     )
     .then((res) => {
-      console.log('TasksAxios', res.data);
+      const tasks = [];
+      const users = store.getters.allUsers;
+
+      res.data.tasks.forEach((el) => {
+        const task = {
+          id: '',
+          projectId: '',
+          name: '',
+          description: '',
+          status: '',
+          time: '',
+          number: '',
+          executor: '',
+          author: '',
+          authorAvatar: '',
+          authorEdited: '',
+          dateCreated: '',
+          dateEdited: '',
+          isDropdownOpen: false,
+        };
+
+        const author = getItemAuthor(users, el.author);
+        const authorAvatar = getItemAuthorAvatar(users, el.author);
+        const authorEdited = getItemAuthorEdited(users, el.authorEdited);
+        const status = formatTaskStatus(el.status);
+
+        task.id = el._id;
+        task.projectId = el.projectId;
+        task.name = el.name;
+        task.description = el.description;
+        task.status = status;
+        task.time = el.time;
+        task.number = el.number;
+        task.executor = el.executor;
+        task.author = author;
+        task.authorAvatar = authorAvatar;
+        task.authorEdited = authorEdited;
+        task.dateCreated = el.dateCreated;
+        task.dateEdited = el.dateEdited;
+
+        tasks.push(task);
+      });
+
+      context.commit('updateAllTasks', tasks);
     })
     .catch((err) => {
       console.log('error', err);
     });
 }
 
-export function addTaskAxios(token) {
+export function addTask() {
   return axios
     .post(
       `${url}/tasks`,
@@ -36,7 +90,7 @@ export function addTaskAxios(token) {
       },
       {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
       }
@@ -50,7 +104,7 @@ export function addTaskAxios(token) {
     });
 }
 
-export function updateTaskAxios(token, id) {
+export function updateTask(id) {
   return axios
     .put(
       `${url}/tasks`,
@@ -63,7 +117,7 @@ export function updateTaskAxios(token, id) {
       },
       {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
       }
@@ -76,11 +130,11 @@ export function updateTaskAxios(token, id) {
     });
 }
 
-export function deleteTaskAxios(token, id) {
+export function deleteTask(id) {
   return axios
     .delete(`${url}/tasks/${id}`, {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',
       },
     })

@@ -1,14 +1,23 @@
 import axios from 'axios';
+import store from '@/store';
+import {
+  getItemAuthor,
+  getItemAuthorEdited,
+} from '@/helpers/getItemAuthorInfo';
 
 const url = 'http://45.12.239.156:8081/api';
 
 export function getProjects(context) {
-  return axios
+  axios
     .post(
       `${url}/projects/search`,
       {
         page: 1,
         limit: 10,
+        sort: {
+          field: 'dateCreated',
+          type: 'desc',
+        },
       },
       {
         headers: {
@@ -19,6 +28,7 @@ export function getProjects(context) {
     )
     .then((res) => {
       const projects = [];
+      const users = store.getters.allUsers;
 
       res.data.projects.forEach((el) => {
         const project = {
@@ -32,10 +42,13 @@ export function getProjects(context) {
           isDropdownOpen: false,
         };
 
+        const author = getItemAuthor(users, el.author);
+        const authorEdited = getItemAuthorEdited(users, el.authorEdited);
+
         project.id = el._id;
         project.name = el.name;
-        project.author = el.author;
-        project.authorEdited = el.authorEdited;
+        project.author = author;
+        project.authorEdited = authorEdited;
         project.code = el.code;
         project.dateCreated = el.dateCreated;
         project.dateEdited = el.dateEdited;
@@ -66,7 +79,6 @@ export function addProject() {
       }
     )
     .then((res) => {
-      localStorage.setItem('ProjectAxios', res.data._id);
       console.log('ProjectAxios', res.data);
     })
     .catch((err) => {

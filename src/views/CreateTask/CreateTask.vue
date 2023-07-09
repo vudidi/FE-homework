@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import customSelect from '@/helpers/customSelect';
+import renderSelect from '@/helpers/renderSelect';
 
 export default {
   components: {},
@@ -162,10 +162,7 @@ export default {
     },
   },
   mounted() {
-    const select = document.querySelectorAll('.select');
-    select.forEach((el) => {
-      customSelect(el);
-    });
+    renderSelect();
   },
 };
 </script>
