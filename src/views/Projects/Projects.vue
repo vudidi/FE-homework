@@ -64,6 +64,24 @@
         v-on:open-dropdown="openDropdown"
         v-on:click-outside="clickOutsideDropdown"
       />
+      <Pagination
+        v-bind:pages="visiblePages"
+        :firstPage="firstPage"
+        :isFirstPageVisible="isFirstPageVisible"
+        :lastPage="lastPage"
+        :isLastPageVisible="isLastPageVisible"
+        :isBackBtnActive="currentPage > 1"
+        :isForwardBtnActive="currentPage < totalPages.length"
+        :isLeftExtend="currentPage >= 5"
+        :isRightExtend="currentPage <= totalPages.length - 4"
+        v-on:go-page="goPage"
+        v-on:go-first="goFirstPage"
+        v-on:go-last="goLastPage"
+        v-on:on-enter="goPageOnEnter"
+        v-on:go-back="goBack"
+        v-on:go-forward="goForward"
+        v-model="model.pageValue"
+      />
     </div>
     <noContent
       v-else
@@ -77,22 +95,25 @@
 <script>
 import ProjectItem from '@/components/ProjectItem/ProjectItem.vue';
 import SearchPanel from '@/components/SearchPanel/SearchPanel.vue';
+import Pagination from '@/components/Pagination/Pagination.vue';
 import getOverflowValue from '@/helpers/showTooltip';
 import { tooltipClasses } from '@/helpers/constants';
 import renderSelect from '@/helpers/renderSelect';
 import store from '@/store';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     ProjectItem,
     SearchPanel,
+    Pagination,
   },
   data() {
     return {
       isCreateModalOpen: false,
       model: {
         sortValue: 'По названию',
+        pageValue: '',
       },
       addProjectBtn: {
         id: 'project-add-btn',
@@ -127,10 +148,70 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['allProjects']),
+    ...mapGetters(['allProjects', 'totalPages', 'visiblePages', 'currentPage']),
+    firstPage() {
+      if (this.totalPages.length > 5)
+        return {
+          num: '1',
+          isSelected: false,
+        };
+      else {
+        return {};
+      }
+    },
+    isFirstPageVisible() {
+      if (this.currentPage >= 5) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    lastPage() {
+      if (this.totalPages.length > 5)
+        return {
+          num: this.totalPages.length,
+          isSelected: false,
+        };
+      else {
+        return {};
+      }
+    },
+    isLastPageVisible() {
+      if (this.currentPage < this.totalPages.length - 3) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
+    ...mapMutations(['updateTotalPages']),
     ...mapActions(['fetchProjects', 'fetchUsers']),
+    goPage(page) {
+      this.updateTotalPages(page.num);
+      this.fetchProjects(page.num, null);
+    },
+    goFirstPage(page) {
+      this.updateTotalPages(page.num);
+      this.fetchProjects(page.num, null);
+    },
+    goLastPage(page) {
+      this.updateTotalPages(page.num);
+      this.fetchProjects(page.num, null);
+    },
+    goPageOnEnter() {
+      this.updateTotalPages(this.model.pageValue);
+      this.fetchProjects(this.model.pageValue, null);
+      this.model.pageValue = '';
+    },
+    goBack() {
+      this.updateTotalPages(this.currentPage - 1);
+      this.fetchProjects(this.currentPage, null);
+    },
+    goForward() {
+      this.updateTotalPages(this.currentPage + 1);
+      this.fetchProjects(this.currentPage, null);
+    },
     updateSortValue(value) {
       this.model.sortValue = value;
     },
@@ -162,7 +243,7 @@ export default {
     this.fetchUsers();
   },
   mounted() {
-    this.fetchProjects();
+    this.fetchProjects(this.currentPage, null);
   },
   updated() {
     getOverflowValue(tooltipClasses);

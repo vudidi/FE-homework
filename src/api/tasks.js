@@ -9,17 +9,18 @@ import formatTaskStatus from '@/helpers/formatTaskStatus';
 
 const url = 'http://45.12.239.156:8081/api';
 
-export function getTasks(context) {
+export function getTasks(context, filter) {
   axios
     .post(
       `${url}/tasks/search`,
       {
         page: 1,
-        limit: 10,
+        limit: 100,
         sort: {
           field: 'dateCreated',
           type: 'desc',
         },
+        filter: filter,
       },
       {
         headers: {
@@ -43,6 +44,7 @@ export function getTasks(context) {
           number: '',
           executor: '',
           author: '',
+          authorId: '',
           authorAvatar: '',
           authorEdited: '',
           dateCreated: '',
@@ -64,6 +66,7 @@ export function getTasks(context) {
         task.number = el.number;
         task.executor = el.executor;
         task.author = author;
+        task.authorId = el.author;
         task.authorAvatar = authorAvatar;
         task.authorEdited = authorEdited;
         task.dateCreated = el.dateCreated;

@@ -35,7 +35,6 @@
     <div
       class="list-menu list-menu_visible profile__menu"
       v-click-outside="clickOutsideDropdown"
-      v-if="currentUserRole"
     >
       <Button
         v-bind:button="dropdownBtn"
@@ -53,7 +52,7 @@
         ></svg-icon>
       </Button>
       <ul class="dropdown-menu" v-if="isDropdownOpen">
-        <li class="dropdown-menu__item">
+        <li v-if="currentUserRole" class="dropdown-menu__item">
           <Link
             v-bind:link="profileUpdateBtn"
             v-bind:class="['dropdown-menu__link']"
@@ -61,7 +60,7 @@
           ></Link>
         </li>
 
-        <li class="dropdown-menu__item">
+        <li v-if="currentUserRole" class="dropdown-menu__item">
           <Button
             v-bind:button="updPasswordBtn"
             v-bind:class="['dropdown-menu__link']"
@@ -72,11 +71,11 @@
           <Link
             v-bind:link="getUserTasksBtn"
             v-bind:class="['dropdown-menu__link']"
-            to="#"
+            :to="{ name: 'tasks', query: { author: updatedUserProfile.id } }"
           ></Link>
         </li>
 
-        <li class="dropdown-menu__item">
+        <li v-if="currentUserRole" class="dropdown-menu__item">
           <Button
             v-bind:button="profileDeleteBtn"
             v-bind:class="[

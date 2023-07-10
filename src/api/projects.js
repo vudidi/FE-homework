@@ -4,20 +4,22 @@ import {
   getItemAuthor,
   getItemAuthorEdited,
 } from '@/helpers/getItemAuthorInfo';
+import { getPagPages } from '@/helpers/getPagPages';
 
 const url = 'http://45.12.239.156:8081/api';
 
-export function getProjects(context) {
+export function getProjects(context, page, filter) {
   axios
     .post(
       `${url}/projects/search`,
       {
-        page: 1,
+        page: page,
         limit: 10,
         sort: {
           field: 'dateCreated',
-          type: 'desc',
+          type: 'asc',
         },
+        filter: filter,
       },
       {
         headers: {
@@ -35,6 +37,7 @@ export function getProjects(context) {
           id: '',
           name: '',
           author: '',
+          authorId: '',
           authorEdited: '',
           code: '',
           dateCreated: '',
@@ -48,6 +51,7 @@ export function getProjects(context) {
         project.id = el._id;
         project.name = el.name;
         project.author = author;
+        project.authorId = el.author;
         project.authorEdited = authorEdited;
         project.code = el.code;
         project.dateCreated = el.dateCreated;
@@ -57,6 +61,7 @@ export function getProjects(context) {
       });
 
       context.commit('updateAllProjects', projects);
+      context.commit('getTotalPages', getPagPages(res.data.total, page));
     })
     .catch((err) => {
       console.log('error', err);

@@ -108,7 +108,12 @@ export default {
     this.fetchUsers();
   },
   mounted() {
-    this.fetchTasks();
+    if (this.$route.query) {
+      const filter = this.$route.query;
+      this.fetchTasks(filter);
+    } else {
+      this.fetchTasks(null);
+    }
   },
   updated() {
     getOverflowValue(tooltipClasses);

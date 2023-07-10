@@ -4,7 +4,11 @@
       <li class="list-item">
         <div class="list-wrapper">
           <div class="list-container">
-            <h3 class="list-title">{{ project.name }}</h3>
+            <router-link
+              :to="{ name: 'tasks', query: { projectId: project.id } }"
+              class="list-title"
+              >{{ project.name }}</router-link
+            >
             <div class="tooltip tooltip__title">
               <div class="tooltip__content">{{ project.name }}</div>
             </div>
@@ -42,7 +46,11 @@
             </div>
           </div>
         </div>
-        <div class="list-menu" v-click-outside="clickOutside">
+        <div
+          v-if="isOwnerOrAdmin"
+          class="list-menu"
+          v-click-outside="clickOutside"
+        >
           <Button
             v-bind:button="dropdownBtn"
             v-bind:class="[
@@ -77,6 +85,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { getDateAndTime, getFullDateAndTime } from '@/helpers/formatDate';
 
 export default {
@@ -87,6 +96,17 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(['currentUser']),
+    isOwnerOrAdmin() {
+      if (
+        this.currentUser.id === this.project.authorId ||
+        this.currentUser.role === 'ADMIN'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     dateCreated() {
       return getDateAndTime(this.project.dateCreated);
     },

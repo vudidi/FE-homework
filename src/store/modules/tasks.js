@@ -15,8 +15,8 @@ export default {
     },
   },
   actions: {
-    fetchTasks(context) {
-      getTasks(context);
+    fetchTasks(context, filter) {
+      getTasks(context, filter);
     },
   },
 };

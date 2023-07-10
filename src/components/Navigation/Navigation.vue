@@ -8,7 +8,7 @@
           class="header__nav-item"
         >
           <Link
-            v-bind:to="navBtn.to"
+            v-bind:to="path(navBtn)"
             v-on:click-link="selectNavBtn"
             v-bind:link="navBtn"
             v-bind:class="[
@@ -76,6 +76,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import getUserInitials from '@/helpers/getUserInitials';
+import store from '@/store';
 
 export default {
   data() {
@@ -93,19 +94,16 @@ export default {
           id: 'projects',
           title: 'Проекты',
           isActive: false,
-          to: '/projects',
         },
         {
           id: 'tasks',
           title: 'Задачи',
           isActive: false,
-          to: '/tasks',
         },
         {
           id: 'users',
           title: 'Пользователи',
           isActive: false,
-          to: '/users',
         },
       ],
       userBtn: {
@@ -130,6 +128,7 @@ export default {
   },
   computed: {
     ...mapGetters(['currentUser', 'updatedUserProfile']),
+
     defaultUserAvatar() {
       return getUserInitials(this.currentUser.name);
     },
@@ -142,6 +141,22 @@ export default {
     },
   },
   methods: {
+    path(navBtn) {
+      if (navBtn.id === 'tasks') {
+        return {
+          path: '/tasks',
+          query: { author: this.currentUser.id },
+        };
+      } else if (navBtn.id === 'projects') {
+        return {
+          path: '/projects',
+        };
+      } else if (navBtn.id === 'users') {
+        return {
+          path: '/users',
+        };
+      }
+    },
     ...mapActions(['fetchCurrentUser']),
     goToProfile() {
       const currentPath = this.$router.history.current.name;
@@ -243,9 +258,10 @@ export default {
       });
     }
   },
-  mounted() {
+  beforeMount() {
     this.fetchCurrentUser();
-    //
+  },
+  mounted() {
     const path = this.$router.history.current.name;
     this.navBtns.forEach((btn) => {
       if (path.includes(btn.id)) {

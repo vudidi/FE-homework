@@ -56,7 +56,11 @@
           </div>
         </div>
       </div>
-      <div class="list-menu" v-click-outside="clickOutside">
+      <div
+        v-if="isOwnerOrAdmin"
+        class="list-menu"
+        v-click-outside="clickOutside"
+      >
         <Button
           v-bind:button="dropdownBtn"
           v-bind:class="[
@@ -90,6 +94,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { getDateAndTime, getFullDateAndTime } from '@/helpers/formatDate';
 import getUserInitials from '@/helpers/getUserInitials';
 
@@ -121,6 +126,17 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(['currentUser']),
+    isOwnerOrAdmin() {
+      if (
+        this.currentUser.id === this.task.authorId ||
+        this.currentUser.role === 'ADMIN'
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     computedStatusClass() {
       if (
         this.task.status === 'Черновик' ||
