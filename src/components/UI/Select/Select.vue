@@ -22,7 +22,10 @@
       />
       <div class="select__custom-options">
         <input
-          :class="['select__custom-option', { isHover: item.isActive }]"
+          :class="[
+            'select__custom-option',
+            { isHover: item.value === activeOption },
+          ]"
           v-for="item in items"
           v-bind:key="item.name"
           v-bind:value="item.name"
@@ -62,6 +65,9 @@ export default {
     items: {
       type: Array,
       default: [],
+    },
+    activeOption: {
+      type: String,
     },
   },
   methods: {

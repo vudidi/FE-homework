@@ -64,18 +64,16 @@
       <SearchPanel
         v-bind:items="sortProjectsSelect"
         :defaultValue="projectsSort.value"
+        :activeOption="projectsSort.field"
         selectID="sortProjectsSelect"
         v-on:click-select="updateSortValue"
         v-bind:sortBtn="sortBtn"
         v-bind:addBtn="addProjectBtn"
         v-bind:filterBtn="filterBtn"
-        :isAscSort="isAscSort"
         v-on:click-link="openCreateModal"
+        v-bind:isAscSort="isAscSort"
         v-on:toggle-sort="toggleSort"
       />
-      <p>page: {{ projectsPage }}</p>
-      <p>field: {{ projectsSort.field }}</p>
-      <p>type: {{ projectsSort.type }}</p>
       <ProjectItem
         v-for="project in allProjects"
         v-bind:key="project.id"
@@ -85,15 +83,16 @@
         v-on:delete-project="confirmModalOpen"
       />
       <Pagination
-        v-bind:pages="visiblePages"
+        :isPagination="isPagination"
+        v-bind:pages="visibleProjectsPages"
         :firstPage="firstPage"
         :isFirstPageVisible="isFirstPageVisible"
         :lastPage="lastPage"
         :isLastPageVisible="isLastPageVisible"
         :isBackBtnActive="projectsPage > 1"
-        :isForwardBtnActive="projectsPage < totalPages.length"
-        :isLeftExtend="projectsPage >= 5"
-        :isRightExtend="projectsPage <= totalPages.length - 4"
+        :isForwardBtnActive="projectsPage < totalProjectsPages.length"
+        :isLeftExtend="isLeftExtend"
+        :isRightExtend="isRightExtend"
         v-on:go-page="goPage"
         v-on:go-first="goFirstPage"
         v-on:go-last="goLastPage"
@@ -154,7 +153,7 @@ export default {
         {
           name: 'По дате создания',
           value: 'dateCreated',
-          isActive: true,
+          isActive: false,
         },
         {
           name: 'По дате обновления',
@@ -178,14 +177,36 @@ export default {
     ...mapGetters([
       'allProjects',
       'isProjectsLoading',
-      'totalPages',
-      'visiblePages',
+      'totalProjectsPages',
+      'visibleProjectsPages',
       'projectsPage',
       'projectsSort',
       'projectsFilter',
+      'usersMaxLimit',
+      'allUsers',
     ]),
+    isPagination() {
+      return this.totalProjectsPages.length > 1 ? false : true;
+    },
+    isLeftExtend() {
+      if (this.totalProjectsPages.length > 10 && this.projectsPage >= 5) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isRightExtend() {
+      if (
+        this.totalProjectsPages.length > 10 &&
+        this.projectsPage <= this.totalProjectsPages.length - 4
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     firstPage() {
-      if (this.totalPages.length > 5)
+      if (this.totalProjectsPages.length > 10)
         return {
           num: '1',
           isSelected: false,
@@ -195,16 +216,16 @@ export default {
       }
     },
     isFirstPageVisible() {
-      if (this.projectsPage >= 5) {
+      if (this.totalProjectsPages.length > 10 && this.projectsPage > 4) {
         return true;
       } else {
         return false;
       }
     },
     lastPage() {
-      if (this.totalPages.length > 5)
+      if (this.totalProjectsPages.length > 10)
         return {
-          num: this.totalPages.length,
+          num: this.totalProjectsPages.length,
           isSelected: false,
         };
       else {
@@ -212,7 +233,10 @@ export default {
       }
     },
     isLastPageVisible() {
-      if (this.projectsPage < this.totalPages.length - 3) {
+      if (
+        this.totalProjectsPages.length > 10 &&
+        this.projectsPage < this.totalProjectsPages.length - 3
+      ) {
         return true;
       } else {
         return false;
@@ -226,7 +250,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['updateTotalPages', 'updateProjectsSort']),
+    ...mapMutations(['SET_UPD_PR_PAGES', 'SET_PR_SORT']),
     ...mapActions(['fetchProjects', 'fetchUsers', 'removeProject']),
     closeDeleteModal() {
       this.isDeleteModalOpen = false;
@@ -240,6 +264,7 @@ export default {
     deleteProject() {
       this.removeProject({
         page: this.projectsPage,
+        limit: this.usersMaxLimit,
         sort: {
           field: this.projectsSort.field,
           type: this.projectsSort.type,
@@ -250,9 +275,10 @@ export default {
       this.isDeleteModalOpen = false;
     },
     goPage(page) {
-      this.updateTotalPages(page.num);
+      this.SET_UPD_PR_PAGES(page.num);
       this.fetchProjects({
         page: page.num,
+        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: null,
       });
@@ -266,9 +292,10 @@ export default {
       });
     },
     goFirstPage(page) {
-      this.updateTotalPages(page.num);
+      this.SET_UPD_PR_PAGES(page.num);
       this.fetchProjects({
         page: page.num,
+        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: null,
       });
@@ -282,9 +309,10 @@ export default {
       });
     },
     goLastPage(page) {
-      this.updateTotalPages(page.num);
+      this.SET_UPD_PR_PAGES(page.num);
       this.fetchProjects({
         page: page.num,
+        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: null,
       });
@@ -298,26 +326,39 @@ export default {
       });
     },
     goPageOnEnter() {
-      this.updateTotalPages(this.model.pageValue);
-      this.fetchProjects({
-        page: this.model.pageValue,
-        sort: this.projectsSort,
-        filter: null,
-      });
-      this.$router.push({
-        query: {
-          page: this.model.pageValue,
-          field: this.projectsSort.field,
-          type: this.projectsSort.type,
+      let pageValue = '';
+
+      if (this.totalProjectsPages.length < this.model.pageValue) {
+        pageValue = this.totalProjectsPages.length;
+      } else {
+        pageValue = this.model.pageValue;
+      }
+
+      if (this.projectsPage !== +pageValue) {
+        this.SET_UPD_PR_PAGES(this.model.pageValue);
+        this.fetchProjects({
+          page: pageValue,
+          limit: this.usersMaxLimit,
+          sort: this.projectsSort,
           filter: null,
-        },
-      });
+        });
+        this.$router.push({
+          query: {
+            page: pageValue,
+            field: this.projectsSort.field,
+            type: this.projectsSort.type,
+            filter: null,
+          },
+        });
+      }
+
       this.model.pageValue = '';
     },
     goBack() {
-      this.updateTotalPages(this.projectsPage - 1);
+      this.SET_UPD_PR_PAGES(this.projectsPage - 1);
       this.fetchProjects({
         page: this.projectsPage,
+        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: null,
       });
@@ -331,9 +372,10 @@ export default {
       });
     },
     goForward() {
-      this.updateTotalPages(this.projectsPage + 1);
+      this.SET_UPD_PR_PAGES(this.projectsPage + 1);
       this.fetchProjects({
         page: this.projectsPage,
+        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: null,
       });
@@ -348,13 +390,13 @@ export default {
     },
     toggleSort() {
       if (this.projectsSort.type === 'desc') {
-        this.updateProjectsSort({
+        this.SET_PR_SORT({
           field: this.projectsSort.field,
           type: 'asc',
           value: this.projectsSort.value,
         });
       } else {
-        this.updateProjectsSort({
+        this.SET_PR_SORT({
           field: this.projectsSort.field,
           type: 'desc',
           value: this.projectsSort.value,
@@ -363,6 +405,7 @@ export default {
 
       this.fetchProjects({
         page: this.projectsPage,
+        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: null,
       });
@@ -379,7 +422,7 @@ export default {
       this.sortProjectsSelect.forEach((el) => {
         if (el.name === value) {
           el.isActive = true;
-          this.updateProjectsSort({
+          this.SET_PR_SORT({
             field: el.value,
             type: this.projectsSort.type,
             value: el.name,
@@ -389,7 +432,12 @@ export default {
         }
       });
 
-      this.fetchProjects({ page: 1, sort: this.projectsSort, filter: null });
+      this.fetchProjects({
+        page: 1,
+        limit: this.usersMaxLimit,
+        sort: this.projectsSort,
+        filter: null,
+      });
       this.$router.push({
         query: {
           page: 1,
@@ -424,9 +472,10 @@ export default {
   },
   watch: {
     $route(to, from) {
-      this.updateTotalPages(this.$route.query.page);
+      this.SET_UPD_PR_PAGES(this.$route.query.page);
       this.fetchProjects({
         page: this.$route.query.page,
+        limit: this.usersMaxLimit,
         sort: {
           field: this.projectsSort.field,
           type: this.projectsSort.type,
@@ -437,15 +486,19 @@ export default {
   },
   // ---------------------------------------------
   beforeMount() {
-    this.fetchUsers();
+    this.fetchUsers({
+      page: 1,
+      sort: 'asc',
+      filter: null,
+    });
   },
   mounted() {
-    const sortValue = this.sortProjectsSelect.find(
-      (el) => el.value === this.$route.query.field
-    );
+    if (this.$route.query.page) {
+      const sortValue = this.sortProjectsSelect.find(
+        (el) => el.value === this.$route.query.field
+      );
 
-    if (this.$route.query) {
-      this.updateProjectsSort({
+      this.SET_PR_SORT({
         field: this.$route.query.field,
         type: this.$route.query.type,
         value: sortValue.name,
@@ -453,12 +506,14 @@ export default {
 
       this.fetchProjects({
         page: this.$route.query.page,
+        limit: this.usersMaxLimit,
         sort: { field: this.$route.query.field, type: this.$route.query.type },
         filter: null,
       });
     } else {
       this.fetchProjects({
         page: this.projectsPage,
+        limit: this.usersMaxLimit,
         sort: {
           field: this.projectsSort.field,
           type: this.projectsSort.type,

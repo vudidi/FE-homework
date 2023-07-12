@@ -24,6 +24,7 @@
       :selectID="selectID"
       v-on:click-select="onSelectClick"
       :defaultValue="defaultValue"
+      :activeOption="activeOption"
       iconClass="search-panel__select-icon"
       inputClass="search-panel__select"
     >
@@ -61,6 +62,7 @@ export default {
     addBtn: { type: Object },
     filterBtn: { type: Object },
     isAscSort: { type: Boolean, default: false },
+    activeOption: { type: String },
   },
   methods: {
     onSelectClick(event) {

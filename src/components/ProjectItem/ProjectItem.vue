@@ -5,7 +5,16 @@
         <div class="list-wrapper">
           <div class="list-container">
             <router-link
-              :to="{ name: 'tasks', query: { projectId: project.id } }"
+              :to="{
+                name: 'tasks',
+                query: {
+                  page: 1,
+                  field: 'dateCreated',
+                  type: 'desc',
+                  author: null,
+                  projectId: project.id,
+                },
+              }"
               :class="['list-title', 'list__link-title']"
               >{{ project.name }}</router-link
             >

@@ -126,7 +126,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['currentUser', 'updatedUserProfile', 'projectsSort']),
+    ...mapGetters([
+      'currentUser',
+      'updatedUserProfile',
+      'projectsSort',
+      'tasksSort',
+      'usersSort',
+    ]),
 
     defaultUserAvatar() {
       return getUserInitials(this.currentUser.name);
@@ -144,7 +150,13 @@ export default {
       if (navBtn.id === 'tasks') {
         return {
           path: '/tasks',
-          query: { author: this.currentUser.id, page: 1 },
+          query: {
+            page: 1,
+            field: this.tasksSort.field,
+            type: this.tasksSort.type,
+            author: this.currentUser.id,
+            projectId: null,
+          },
         };
       } else if (navBtn.id === 'projects') {
         return {
@@ -158,6 +170,10 @@ export default {
       } else if (navBtn.id === 'users') {
         return {
           path: '/users',
+          query: {
+            page: 1,
+            sort: this.usersSort,
+          },
         };
       }
     },

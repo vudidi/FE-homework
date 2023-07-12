@@ -86,3 +86,7 @@
   color: $fontPrimary;
   cursor: pointer;
 }
+
+.select__custom-option.isHover {
+  pointer-events: none;
+}

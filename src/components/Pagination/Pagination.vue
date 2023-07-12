@@ -1,5 +1,5 @@
 <template>
-  <div class="pag">
+  <div :class="['pag', { pag_hidden: isPagination }]">
     <Button
       v-on:click-btn="$emit('go-back')"
       v-bind:button="pagBackBtn"
@@ -96,6 +96,7 @@ export default {
     PagItem,
   },
   props: {
+    isPagination: { type: Boolean, default: false },
     pages: {
       type: Array,
       default: [],

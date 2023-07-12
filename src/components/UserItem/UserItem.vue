@@ -48,11 +48,12 @@
             <a class="dropdown-menu__link" href="#">Редактировать</a>
           </li>
           <li class="dropdown-menu__item">
-            <a
+            <button
+              v-on:click="$emit('delete-user', user)"
               class="dropdown-menu__link dropdown-menu__link_type_delete"
-              href="#"
-              >Удалить</a
             >
+              Удалить
+            </button>
           </li>
         </ul>
       </div>

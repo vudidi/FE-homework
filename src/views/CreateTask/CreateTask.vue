@@ -61,10 +61,10 @@
       </fieldset>
 
       <div class="action-page__buttons">
-        <Link
-          v-bind:link="cancelBtn"
+        <Button
+          v-bind:button="cancelBtn"
           v-bind:class="['button', 'secondary-button', 'action-page__button']"
-          to="/tasks"
+          v-on:click-btn="goBack"
         />
         <Button
           v-bind:button="createBtn"
@@ -181,6 +181,9 @@ export default {
         project: this.model.projectValue,
         executor: this.model.executorValue,
       });
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
   mounted() {},

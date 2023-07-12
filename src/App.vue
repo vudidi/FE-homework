@@ -7,18 +7,25 @@
 
 <script>
 import Navigation from '@/components/Navigation/Navigation.vue';
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'App',
   components: {
     Navigation,
   },
+  computed: {
+    ...mapGetters(['usersMaxLimit']),
+  },
   methods: {
     ...mapActions(['fetchCurrentUser', 'fetchUsers']),
   },
   beforeMount() {
-    this.fetchUsers();
+    this.fetchUsers({
+      page: 1,
+      sort: 'asc',
+      filter: null,
+    });
     this.fetchCurrentUser();
   },
 };

@@ -1,6 +1,6 @@
 export function getItemAuthor(users, userID) {
   const user = users.find((user) => {
-    return user.id === userID;
+    return user._id === userID;
   });
 
   if (user) {
@@ -22,7 +22,7 @@ export function getItemAuthor(users, userID) {
 
 export function getItemAuthorEdited(users, userID) {
   const user = users.find((user) => {
-    return user.id === userID;
+    return user._id === userID;
   });
 
   if (user) {
@@ -44,7 +44,7 @@ export function getItemAuthorEdited(users, userID) {
 
 export function getItemAuthorAvatar(users, userID) {
   const user = users.find((user) => {
-    return user.id === userID;
+    return user._id === userID;
   });
 
   if (user) {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getPagPages } from '@/helpers/getPagPages';
 
 const url = 'http://45.12.239.156:8081/api';
 
@@ -26,15 +27,16 @@ export function getCurrentUser(context) {
   }
 }
 
-export function getUsers(context) {
-  context.commit('updateUsersLoading', true);
+export function getUsers(context, params) {
+  context.commit('SET_US_LOADING', true);
 
   axios
     .post(
       `${url}/users/search`,
       {
-        page: 1,
-        limit: 50,
+        page: params.page,
+        limit: params.limit,
+        sort: params.sort,
       },
       {
         headers: {
@@ -69,11 +71,17 @@ export function getUsers(context) {
         users.push(user);
       });
 
-      context.commit('updateUsersLoading', false);
-      context.commit('updateAllUsers', users);
+      context.commit('SET_US_LOADING', false);
+      context.commit('SET_USERS', users);
+      context.commit(
+        'SET_TOTAL_US_PAGES',
+        getPagPages(res.data.total, params.page)
+      );
+      context.commit('SET_US_MAX_LIMIT', res.data.limit * res.data.total);
     })
+
     .catch((err) => {
-      context.commit('updateUsersLoading', false);
+      context.commit('SET_US_LOADING', false);
       console.log('error', err);
     });
 }
@@ -106,4 +114,53 @@ export function getUserProfile(context, userID) {
       context.commit('updateProfileLoading', false);
       console.log('error', err);
     });
+}
+
+function deleteItem(params) {
+  return axios.put(
+    `${url}/users/status`,
+    {
+      _id: params.id,
+      status: 'DELETED',
+    },
+    {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+export function deleteUser(context, params) {
+  context.commit('SET_US_LOADING', true);
+
+  deleteItem(params)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .then(() => {
+      getUsers(context, params);
+    })
+    .catch((err) => {
+      context.commit('SET_US_LOADING', false);
+      console.log('error', err);
+    });
+}
+
+export function getAllUsers(params) {
+  return axios.post(
+    `${url}/users/search`,
+    {
+      page: 1,
+      limit: params.limit,
+      sort: 'asc',
+    },
+    {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 }

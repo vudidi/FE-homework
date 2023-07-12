@@ -74,7 +74,16 @@
           <Link
             v-bind:link="getUserTasksBtn"
             v-bind:class="['dropdown-menu__link']"
-            :to="{ name: 'tasks', query: { author: updatedUserProfile.id } }"
+            :to="{
+              name: 'tasks',
+              query: {
+                page: 1,
+                field: 'dateCreated',
+                type: 'desc',
+                author: updatedUserProfile.id,
+                projectId: null,
+              },
+            }"
           ></Link>
         </li>
 

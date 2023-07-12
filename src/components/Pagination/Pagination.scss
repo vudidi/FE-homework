@@ -2,6 +2,9 @@
   padding: 0 20px 20px;
   display: flex;
   align-items: center;
+  &_hidden {
+    display: none;
+  }
   &__label {
     color: $fontDisabled;
     font-size: 14px;

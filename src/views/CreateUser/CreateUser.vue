@@ -131,10 +131,10 @@
       </fieldset>
 
       <div class="action-page__buttons">
-        <Link
-          v-bind:link="cancelBtn"
+        <Button
+          v-bind:button="cancelBtn"
           v-bind:class="['button', 'secondary-button', 'action-page__button']"
-          to="/users"
+          v-on:click-btn="goBack"
         />
         <Button
           v-bind:button="createBtn"
@@ -214,6 +214,9 @@ export default {
       uploadAvatar(ID, this.model.avatar);
       // getUsers(TOKEN);
       // this.$refs.createUserForm.reset();
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
   computed: {
