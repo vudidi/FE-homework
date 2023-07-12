@@ -16,7 +16,18 @@ import store from '@/store';
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', redirect: '/projects' },
+  {
+    path: '/',
+    redirect: {
+      name: 'projects',
+      query: {
+        page: 1,
+        field: 'dateCreated',
+        type: 'desc',
+        filter: null,
+      },
+    },
+  },
   {
     path: '/projects',
     component: ProjectLayout,

@@ -3,6 +3,8 @@ import axios from 'axios';
 const url = 'http://45.12.239.156:8081/api';
 
 export function uploadAvatar(context, data) {
+  context.commit('updateProfileAvaLoading', true);
+
   return axios
     .put(
       `${url}/users/picture`,
@@ -18,14 +20,18 @@ export function uploadAvatar(context, data) {
       }
     )
     .then((res) => {
+      context.commit('updateProfileAvaLoading', false);
       context.commit('updateUserProfile', res.data);
     })
     .catch((err) => {
+      context.commit('updateProfileAvaLoading', false);
       console.log('error', err);
     });
 }
 
 export function uploadCurrentAvatar(context, data) {
+  context.commit('updateProfileAvaLoading', true);
+
   return axios
     .put(
       `${url}/users/picture`,
@@ -41,9 +47,11 @@ export function uploadCurrentAvatar(context, data) {
       }
     )
     .then((res) => {
+      context.commit('updateProfileAvaLoading', false);
       context.commit('updateCurrentUser', res.data);
     })
     .catch((err) => {
+      context.commit('updateProfileAvaLoading', false);
       console.log('error', err);
     });
 }

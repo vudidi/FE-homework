@@ -25,7 +25,7 @@
         width: 100%;
       }
       &_confirm {
-        max-width: 5000px;
+        max-width: 500px;
         width: 100%;
       }
     }
@@ -37,9 +37,18 @@
     margin: 16px;
   }
   &__wrapper {
+    position: relative;
     padding: 24px;
     border-top: 1px solid $borderDefault;
     border-bottom: 1px solid $borderDefault;
+  }
+  &__text {
+    font-size: 14px;
+    font-weight: 400;
+    color: $fontPrimary;
+    & span {
+      color: $fontError;
+    }
   }
   &__field {
     &:first-of-type {
@@ -71,8 +80,15 @@
     margin: 24px;
   }
   &__button {
+    transition: all ease 0.5s;
     &:first-of-type {
       margin: 0 8px 0 0;
+    }
+    &_disabled {
+      background: $bgDisabled;
+      border: 1px solid $bgDisabled;
+      color: $fontDisabled;
+      pointer-events: none;
     }
   }
 }

@@ -1,48 +1,70 @@
-import { getProjects } from '@/api/projects';
+import { getProjects, deleteProject } from '@/api/projects';
 
 export default {
   state: {
     projects: [],
+    isLoading: false,
     pages: [],
-    currentPage: '1',
+    selectedPage: '1',
+    sort: {
+      field: 'dateCreated',
+      type: 'desc',
+      value: 'По дате создания',
+    },
+    filter: null,
   },
   getters: {
     allProjects(state) {
       return state.projects;
     },
+    isProjectsLoading(state) {
+      return state.isLoading;
+    },
     totalPages(state) {
       return state.pages;
     },
     visiblePages(state) {
-      if (state.pages.length > 5 && state.currentPage < 5) {
+      if (state.pages.length > 5 && state.selectedPage < 5) {
         return state.pages.slice(0, 5);
       } else if (
         state.pages.length > 5 &&
-        state.currentPage > 4 &&
-        state.currentPage <= state.pages.length - 4
+        state.selectedPage > 4 &&
+        state.selectedPage <= state.pages.length - 4
       ) {
-        return state.pages.slice(state.currentPage - 2, state.currentPage + 1);
+        return state.pages.slice(
+          state.selectedPage - 2,
+          state.selectedPage + 1
+        );
       } else if (
         state.pages.length > 5 &&
-        state.currentPage > state.pages.length - 4
+        state.selectedPage > state.pages.length - 4
       ) {
         return state.pages.slice(state.pages.length - 5, state.pages.length);
       } else {
         return state.pages;
       }
     },
-    currentPage(state) {
+    projectsPage(state) {
       state.pages.forEach((page) => {
         if (page.isSelected === true) {
-          state.currentPage = page.num;
+          state.selectedPage = page.num;
         }
       });
-      return state.currentPage;
+      return state.selectedPage;
+    },
+    projectsSort(state) {
+      return state.sort;
+    },
+    projectsFilter(state) {
+      return state.filter;
     },
   },
   mutations: {
     updateAllProjects(state, payload) {
       state.projects = payload;
+    },
+    updateProjectsLoading(state, payload) {
+      state.isLoading = payload;
     },
     getTotalPages(state, payload) {
       state.pages = payload;
@@ -56,10 +78,16 @@ export default {
         }
       });
     },
+    updateProjectsSort(state, payload) {
+      state.sort = payload;
+    },
   },
   actions: {
-    fetchProjects(context, page, filter) {
-      getProjects(context, page, filter);
+    fetchProjects(context, params) {
+      getProjects(context, params);
+    },
+    removeProject(context, params) {
+      deleteProject(context, params);
     },
   },
 };

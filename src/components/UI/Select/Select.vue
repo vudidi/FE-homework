@@ -1,29 +1,35 @@
 <template>
-  <div :class="['select', inputClass]">
-    <div class="select__wrapper">
-      <svg-icon
-        v-bind:class="['select__icon', iconClass]"
-        name="arrow"
-      ></svg-icon>
-      <slot />
-      <select class="select__native"></select>
-      <div
-        :id="selectID"
-        class="select__custom"
-        aria-hidden="true"
-        v-on:keyup.enter="onSelectEnter"
-      >
-        <input class="select__custom-trigger" :value="defaultValue" readonly />
-        <div class="select__custom-options">
-          <input
-            class="select__custom-option"
-            v-for="item in items"
-            v-bind:key="item.name"
-            v-bind:value="item.name"
-            v-bind:data-value="item.value"
-            v-on:click="onSelectClick"
-          />
-        </div>
+  <div v-click-outside="clickOutside" :class="['select', inputClass]">
+    <svg-icon
+      v-bind:class="[
+        'select__icon',
+        { select__icon_active: isSelectOpen },
+        iconClass,
+      ]"
+      name="arrow"
+    ></svg-icon>
+    <slot />
+    <div
+      :id="selectID"
+      :class="['select__custom', { isActive: isSelectOpen }]"
+      aria-hidden="true"
+      v-on:click="toggleSelect"
+    >
+      <input
+        :class="['select__custom-trigger', { isFocused: isSelectOpen }]"
+        :value="defaultValue"
+        readonly
+      />
+      <div class="select__custom-options">
+        <input
+          :class="['select__custom-option', { isHover: item.isActive }]"
+          v-for="item in items"
+          v-bind:key="item.name"
+          v-bind:value="item.name"
+          v-bind:data-value="item.value"
+          v-on:click="onSelectClick"
+          readonly
+        />
       </div>
     </div>
   </div>
@@ -32,7 +38,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      isSelectOpen: false,
+    };
   },
   props: {
     iconClass: {
@@ -57,11 +65,17 @@ export default {
     },
   },
   methods: {
+    toggleSelect() {
+      this.isSelectOpen = !this.isSelectOpen;
+    },
+    clickOutside() {
+      this.isSelectOpen = false;
+    },
     onSelectClick($event) {
-      this.$emit('onSelectClick', $event.target.value);
+      this.$emit('click-select', $event.target.value);
     },
     onSelectEnter($event) {
-      this.$emit('onSelectEnter', $event.target.value);
+      this.$emit('enter-select', $event.target.value);
     },
   },
 };

@@ -40,11 +40,10 @@
 
             <Select
               v-bind:items="selectProjects"
-              defaultValue="Выберите значение..."
+              :defaultValue="model.projectValue"
               v-bind:class="['action-page__select']"
               selectID="projectSelect"
-              v-on:onSelectClick="updateProjectValue"
-              v-on:onSelectEnter="updateProjectValue"
+              v-on:click-select="updateProjectValue"
             />
           </div>
 
@@ -52,11 +51,10 @@
             <label class="action-page__label">Исполнитель</label>
             <Select
               v-bind:items="selectExecutors"
-              defaultValue="Не назначен"
+              :defaultValue="model.executorValue"
               v-bind:class="['action-page__select']"
               selectID="executorSelect"
-              v-on:onSelectClick="updateExecutortValue"
-              v-on:onSelectEnter="updateExecutortValue"
+              v-on:click-select="updateExecutortValue"
             />
           </div>
         </div>
@@ -79,8 +77,6 @@
 </template>
 
 <script>
-import renderSelect from '@/helpers/renderSelect';
-
 export default {
   components: {},
   data() {
@@ -88,8 +84,8 @@ export default {
       model: {
         titleValue: '',
         descriptionValue: '',
-        projectValue: '',
-        executorValue: '',
+        projectValue: 'Выберите значение...',
+        executorValue: 'Не назначен',
       },
       createBtn: {
         id: 'create-project',
@@ -103,67 +99,91 @@ export default {
         {
           name: 'Проект №1',
           value: 'proj1',
+          isActive: false,
         },
         {
           name: 'Проект №2',
           value: 'proj2',
+          isActive: false,
         },
         {
           name: 'Проект №3',
           value: 'proj3',
+          isActive: false,
         },
         {
           name: 'Проект №4',
           value: 'proj4',
+          isActive: false,
         },
         {
           name: 'Проект №5',
           value: 'proj5',
+          isActive: false,
         },
       ],
       selectExecutors: [
         {
           name: 'Котов Семен Васильевич',
           value: 'kotov',
+          isActive: false,
         },
         {
           name: 'Акунин Иван Иванович',
           value: 'akunin',
+          isActive: false,
         },
         {
           name: 'Львов Петр Ибрагимович',
           value: 'lvov',
+          isActive: false,
         },
         {
           name: 'Константинов Константин Иванович',
           value: 'konst',
+          isActive: false,
         },
         {
           name: 'Иванов Петр Васильевич',
           value: 'ivanov',
+          isActive: false,
         },
       ],
     };
   },
   methods: {
     updateProjectValue(value) {
-      this.model.selectValue = value;
+      this.model.projectValue = value;
+
+      this.selectProjects.forEach((el) => {
+        if (el.name === value) {
+          el.isActive = true;
+        } else {
+          el.isActive = false;
+        }
+      });
     },
     updateExecutortValue(value) {
       this.model.executorValue = value;
+
+      this.selectExecutors.forEach((el) => {
+        if (el.name === value) {
+          el.isActive = true;
+        } else {
+          el.isActive = false;
+        }
+      });
     },
     getFormData() {
       console.log({
         title: this.model.titleValue,
         description: this.model.descriptionValue,
-        project: this.model.selectValue,
+        project: this.model.projectValue,
         executor: this.model.executorValue,
       });
     },
   },
-  mounted() {
-    renderSelect();
-  },
+  mounted() {},
 };
 </script>
 

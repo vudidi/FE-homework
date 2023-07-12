@@ -1,6 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="list users" v-if="allUsers.length">
+      <PreloadModal :isOpen="isUsersLoading" />
+
       <div class="search-panel">
         <Input
           placeholder="Поиск..."
@@ -50,10 +52,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import UserItem from '@/components/UserItem/UserItem.vue';
+import PreloadModal from '@/components/PreloadModal/PreloadModal.vue';
 
 export default {
   components: {
     UserItem,
+    PreloadModal,
   },
   data() {
     return {
@@ -67,7 +71,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['allUsers']),
+    ...mapGetters(['allUsers', 'isUsersLoading']),
     ...mapGetters(['currentUser']),
     currentUserRole() {
       return this.currentUser.role === 'ADMIN' ? true : false;

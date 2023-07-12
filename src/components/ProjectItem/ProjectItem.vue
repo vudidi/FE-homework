@@ -6,7 +6,7 @@
           <div class="list-container">
             <router-link
               :to="{ name: 'tasks', query: { projectId: project.id } }"
-              class="list-title"
+              :class="['list-title', 'list__link-title']"
               >{{ project.name }}</router-link
             >
             <div class="tooltip tooltip__title">
@@ -71,11 +71,12 @@
               <a class="dropdown-menu__link" href="#">Редактировать</a>
             </li>
             <li class="dropdown-menu__item">
-              <a
+              <button
+                v-on:click="$emit('delete-project', project)"
                 class="dropdown-menu__link dropdown-menu__link_type_delete"
-                href="#"
-                >Удалить</a
               >
+                Удалить
+              </button>
             </li>
           </ul>
         </div>
@@ -87,6 +88,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDateAndTime, getFullDateAndTime } from '@/helpers/formatDate';
+import Button from '../UI/Button/Button.vue';
 
 export default {
   props: {

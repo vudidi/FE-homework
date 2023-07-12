@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <PreloadModal :isOpen="isUsersLoading" />
     <form
       autocomplete="off"
       v-on:submit.prevent="login"
@@ -90,12 +91,13 @@
 </template>
 
 <script>
+import PreloadModal from '@/components/PreloadModal/PreloadModal.vue';
 import enableValidation from '@/helpers/validation';
 import { validationSet } from '@/helpers/constants';
 import { mapGetters, mapActions } from 'vuex';
-import { getCurrentUser } from '@/api/users';
 
 export default {
+  components: { PreloadModal },
   data() {
     return {
       isPasswordHidden: true,
@@ -106,7 +108,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['currentError']),
+    ...mapGetters(['isUsersLoading', 'currentError']),
     passwordInputType() {
       if (this.isPasswordHidden) {
         return 'password';

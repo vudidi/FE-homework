@@ -8,18 +8,17 @@ import { getPagPages } from '@/helpers/getPagPages';
 
 const url = 'http://45.12.239.156:8081/api';
 
-export function getProjects(context, page, filter) {
+export function getProjects(context, params) {
+  context.commit('updateProjectsLoading', true);
+
   axios
     .post(
       `${url}/projects/search`,
       {
-        page: page,
+        page: params.page,
         limit: 10,
-        sort: {
-          field: 'dateCreated',
-          type: 'asc',
-        },
-        filter: filter,
+        sort: params.sort,
+        filter: params.filter,
       },
       {
         headers: {
@@ -60,10 +59,12 @@ export function getProjects(context, page, filter) {
         projects.push(project);
       });
 
+      context.commit('updateProjectsLoading', false);
       context.commit('updateAllProjects', projects);
-      context.commit('getTotalPages', getPagPages(res.data.total, page));
+      context.commit('getTotalPages', getPagPages(res.data.total, params.page));
     })
     .catch((err) => {
+      context.commit('updateProjectsLoading', false);
       console.log('error', err);
     });
 }
@@ -115,19 +116,45 @@ export function updateProject(id) {
     });
 }
 
-export function deleteProject(token, id) {
-  return axios
-    .delete(`${url}/projects/${id}`, {
+function getItems(params) {
+  return axios.post(
+    `${url}/projects/search`,
+    {
+      page: params.page,
+      limit: 10,
+      sort: params.sort,
+      filter: params.filter,
+    },
+    {
       headers: {
         authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',
       },
-    })
+    }
+  );
+}
+
+function deleteItem(params) {
+  return axios.delete(`${url}/projects/${params.id}`, {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export function deleteProject(context, params) {
+  context.commit('updateProjectsLoading', true);
+
+  deleteItem(params)
     .then((res) => {
-      localStorage.removeItem('ProjectAxios');
-      console.log(res.data.message);
+      console.log(res.data);
+    })
+    .then(() => {
+      getProjects(context, params);
     })
     .catch((err) => {
+      context.commit('updateProjectsLoading', false);
       console.log('error', err);
     });
 }

@@ -10,6 +10,8 @@ import formatTaskStatus from '@/helpers/formatTaskStatus';
 const url = 'http://45.12.239.156:8081/api';
 
 export function getTasks(context, filter) {
+  context.commit('updateTasksLoading', true);
+
   axios
     .post(
       `${url}/tasks/search`,
@@ -75,9 +77,11 @@ export function getTasks(context, filter) {
         tasks.push(task);
       });
 
+      context.commit('updateTasksLoading', false);
       context.commit('updateAllTasks', tasks);
     })
     .catch((err) => {
+      context.commit('updateTasksLoading', false);
       console.log('error', err);
     });
 }

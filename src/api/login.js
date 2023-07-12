@@ -4,7 +4,9 @@ import router from '@/router/router';
 const url = 'http://45.12.239.156:8081/api';
 
 export function loginUser(context, user) {
-  return axios
+  context.commit('updateAuthLoading', true);
+
+  axios
     .post(
       `${url}/login`,
       {
@@ -18,14 +20,24 @@ export function loginUser(context, user) {
       }
     )
     .then((res) => {
+      context.commit('updateAuthLoading', false);
+
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('isAuth', true);
-      router.push('/projects').catch((err) => {
-        throw new Error(`Problem handling something: ${err}.`);
+
+      router.push({
+        name: 'projects',
+        query: {
+          page: 1,
+          field: 'dateCreated',
+          type: 'desc',
+          filter: null,
+        },
       });
     })
     .catch((err) => {
       console.log('error', err);
+      context.commit('updateAuthLoading', false);
       context.commit('updateError', err.response.data.message);
     });
 }

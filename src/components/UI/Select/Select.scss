@@ -1,17 +1,8 @@
-.select__native,
-.select__custom {
-  position: relative;
-  width: 100%;
-  height: 42px;
-}
-
 .select {
   position: relative;
-  width: 300px;
-  &__wrapper {
-    position: relative;
-    background-color: $bgSecondaryDefault;
-  }
+  background-color: $bgSecondaryDefault;
+  height: 42px;
+  width: 100%;
   &__icon {
     position: absolute;
     top: 10px;
@@ -28,14 +19,7 @@
       z-index: 2;
     }
   }
-  &__native {
-    opacity: 0;
-  }
   &__custom {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: none;
     &-trigger {
       position: relative;
       width: 100%;
@@ -66,15 +50,6 @@
   }
 }
 
-@media (hover) {
-  .select__custom {
-    display: block;
-  }
-  .select__native:focus + .select__custom {
-    display: none;
-  }
-}
-
 // .select__native,
 .select__custom-trigger {
   font-size: 14px;
@@ -96,7 +71,6 @@
   pointer-events: none;
 }
 
-// .select__native,
 .isFocused {
   border: 1px solid $borderActive;
 }

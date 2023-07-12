@@ -20,6 +20,10 @@
     width: 24px;
     height: 24px;
     color: $fontPrimary;
+    transition: all ease 0.5s;
+    &_asc {
+      transform: rotate(180deg);
+    }
   }
   &__select-icon {
     right: 50px !important;

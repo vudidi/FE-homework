@@ -18,6 +18,9 @@ export default {
       type: Object,
       default: {},
     },
+    pageName: {
+      type: String,
+    },
   },
   data() {
     return {

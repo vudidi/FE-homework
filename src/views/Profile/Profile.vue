@@ -1,5 +1,6 @@
 <template>
-  <section class="profile">
+  <PreloadModal v-if="isProfileLoading" :isOpen="isProfileLoading" />
+  <section v-else-if="!isProfileLoading" class="profile">
     <Modal
       v-on:click-accept-btn="updateAvatar"
       v-on:click-cancel-btn="closeImageModal"
@@ -8,6 +9,7 @@
       type="modal__container_type_create"
       cancelBtnTitle="Отмена"
       acceptBtnTitle="Сохранить изменения"
+      :isDisabled="isConfirmBtnDisabled"
     >
       <Uploader
         v-bind:class="['profile__uploader']"
@@ -30,6 +32,7 @@
         :src="previewImage"
         alt="Фото пользователя"
       />
+      <Preloader v-if="isProfileAvaLoading" :class="['profile__preloader']" />
     </Modal>
 
     <div
@@ -166,6 +169,8 @@
 
 <script>
 import Modal from '@/components/UI/Modal/Modal.vue';
+import Preloader from '@/components/Preloader/Preloader.vue';
+import PreloadModal from '@/components/PreloadModal/PreloadModal.vue';
 import { mapGetters, mapActions } from 'vuex';
 import getUserInitials from '@/helpers/getUserInitials';
 import formatFileSize from '@/helpers/formatFileSize';
@@ -174,9 +179,12 @@ import validateFile from '@/helpers/validateFile';
 export default {
   components: {
     Modal,
+    Preloader,
+    PreloadModal,
   },
   data() {
     return {
+      isConfirmBtnDisabled: true,
       isPreviewImage: false,
       previewImage: '',
       isDragover: false,
@@ -224,7 +232,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['updatedUserProfile', 'currentUser']),
+    ...mapGetters([
+      'updatedUserProfile',
+      'currentUser',
+      'isProfileLoading',
+      'isProfileAvaLoading',
+    ]),
     currentUserRole() {
       if (
         this.currentUser.role === 'ADMIN' ||
@@ -315,19 +328,10 @@ export default {
       this.isImageModalOpen = false;
     },
     async openImageModal() {
+      this.isConfirmBtnDisabled = true;
       this.isImageModalOpen = true;
       this.isImageDropdownOpen = false;
-
-      if (this.updatedUserProfile.picture !== null) {
-        const URL_TO_IMG = this.$refs.userImage.currentSrc;
-        const fileImg = await fetch(URL_TO_IMG).then((r) => r.blob());
-
-        this.isPreviewImage = true;
-        this.previewImage = URL_TO_IMG;
-        this.currentImage.name = 'FileName';
-        this.currentImage.type = fileImg.type;
-        this.currentImage.size = formatFileSize(fileImg.size);
-      }
+      this.isPreviewImage = false;
     },
     closeImageModal() {
       this.isImageModalOpen = false;
@@ -361,11 +365,13 @@ export default {
           formData: 'null',
         });
       }
+      this.isConfirmBtnDisabled = true;
       this.isImageDropdownOpen = false;
       this.model.avatar = null;
       this.isPreviewImage = false;
     },
     deletePhotoInModal() {
+      this.isConfirmBtnDisabled = true;
       this.model.avatar = null;
       this.isPreviewImage = false;
     },
@@ -375,6 +381,12 @@ export default {
       this.currentImage.name = `${event.target.files[0].name}`;
       this.currentImage.type = `${event.target.files[0].type}`;
       this.currentImage.size = `${formatFileSize(event.target.files[0].size)}`;
+
+      if (!validateFile(this.model.avatar.size, this.model.avatar.type)) {
+        this.isConfirmBtnDisabled = false;
+      } else {
+        this.isConfirmBtnDisabled = true;
+      }
 
       this.isPreviewImage = true;
       this.previewImage = URL.createObjectURL(event.target.files[0]);
@@ -390,6 +402,12 @@ export default {
       this.currentImage.size = `${formatFileSize(
         event.dataTransfer.files[0].size
       )}`;
+
+      if (!validateFile(this.model.avatar.size, this.model.avatar.type)) {
+        this.isConfirmBtnDisabled = false;
+      } else {
+        this.isConfirmBtnDisabled = true;
+      }
 
       this.isPreviewImage = true;
       this.previewImage = URL.createObjectURL(event.dataTransfer.files[0]);

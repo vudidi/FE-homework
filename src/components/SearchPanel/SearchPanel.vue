@@ -22,18 +22,21 @@
     <Select
       v-bind:items="items"
       :selectID="selectID"
-      v-on:onSelectClick="$emit('onSelectClick')"
-      v-on:onSelectEnter="$emit('onSelectEnter')"
-      defaultValue="По названию"
+      v-on:click-select="onSelectClick"
+      :defaultValue="defaultValue"
       iconClass="search-panel__select-icon"
       inputClass="search-panel__select"
     >
       <Button
+        v-on:click-btn="$emit('toggle-sort')"
         v-bind:button="sortBtn"
         v-bind:class="['button', 'sort-button', 'search-panel__sortBtn']"
       >
         <svg-icon
-          v-bind:class="['search-panel__icon']"
+          v-bind:class="[
+            'search-panel__icon',
+            { 'search-panel__icon_asc': isAscSort },
+          ]"
           name="sort-arrow"
         ></svg-icon> </Button
     ></Select>
@@ -52,10 +55,17 @@ export default {
     items: {
       type: Array,
     },
+    defaultValue: { type: String },
     selectID: { type: String },
     sortBtn: { type: Object },
     addBtn: { type: Object },
     filterBtn: { type: Object },
+    isAscSort: { type: Boolean, default: false },
+  },
+  methods: {
+    onSelectClick(event) {
+      this.$emit('click-select', event);
+    },
   },
 };
 </script>

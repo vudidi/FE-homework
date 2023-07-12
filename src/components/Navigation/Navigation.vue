@@ -76,7 +76,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import getUserInitials from '@/helpers/getUserInitials';
-import store from '@/store';
 
 export default {
   data() {
@@ -127,7 +126,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['currentUser', 'updatedUserProfile']),
+    ...mapGetters(['currentUser', 'updatedUserProfile', 'projectsSort']),
 
     defaultUserAvatar() {
       return getUserInitials(this.currentUser.name);
@@ -145,11 +144,16 @@ export default {
       if (navBtn.id === 'tasks') {
         return {
           path: '/tasks',
-          query: { author: this.currentUser.id },
+          query: { author: this.currentUser.id, page: 1 },
         };
       } else if (navBtn.id === 'projects') {
         return {
           path: '/projects',
+          query: {
+            page: 1,
+            field: this.projectsSort.field,
+            type: this.projectsSort.type,
+          },
         };
       } else if (navBtn.id === 'users') {
         return {

@@ -121,7 +121,9 @@ export default {
       default: false,
     },
     isBackBtnActive: { type: Boolean, default: false },
+    pathBack: { type: Object },
     isForwardBtnActive: { type: Boolean, default: false },
+    pathForward: { type: Object },
     isLeftExtend: {
       type: Boolean,
       default: false,

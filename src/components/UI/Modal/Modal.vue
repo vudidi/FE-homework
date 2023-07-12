@@ -12,7 +12,12 @@
         <Button
           v-on:click-btn="$emit('click-accept-btn')"
           v-bind:button="acceptBtn"
-          v-bind:class="['button', 'primary-button', 'modal__button']"
+          v-bind:class="[
+            'button',
+            'primary-button',
+            'modal__button',
+            { modal__button_disabled: isDisabled },
+          ]"
         />
       </div>
     </div>
@@ -37,6 +42,11 @@ export default {
     },
     acceptBtnTitle: {
       type: String,
+    },
+    isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   data() {

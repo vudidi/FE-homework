@@ -1,11 +1,12 @@
 <template>
   <div class="wrapper">
+    <PreloadModal :isOpen="isTasksLoading" />
     <div class="list tasks" v-if="allTasks.length">
       <SearchPanel
         v-bind:items="sortTasksSelect"
         selectID="sortTasksSelect"
-        v-on:onSelectClick="updateSortValue"
-        v-on:onSelectEnter="updateSortValue"
+        :defaultValue="model.sortValue"
+        v-on:click-select="updateSortValue"
         v-bind:sortBtn="sortBtn"
         v-bind:addBtn="addTaskBtn"
         v-bind:filterBtn="filterBtn"
@@ -25,19 +26,20 @@
 
 <script>
 import TaskItem from '@/components/TaskItem/TaskItem.vue';
+import PreloadModal from '@/components/PreloadModal/PreloadModal.vue';
 import getOverflowValue from '@/helpers/showTooltip';
 import { tooltipClasses } from '@/helpers/constants';
-import renderSelect from '@/helpers/renderSelect';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     TaskItem,
+    PreloadModal,
   },
   data() {
     return {
       model: {
-        sortValue: 'По названию',
+        sortValue: 'Выберите опцию',
       },
       addTaskBtn: {
         id: 'task-add-btn',
@@ -55,37 +57,51 @@ export default {
         {
           name: 'По названию',
           value: 'title',
+          isActive: false,
         },
         {
           name: 'По автору',
           value: 'author',
+          isActive: false,
         },
         {
           name: 'По статусу',
           value: 'status',
+          isActive: false,
         },
         {
           name: 'По исполнителю',
           value: 'executor',
+          isActive: false,
         },
         {
           name: 'По дате создания',
           value: 'create',
+          isActive: false,
         },
         {
           name: 'По дате обновления',
           value: 'update',
+          isActive: false,
         },
       ],
     };
   },
   computed: {
-    ...mapGetters(['allTasks']),
+    ...mapGetters(['allTasks', 'isTasksLoading']),
   },
   methods: {
     ...mapActions(['fetchTasks', 'fetchUsers']),
     updateSortValue(value) {
       this.model.sortValue = value;
+
+      this.sortTasksSelect.forEach((el) => {
+        if (el.name === value) {
+          el.isActive = true;
+        } else {
+          el.isActive = false;
+        }
+      });
     },
     openDropdown(id) {
       this.allTasks.forEach((task) => {
@@ -117,7 +133,6 @@ export default {
   },
   updated() {
     getOverflowValue(tooltipClasses);
-    renderSelect();
   },
 };
 </script>

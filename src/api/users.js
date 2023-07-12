@@ -27,6 +27,8 @@ export function getCurrentUser(context) {
 }
 
 export function getUsers(context) {
+  context.commit('updateUsersLoading', true);
+
   axios
     .post(
       `${url}/users/search`,
@@ -66,14 +68,19 @@ export function getUsers(context) {
         }
         users.push(user);
       });
+
+      context.commit('updateUsersLoading', false);
       context.commit('updateAllUsers', users);
     })
     .catch((err) => {
+      context.commit('updateUsersLoading', false);
       console.log('error', err);
     });
 }
 
 export function getUserProfile(context, userID) {
+  context.commit('updateProfileLoading', true);
+
   axios
     .post(
       `${url}/users/search`,
@@ -92,9 +99,11 @@ export function getUserProfile(context, userID) {
       }
     )
     .then((res) => {
+      context.commit('updateProfileLoading', false);
       context.commit('updateUserProfile', res.data.users[0]);
     })
     .catch((err) => {
+      context.commit('updateProfileLoading', false);
       console.log('error', err);
     });
 }

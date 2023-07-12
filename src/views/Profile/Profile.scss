@@ -30,6 +30,11 @@
   &__uploader {
     margin: 0 0 24px;
   }
+  &__preloader {
+    position: absolute;
+    bottom: -70px;
+    left: 24px;
+  }
   &__image {
     width: 300px;
     height: 300px;

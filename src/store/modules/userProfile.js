@@ -13,10 +13,18 @@ export default {
       status: '',
       picture: null,
     },
+    isLoading: false,
+    isAvaLoading: false,
   },
   getters: {
     updatedUserProfile(state) {
       return state.userProfile;
+    },
+    isProfileLoading(state) {
+      return state.isLoading;
+    },
+    isProfileAvaLoading(state) {
+      return state.isAvaLoading;
     },
   },
   mutations: {
@@ -31,6 +39,12 @@ export default {
       } else {
         state.userProfile.picture = null;
       }
+    },
+    updateProfileLoading(state, payload) {
+      state.isLoading = payload;
+    },
+    updateProfileAvaLoading(state, payload) {
+      state.isAvaLoading = payload;
     },
   },
   actions: {

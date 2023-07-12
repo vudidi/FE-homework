@@ -1,0 +1,22 @@
+@keyframes move {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.preloader {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  &__modal {
+    background: rgba(0, 0, 0, 0.075) !important;
+  }
+  &__icon {
+    width: 40px;
+    height: 40px;
+    animation: move 1s infinite linear;
+  }
+}
