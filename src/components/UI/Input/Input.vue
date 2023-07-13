@@ -11,17 +11,26 @@
       ]"
       v-bind:type="type"
       v-bind:placeholder="placeholder"
+      v-on:keydown.enter="$emit('search-on-enter')"
       v-on:input="onInput($event)"
       v-on:change="onInput($event)"
       v-bind:value="value"
     />
-    <span :class="['field__error', inputErrorClass]"></span>
+    <span :class="['field__error', inputErrorClass]"> </span>
+    <span
+      :class="[
+        'field__search-error',
+        { 'field__search-error_visible': isErrorVisible },
+      ]"
+    >
+      {{ errorText }}
+    </span>
     <slot />
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   props: {
@@ -49,6 +58,14 @@ export default {
       type: String,
       required: false,
     },
+    errorText: {
+      type: String,
+      required: false,
+    },
+    isErrorVisible: {
+      type: Boolean,
+      required: false,
+    },
   },
   data() {
     return {
@@ -65,10 +82,11 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['updateError']),
+    ...mapMutations(['UPDATE_ERROR', 'SET_US_SEARCH_RESULT']),
     onInput($event) {
       this.$emit('input', $event.target.value);
-      this.updateError('');
+      this.UPDATE_ERROR('');
+      this.SET_US_SEARCH_RESULT(true);
     },
   },
 };

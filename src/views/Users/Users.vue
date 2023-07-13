@@ -21,10 +21,14 @@
           placeholder="Поиск..."
           type="search"
           :defaultInput="true"
-          v-bind:class="['search-panel__input']"
+          :class="['search-panel__input']"
+          v-model="model.searchValue"
+          v-on:search-on-enter="searchUser"
+          errorText="Ничего не найдено"
+          :isErrorVisible="!usersSearchResult"
         >
           <svg-icon
-            v-bind:class="['field__icon']"
+            :class="['field__icon']"
             name="search"
             :defaultInput="true"
           ></svg-icon
@@ -104,6 +108,7 @@ export default {
       deletedUserId: '',
       deletedUsername: '',
       model: {
+        searchValue: '',
         pageValue: '',
       },
       addUserBtn: {
@@ -125,6 +130,7 @@ export default {
       'usersPage',
       'usersSort',
       'usersFilter',
+      'usersSearchResult',
     ]),
     isPagination() {
       return this.totalUsersPages.length > 1 ? false : true;
@@ -194,8 +200,32 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['SET_UPD_US_PAGES', 'SET_US_SORT']),
-    ...mapActions(['fetchUsers', 'changeUserStatus']),
+    ...mapMutations([
+      'SET_UPD_US_PAGES',
+      'SET_US_SORT',
+      'SET_US_FILTER',
+      'SET_US_SEARCH_RESULT',
+    ]),
+    ...mapActions(['fetchUsers', 'changeUserStatus', 'fetchUsersSearch']),
+    searchUser() {
+      if (this.model.searchValue !== this.usersFilter?.name) {
+        this.SET_US_FILTER({ name: this.model.searchValue });
+        this.fetchUsersSearch({
+          page: 1,
+          limit: 10,
+          sort: this.usersSort,
+          filter: this.usersFilter,
+        });
+        this.$router.push({
+          query: {
+            page: this.usersPage,
+            sort: this.usersSort,
+            ...this.usersFilter,
+          },
+        });
+      }
+    },
+
     openDropdown(id) {
       this.allUsers.forEach((user) => {
         if (user.id === id) {
@@ -225,7 +255,7 @@ export default {
       this.changeUserStatus({
         page: this.usersPage,
         sort: this.usersSort,
-        filter: null,
+        filter: this.usersFilter,
         id: this.deletedUserId,
       });
       this.isDeleteModalOpen = false;
@@ -237,13 +267,13 @@ export default {
         page: page.num,
         limit: 10,
         sort: this.usersSort,
-        filter: null,
+        filter: this.usersFilter,
       });
       this.$router.push({
         query: {
           page: page.num,
           sort: this.usersSort,
-          filter: null,
+          ...this.usersFilter,
         },
       });
     },
@@ -253,13 +283,13 @@ export default {
         page: page.num,
         limit: 10,
         sort: this.usersSort,
-        filter: null,
+        filter: this.usersFilter,
       });
       this.$router.push({
         query: {
           page: page.num,
           sort: this.usersSort,
-          filter: null,
+          ...this.usersFilter,
         },
       });
     },
@@ -269,13 +299,13 @@ export default {
         page: page.num,
         limit: 10,
         sort: this.usersSort,
-        filter: null,
+        filter: this.usersFilter,
       });
       this.$router.push({
         query: {
           page: page.num,
           sort: this.usersSort,
-          filter: null,
+          ...this.usersFilter,
         },
       });
     },
@@ -294,13 +324,13 @@ export default {
           page: pageValue,
           limit: 10,
           sort: this.usersSort,
-          filter: null,
+          filter: this.usersFilter,
         });
         this.$router.push({
           query: {
             page: pageValue,
             sort: this.usersSort,
-            filter: null,
+            ...this.usersFilter,
           },
         });
       }
@@ -313,13 +343,13 @@ export default {
         page: this.usersPage,
         limit: 10,
         sort: this.usersSort,
-        filter: null,
+        filter: this.usersFilter,
       });
       this.$router.push({
         query: {
           page: this.usersPage,
           sort: this.usersSort,
-          filter: null,
+          ...this.usersFilter,
         },
       });
     },
@@ -329,13 +359,13 @@ export default {
         page: this.usersPage,
         limit: 10,
         sort: this.usersSort,
-        filter: null,
+        filter: this.usersFilter,
       });
       this.$router.push({
         query: {
           page: this.usersPage,
           sort: this.usersSort,
-          filter: null,
+          ...this.usersFilter,
         },
       });
     },
@@ -351,19 +381,34 @@ export default {
         page: this.usersPage,
         limit: 10,
         sort: this.usersSort,
-        filter: null,
+        filter: this.usersFilter,
       });
       this.$router.push({
         query: {
           page: this.usersPage,
           sort: this.usersSort,
-          filter: null,
+          ...this.usersFilter,
         },
       });
     },
     //--------------------
   },
+  beforeRouteLeave(to, from, next) {
+    if (!this.usersSearchResult) {
+      this.SET_US_FILTER(null);
+      this.SET_US_SEARCH_RESULT(true);
+    }
+    next();
+  },
   mounted() {
+    if (this.usersFilter !== null) {
+      this.model.searchValue = this.usersFilter.name;
+    }
+
+    if (!this.usersSearchResult) {
+      this.SET_US_SEARCH_RESULT(true);
+    }
+
     if (this.$route.query) {
       this.SET_US_SORT(this.$route.query.sort);
 
@@ -371,7 +416,7 @@ export default {
         page: this.$route.query.page,
         limit: 10,
         sort: this.$route.query.sort,
-        filter: null,
+        filter: this.usersFilter,
       });
     } else {
       this.fetchUsers({

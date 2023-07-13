@@ -1,5 +1,10 @@
 import { loginUser } from '@/api/login';
 
+export const mutation = {
+  UPDATE_ERROR: 'UPDATE_ERROR',
+  UPDATE_AUTH_LOADING: 'UPDATE_AUTH_LOADING',
+};
+
 export default {
   state: {
     authError: '',
@@ -14,10 +19,10 @@ export default {
     },
   },
   mutations: {
-    updateError(state, payload) {
+    [mutation.UPDATE_ERROR]: (state, payload) => {
       state.authError = payload;
     },
-    updateAuthLoading(state, payload) {
+    [mutation.UPDATE_AUTH_LOADING]: (state, payload) => {
       state.isLoading = payload;
     },
   },

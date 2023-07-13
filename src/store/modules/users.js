@@ -1,4 +1,4 @@
-import { getUsers, deleteUser } from '@/api/users';
+import { getUsers, deleteUser, searchUsers } from '@/api/users';
 
 export const mutation = {
   SET_USERS: 'SET_USERS',
@@ -6,6 +6,8 @@ export const mutation = {
   SET_TOTAL_US_PAGES: 'SET_TOTAL_US_PAGES',
   SET_UPD_US_PAGES: 'SET_UPD_US_PAGES',
   SET_US_SORT: 'SET_US_SORT',
+  SET_US_FILTER: 'SET_US_FILTER',
+  SET_US_SEARCH_RESULT: 'SET_US_SEARCH_RESULT',
   SET_US_MAX_LIMIT: 'SET_US_MAX_LIMIT',
 };
 
@@ -17,7 +19,8 @@ export default {
     selectedPage: '1',
     sort: 'asc',
     filter: null,
-    maxLimit: '50',
+    isSearchResults: false,
+    maxLimit: '10',
   },
   getters: {
     allUsers(state) {
@@ -64,6 +67,9 @@ export default {
     usersFilter(state) {
       return state.filter;
     },
+    usersSearchResult(state) {
+      return state.isSearchResults;
+    },
     usersMaxLimit(state) {
       return state.maxLimit;
     },
@@ -90,6 +96,12 @@ export default {
     [mutation.SET_US_SORT]: (state, payload) => {
       state.sort = payload;
     },
+    [mutation.SET_US_FILTER]: (state, payload) => {
+      state.filter = payload;
+    },
+    [mutation.SET_US_SEARCH_RESULT]: (state, payload) => {
+      state.isSearchResults = payload;
+    },
     [mutation.SET_US_MAX_LIMIT]: (state, payload) => {
       state.maxLimit = payload;
     },
@@ -100,6 +112,9 @@ export default {
     },
     changeUserStatus(context, params) {
       deleteUser(context, params);
+    },
+    fetchUsersSearch(context, params) {
+      searchUsers(context, params);
     },
   },
 };

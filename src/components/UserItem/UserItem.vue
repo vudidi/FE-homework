@@ -16,8 +16,13 @@
         <Link
           v-bind:link="userLink"
           :to="{ name: 'user-profile', params: { id: user.id } }"
-          ><h3 class="list-title list__user-title">{{ user.name }}</h3></Link
         >
+          <keep-alive>
+            <h3 ref="username" class="list-title list__user-title">
+              {{ user.name }}
+            </h3></keep-alive
+          >
+        </Link>
         <div class="list-status list-status_type_off" v-if="!userStatus">
           Не активен
         </div>
@@ -63,6 +68,7 @@
 
 <script>
 import getUserInitials from '@/helpers/getUserInitials';
+import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -75,7 +81,19 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      dropdownBtn: {
+        id: 'list-user-btn',
+        isActive: false,
+      },
+      userLink: {
+        id: 'user-link',
+      },
+    };
+  },
   computed: {
+    ...mapGetters(['usersFilter']),
     userStatus() {
       return this.user.status === 'ACTIVE' ? true : false;
     },
@@ -94,17 +112,28 @@ export default {
     clickOutside() {
       this.$emit('click-outside', this.user.id);
     },
+    getUsername() {
+      this.$nextTick(function () {
+        this.$refs.username.innerHTML = this.user.name;
+        if (
+          this.usersFilter !== null &&
+          this.usersFilter.name &&
+          this.$refs.username
+        ) {
+          const newTitle = `${this.$refs.username.innerHTML}`.replace(
+            new RegExp(this.usersFilter.name, 'ig'),
+            `<span class="list-title_highlight">$&</span>`
+          );
+          this.$refs.username.innerHTML = newTitle;
+        }
+      });
+    },
   },
-  data() {
-    return {
-      dropdownBtn: {
-        id: 'list-user-btn',
-        isActive: false,
-      },
-      userLink: {
-        id: 'user-link',
-      },
-    };
+  mounted() {
+    this.getUsername();
+  },
+  updated() {
+    this.getUsername();
   },
 };
 </script>

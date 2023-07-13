@@ -37,6 +37,7 @@ export function getUsers(context, params) {
         page: params.page,
         limit: params.limit,
         sort: params.sort,
+        filter: params.filter,
       },
       {
         headers: {
@@ -163,4 +164,68 @@ export function getAllUsers(params) {
       },
     }
   );
+}
+
+export function searchUsers(context, params) {
+  axios
+    .post(
+      `${url}/users/search`,
+      {
+        page: params.page,
+        limit: params.limit,
+        sort: params.sort,
+        filter: params.filter,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    .then((res) => {
+      if (res.data.users.length < 1) {
+        context.commit('SET_US_SEARCH_RESULT', false);
+      } else {
+        context.commit('SET_US_SEARCH_RESULT', true);
+
+        const users = [];
+
+        res.data.users.forEach((el) => {
+          const user = {
+            id: '',
+            role: '',
+            name: '',
+            description: '',
+            status: '',
+            picture: null,
+            isDropdownOpen: false,
+          };
+          user.id = el._id;
+          user.role = el.roles[0];
+          user.name = el.name;
+          user.description = el.description;
+          user.status = el.status;
+          if (el.picture) {
+            user.picture = `http://45.12.239.156:8081/${el.picture}`;
+          } else {
+            user.picture = null;
+          }
+          users.push(user);
+        });
+
+        context.commit('SET_US_LOADING', false);
+        context.commit('SET_USERS', users);
+        context.commit(
+          'SET_TOTAL_US_PAGES',
+          getPagPages(res.data.total, params.page)
+        );
+        context.commit('SET_US_MAX_LIMIT', res.data.limit * res.data.total);
+      }
+    })
+
+    .catch((err) => {
+      context.commit('SET_US_LOADING', false);
+      console.log('error', err);
+    });
 }

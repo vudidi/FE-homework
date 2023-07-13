@@ -4,7 +4,7 @@ import router from '@/router/router';
 const url = 'http://45.12.239.156:8081/api';
 
 export function loginUser(context, user) {
-  context.commit('updateAuthLoading', true);
+  context.commit('UPDATE_AUTH_LOADING', true);
 
   axios
     .post(
@@ -20,7 +20,7 @@ export function loginUser(context, user) {
       }
     )
     .then((res) => {
-      context.commit('updateAuthLoading', false);
+      context.commit('UPDATE_AUTH_LOADING', false);
 
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('isAuth', true);
@@ -37,7 +37,7 @@ export function loginUser(context, user) {
     })
     .catch((err) => {
       console.log('error', err);
-      context.commit('updateAuthLoading', false);
-      context.commit('updateError', err.response.data.message);
+      context.commit('UPDATE_AUTH_LOADING', false);
+      context.commit('UPDATE_ERROR', err.response.data.message);
     });
 }

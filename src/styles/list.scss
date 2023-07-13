@@ -45,6 +45,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: default;
+    &_highlight {
+      font-weight: 600;
+      // color: $bgPrimaryActive;
+      color: red;
+    }
   }
   &__user-title {
     margin: 0 32px 0 0;
