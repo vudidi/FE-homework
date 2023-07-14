@@ -223,7 +223,6 @@ export function searchUsers(context, params) {
         context.commit('SET_US_MAX_LIMIT', res.data.limit * res.data.total);
       }
     })
-
     .catch((err) => {
       context.commit('SET_US_LOADING', false);
       console.log('error', err);

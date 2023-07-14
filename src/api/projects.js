@@ -157,3 +157,70 @@ export function deleteProject(context, params) {
       console.log('error', err);
     });
 }
+
+export function searchProjects(context, params) {
+  context.commit('SET_PR_LOADING', true);
+  const users = [];
+
+  getAllUsers(params)
+    .then((res) => {
+      users.push(...res.data.users);
+    })
+    .then(() => {
+      getAllProjects(params)
+        .then((res) => {
+          if (res.data.projects.length < 1) {
+            context.commit('SET_PR_LOADING', false);
+            context.commit('SET_PR_SEARCH_RESULT', false);
+            console.log('noRes');
+          } else {
+            context.commit('SET_PR_SEARCH_RESULT', true);
+            console.log('Res');
+            const projects = [];
+
+            res.data.projects.forEach((el) => {
+              const project = {
+                id: '',
+                name: '',
+                author: '',
+                authorId: '',
+                authorEdited: '',
+                code: '',
+                dateCreated: '',
+                dateEdited: '',
+                isDropdownOpen: false,
+              };
+
+              const author = getItemAuthor(users, el.author);
+              const authorEdited = getItemAuthorEdited(users, el.authorEdited);
+
+              project.id = el._id;
+              project.name = el.name;
+              project.author = author;
+              project.authorId = el.author;
+              project.authorEdited = authorEdited;
+              project.code = el.code;
+              project.dateCreated = el.dateCreated;
+              project.dateEdited = el.dateEdited;
+
+              projects.push(project);
+            });
+
+            context.commit('SET_PR_LOADING', false);
+            context.commit('SET_PROJECTS', projects);
+            context.commit(
+              'SET_TOTAL_PR_PAGES',
+              getPagPages(res.data.total, params.page)
+            );
+          }
+        })
+        .catch((err) => {
+          context.commit('SET_PR_LOADING', false);
+          console.log('error', err);
+        });
+    })
+    .catch((err) => {
+      context.commit('SET_PR_LOADING', false);
+      console.log('error', err);
+    });
+}

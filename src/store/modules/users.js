@@ -20,7 +20,7 @@ export default {
     sort: 'asc',
     filter: null,
     isSearchResults: false,
-    maxLimit: '10',
+    maxLimit: '100000',
   },
   getters: {
     allUsers(state) {

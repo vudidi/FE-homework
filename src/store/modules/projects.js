@@ -1,4 +1,4 @@
-import { getProjects, deleteProject } from '@/api/projects';
+import { getProjects, deleteProject, searchProjects } from '@/api/projects';
 
 export const mutation = {
   SET_PROJECTS: 'SET_PROJECTS',
@@ -6,6 +6,8 @@ export const mutation = {
   SET_TOTAL_PR_PAGES: 'SET_TOTAL_PR_PAGES',
   SET_UPD_PR_PAGES: 'SET_UPD_PR_PAGES',
   SET_PR_SORT: 'SET_PR_SORT',
+  SET_PR_FILTER: 'SET_PR_FILTER',
+  SET_PR_SEARCH_RESULT: 'SET_PR_SEARCH_RESULT',
 };
 
 export default {
@@ -20,6 +22,7 @@ export default {
       value: 'По дате создания',
     },
     filter: null,
+    isSearchResults: false,
   },
   getters: {
     allProjects(state) {
@@ -66,6 +69,9 @@ export default {
     projectsFilter(state) {
       return state.filter;
     },
+    projectsSearchResult(state) {
+      return state.isSearchResults;
+    },
   },
   mutations: {
     [mutation.SET_PROJECTS]: (state, payload) => {
@@ -89,6 +95,12 @@ export default {
     [mutation.SET_PR_SORT]: (state, payload) => {
       state.sort = payload;
     },
+    [mutation.SET_PR_FILTER]: (state, payload) => {
+      state.filter = payload;
+    },
+    [mutation.SET_PR_SEARCH_RESULT]: (state, payload) => {
+      state.isSearchResults = payload;
+    },
   },
   actions: {
     fetchProjects(context, params) {
@@ -96,6 +108,9 @@ export default {
     },
     removeProject(context, params) {
       deleteProject(context, params);
+    },
+    fetchProjectsSearch(context, params) {
+      searchProjects(context, params);
     },
   },
 };

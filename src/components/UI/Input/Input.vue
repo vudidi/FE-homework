@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
   props: {
@@ -82,11 +82,18 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['UPDATE_ERROR', 'SET_US_SEARCH_RESULT']),
+    ...mapMutations([
+      'UPDATE_ERROR',
+      'SET_US_SEARCH_RESULT',
+      'SET_PR_SEARCH_RESULT',
+      'SET_TS_SEARCH_RESULT',
+    ]),
     onInput($event) {
       this.$emit('input', $event.target.value);
       this.UPDATE_ERROR('');
       this.SET_US_SEARCH_RESULT(true);
+      this.SET_PR_SEARCH_RESULT(true);
+      this.SET_TS_SEARCH_RESULT(true);
     },
   },
 };

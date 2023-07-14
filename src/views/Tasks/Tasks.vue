@@ -430,17 +430,6 @@ export default {
       });
     },
   },
-  watch: {
-    $route(to, from) {
-      this.SET_UPD_TS_PAGES(this.$route.query.page);
-      this.fetchTasks({
-        page: this.$route.query.page,
-        limit: this.usersMaxLimit,
-        sort: this.tasksSort,
-        filter: this.tasksFilter,
-      });
-    },
-  },
   //-------------------------
   beforeMount() {
     this.fetchUsers({
@@ -449,6 +438,7 @@ export default {
       filter: null,
     });
   },
+
   mounted() {
     if (this.$route.query.page) {
       const sortValue = this.sortTasksSelect.find(

@@ -225,7 +225,6 @@ export default {
         });
       }
     },
-
     openDropdown(id) {
       this.allUsers.forEach((user) => {
         if (user.id === id) {

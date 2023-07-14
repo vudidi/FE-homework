@@ -73,6 +73,10 @@
         v-on:click-link="openCreateModal"
         v-bind:isAscSort="isAscSort"
         v-on:toggle-sort="toggleSort"
+        errorText="Ничего не найдено"
+        :isErrorVisible="!projectsSearchResult"
+        v-on:search-on-enter="searchProject"
+        v-model="model.searchValue"
       />
       <ProjectItem
         v-for="project in allProjects"
@@ -136,6 +140,7 @@ export default {
       deletedProjectTitle: '',
       model: {
         pageValue: '',
+        searchValue: '',
       },
       addProjectBtn: {
         id: 'project-add-btn',
@@ -182,6 +187,7 @@ export default {
       'projectsPage',
       'projectsSort',
       'projectsFilter',
+      'projectsSearchResult',
       'usersMaxLimit',
       'allUsers',
     ]),
@@ -250,8 +256,18 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['SET_UPD_PR_PAGES', 'SET_PR_SORT']),
-    ...mapActions(['fetchProjects', 'fetchUsers', 'removeProject']),
+    ...mapMutations([
+      'SET_UPD_PR_PAGES',
+      'SET_PR_SORT',
+      'SET_PR_FILTER',
+      'SET_PR_SEARCH_RESULT',
+    ]),
+    ...mapActions([
+      'fetchProjects',
+      'fetchUsers',
+      'removeProject',
+      'fetchProjectsSearch',
+    ]),
     closeDeleteModal() {
       this.isDeleteModalOpen = false;
     },
@@ -269,10 +285,28 @@ export default {
           field: this.projectsSort.field,
           type: this.projectsSort.type,
         },
-        filter: null,
+        filter: this.projectsFilter,
         id: this.deletedProjectId,
       });
       this.isDeleteModalOpen = false;
+    },
+    searchProject() {
+      if (this.model.searchValue !== this.projectsFilter?.name) {
+        this.SET_PR_FILTER({ name: this.model.searchValue.trim() });
+        this.fetchProjectsSearch({
+          page: 1,
+          limit: this.usersMaxLimit,
+          sort: this.projectsSort,
+          filter: this.projectsFilter,
+        });
+        this.$router.push({
+          query: {
+            page: this.projectsPage,
+            ...this.projectsSort,
+            ...this.projectsFilter,
+          },
+        });
+      }
     },
     goPage(page) {
       this.SET_UPD_PR_PAGES(page.num);
@@ -280,14 +314,14 @@ export default {
         page: page.num,
         limit: this.usersMaxLimit,
         sort: this.projectsSort,
-        filter: null,
+        filter: this.projectsFilter,
       });
       this.$router.push({
         query: {
           page: page.num,
           field: this.projectsSort.field,
           type: this.projectsSort.type,
-          filter: null,
+          ...this.projectsFilter,
         },
       });
     },
@@ -297,14 +331,14 @@ export default {
         page: page.num,
         limit: this.usersMaxLimit,
         sort: this.projectsSort,
-        filter: null,
+        filter: this.projectsFilter,
       });
       this.$router.push({
         query: {
           page: page.num,
           field: this.projectsSort.field,
           type: this.projectsSort.type,
-          filter: null,
+          ...this.projectsFilter,
         },
       });
     },
@@ -314,14 +348,14 @@ export default {
         page: page.num,
         limit: this.usersMaxLimit,
         sort: this.projectsSort,
-        filter: null,
+        filter: this.projectsFilter,
       });
       this.$router.push({
         query: {
           page: page.num,
           field: this.projectsSort.field,
           type: this.projectsSort.type,
-          filter: null,
+          ...this.projectsFilter,
         },
       });
     },
@@ -340,14 +374,14 @@ export default {
           page: pageValue,
           limit: this.usersMaxLimit,
           sort: this.projectsSort,
-          filter: null,
+          filter: this.projectsFilter,
         });
         this.$router.push({
           query: {
             page: pageValue,
             field: this.projectsSort.field,
             type: this.projectsSort.type,
-            filter: null,
+            ...this.projectsFilter,
           },
         });
       }
@@ -360,14 +394,14 @@ export default {
         page: this.projectsPage,
         limit: this.usersMaxLimit,
         sort: this.projectsSort,
-        filter: null,
+        filter: this.projectsFilter,
       });
       this.$router.push({
         query: {
           page: this.projectsPage,
           field: this.projectsSort.field,
           type: this.projectsSort.type,
-          filter: null,
+          ...this.projectsFilter,
         },
       });
     },
@@ -377,14 +411,14 @@ export default {
         page: this.projectsPage,
         limit: this.usersMaxLimit,
         sort: this.projectsSort,
-        filter: null,
+        filter: this.projectsFilter,
       });
       this.$router.push({
         query: {
           page: this.projectsPage,
           field: this.projectsSort.field,
           type: this.projectsSort.type,
-          filter: null,
+          ...this.projectsFilter,
         },
       });
     },
@@ -407,14 +441,14 @@ export default {
         page: this.projectsPage,
         limit: this.usersMaxLimit,
         sort: this.projectsSort,
-        filter: null,
+        filter: this.projectsFilter,
       });
       this.$router.push({
         query: {
           page: this.projectsPage,
           field: this.projectsSort.field,
           type: this.projectsSort.type,
-          filter: null,
+          ...this.projectsFilter,
         },
       });
     },
@@ -436,14 +470,14 @@ export default {
         page: 1,
         limit: this.usersMaxLimit,
         sort: this.projectsSort,
-        filter: null,
+        filter: this.projectsFilter,
       });
       this.$router.push({
         query: {
           page: 1,
           field: this.projectsSort.field,
           type: this.projectsSort.type,
-          filter: null,
+          ...this.projectsFilter,
         },
       });
     },
@@ -470,21 +504,22 @@ export default {
       });
     },
   },
-  watch: {
-    $route(to, from) {
-      this.SET_UPD_PR_PAGES(this.$route.query.page);
-      this.fetchProjects({
-        page: this.$route.query.page,
-        limit: this.usersMaxLimit,
-        sort: {
-          field: this.projectsSort.field,
-          type: this.projectsSort.type,
-        },
-        filter: null,
-      });
-    },
-  },
   // ---------------------------------------------
+  beforeRouteEnter(to, from, next) {
+    if (from.name === 'login') {
+      store.dispatch('fetchCurrentUser');
+      next();
+    } else {
+      next();
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.projectsSearchResult) {
+      this.SET_PR_FILTER(null);
+      this.SET_PR_SEARCH_RESULT(true);
+    }
+    next();
+  },
   beforeMount() {
     this.fetchUsers({
       page: 1,
@@ -493,6 +528,14 @@ export default {
     });
   },
   mounted() {
+    if (this.projectsFilter !== null) {
+      this.model.searchValue = this.projectsFilter.name;
+    }
+
+    if (!this.projectsSearchResult) {
+      this.SET_PR_SEARCH_RESULT(true);
+    }
+
     if (this.$route.query.page) {
       const sortValue = this.sortProjectsSelect.find(
         (el) => el.value === this.$route.query.field
@@ -508,7 +551,7 @@ export default {
         page: this.$route.query.page,
         limit: this.usersMaxLimit,
         sort: { field: this.$route.query.field, type: this.$route.query.type },
-        filter: null,
+        filter: this.projectsFilter,
       });
     } else {
       this.fetchProjects({
@@ -524,15 +567,6 @@ export default {
   },
   updated() {
     getOverflowValue(tooltipClasses);
-  },
-  // ---------------------------------------------
-  beforeRouteEnter(to, from, next) {
-    if (from.name === 'login') {
-      store.dispatch('fetchCurrentUser');
-      next();
-    } else {
-      next();
-    }
   },
 };
 </script>

@@ -4,7 +4,13 @@
       placeholder="Поиск..."
       type="search"
       :defaultInput="true"
-      v-bind:class="['search-panel__input']"
+      :class="['search-panel__input']"
+      v-on:search-on-enter="$emit('search-on-enter')"
+      :value="value"
+      v-on:input="onInput"
+      v-on:change="onInput"
+      :errorText="errorText"
+      :isErrorVisible="isErrorVisible"
     >
       <svg-icon
         v-bind:class="['field__icon']"
@@ -63,10 +69,19 @@ export default {
     filterBtn: { type: Object },
     isAscSort: { type: Boolean, default: false },
     activeOption: { type: String },
+    value: {
+      type: [String, Number],
+      default: '',
+    },
+    errorText: { type: String },
+    isErrorVisible: { type: Boolean, default: false },
   },
   methods: {
     onSelectClick(event) {
       this.$emit('click-select', event);
+    },
+    onInput(e) {
+      this.$emit('input', e);
     },
   },
 };

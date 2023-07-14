@@ -76,10 +76,15 @@ export function getTasks(context, params) {
             task.executor = el.executor;
             task.author = author;
             task.authorId = el.author;
-            task.authorAvatar = authorAvatar;
             task.authorEdited = authorEdited;
             task.dateCreated = el.dateCreated;
             task.dateEdited = el.dateEdited;
+
+            if (authorAvatar !== null) {
+              task.authorAvatar = `http://45.12.239.156:8081/${authorAvatar}`;
+            } else {
+              task.authorAvatar = null;
+            }
 
             tasks.push(task);
           });

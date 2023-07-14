@@ -16,7 +16,7 @@
                 },
               }"
               :class="['list-title', 'list__link-title']"
-              >{{ project.name }}</router-link
+              ><div ref="projectTitle">{{ project.name }}</div></router-link
             >
             <div class="tooltip tooltip__title">
               <div class="tooltip__content">{{ project.name }}</div>
@@ -97,7 +97,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDateAndTime, getFullDateAndTime } from '@/helpers/formatDate';
-import Button from '../UI/Button/Button.vue';
 
 export default {
   props: {
@@ -106,8 +105,17 @@ export default {
       default: {},
     },
   },
+  data() {
+    return {
+      isHover: false,
+      dropdownBtn: {
+        id: 'list-project-btn',
+        isActive: false,
+      },
+    };
+  },
   computed: {
-    ...mapGetters(['currentUser']),
+    ...mapGetters(['currentUser', 'projectsFilter']),
     isOwnerOrAdmin() {
       if (
         this.currentUser.id === this.project.authorId ||
@@ -149,15 +157,28 @@ export default {
     clickOutside() {
       this.$emit('click-outside', this.project.id);
     },
+    getProjectTitle() {
+      this.$nextTick(function () {
+        this.$refs.projectTitle.innerHTML = this.project.name;
+        if (
+          this.projectsFilter !== null &&
+          this.projectsFilter.name &&
+          this.$refs.projectTitle
+        ) {
+          const newTitle = `${this.$refs.projectTitle.innerHTML}`.replace(
+            new RegExp(this.projectsFilter.name, 'ig'),
+            `<span class="list-title_highlight">$&</span>`
+          );
+          this.$refs.projectTitle.innerHTML = newTitle;
+        }
+      });
+    },
   },
-  data() {
-    return {
-      isHover: false,
-      dropdownBtn: {
-        id: 'list-project-btn',
-        isActive: false,
-      },
-    };
+  mounted() {
+    this.getProjectTitle();
+  },
+  updated() {
+    this.getProjectTitle();
   },
 };
 </script>

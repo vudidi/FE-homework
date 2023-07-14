@@ -7,6 +7,7 @@ export const mutation = {
   SET_UPD_TS_PAGES: 'SET_UPD_TS_PAGES',
   SET_TS_SORT: 'SET_TS_SORT',
   SET_TS_FILTER: 'SET_TS_FILTER',
+  SET_TS_SEARCH_RESULT: 'SET_TS_SEARCH_RESULT',
 };
 
 export default {
@@ -29,6 +30,7 @@ export default {
       dateStart: null,
       dateEnd: null,
     },
+    isSearchResults: false,
   },
   getters: {
     allTasks(state) {
@@ -75,6 +77,9 @@ export default {
     tasksFilter(state) {
       return state.filter;
     },
+    tasksSearchResult(state) {
+      return state.isSearchResults;
+    },
   },
   mutations: {
     [mutation.SET_TASKS]: (state, payload) => {
@@ -100,6 +105,9 @@ export default {
     },
     [mutation.SET_TS_FILTER]: (state, payload) => {
       state.filter = payload;
+    },
+    [mutation.SET_TS_SEARCH_RESULT]: (state, payload) => {
+      state.isSearchResults = payload;
     },
   },
   actions: {

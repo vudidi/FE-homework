@@ -49,5 +49,7 @@ export function getItemAuthorAvatar(users, userID) {
 
   if (user) {
     return user.picture;
+  } else {
+    return null;
   }
 }
