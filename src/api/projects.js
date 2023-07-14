@@ -31,7 +31,7 @@ export function getProjects(context, params) {
 
   const users = [];
 
-  getAllUsers(params)
+  getAllUsers()
     .then((res) => {
       users.push(...res.data.users);
     })
@@ -86,53 +86,6 @@ export function getProjects(context, params) {
     });
 }
 
-// export function addProject() {
-//   return axios
-//     .post(
-//       `${url}/projects`,
-//       {
-//         name: 'Project 5',
-//         code: 'code#74563432',
-//       },
-//       {
-//         headers: {
-//           authorization: `Bearer ${localStorage.getItem('token')}`,
-//           'Content-Type': 'application/json',
-//         },
-//       }
-//     )
-//     .then((res) => {
-//       console.log('ProjectAxios', res.data);
-//     })
-//     .catch((err) => {
-//       console.log('error', err);
-//     });
-// }
-
-// export function updateProject(id) {
-//   return axios
-//     .put(
-//       `${url}/projects`,
-//       {
-//         name: 'updatedProjectAxios',
-//         code: 'code#74563432',
-//         _id: id,
-//       },
-//       {
-//         headers: {
-//           authorization: `Bearer ${localStorage.getItem('token')}`,
-//           'Content-Type': 'application/json',
-//         },
-//       }
-//     )
-//     .then((res) => {
-//       console.log('updatedProjectAxios', res.data);
-//     })
-//     .catch((err) => {
-//       console.log('error', err);
-//     });
-// }
-
 function deleteItem(params) {
   return axios.delete(`${url}/projects/${params.id}`, {
     headers: {
@@ -162,7 +115,7 @@ export function searchProjects(context, params) {
   context.commit('SET_PR_LOADING', true);
   const users = [];
 
-  getAllUsers(params)
+  getAllUsers()
     .then((res) => {
       users.push(...res.data.users);
     })
@@ -172,10 +125,8 @@ export function searchProjects(context, params) {
           if (res.data.projects.length < 1) {
             context.commit('SET_PR_LOADING', false);
             context.commit('SET_PR_SEARCH_RESULT', false);
-            console.log('noRes');
           } else {
             context.commit('SET_PR_SEARCH_RESULT', true);
-            console.log('Res');
             const projects = [];
 
             res.data.projects.forEach((el) => {

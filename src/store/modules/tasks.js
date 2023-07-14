@@ -1,4 +1,4 @@
-import { getTasks, deleteTask } from '@/api/tasks';
+import { getTasks, deleteTask, searchTasks } from '@/api/tasks';
 
 export const mutation = {
   SET_TASKS: 'SET_TASKS',
@@ -116,6 +116,9 @@ export default {
     },
     removeTask(context, params) {
       deleteTask(context, params);
+    },
+    fetchTasksSearch(context, params) {
+      searchTasks(context, params);
     },
   },
 };

@@ -13,6 +13,7 @@
                   type: 'desc',
                   author: null,
                   projectId: project.id,
+                  name: null,
                 },
               }"
               :class="['list-title', 'list__link-title']"
@@ -24,7 +25,7 @@
           </div>
           <div class="list-container">
             <div class="list-tooltip">
-              <p class="list-code">{{ project.code }}</p>
+              <p ref="projectCode" class="list-code">{{ project.code }}</p>
               <div class="tooltip tooltip__code">
                 <div class="tooltip__content">{{ project.code }}</div>
               </div>
@@ -173,12 +174,30 @@ export default {
         }
       });
     },
+    getProjectCode() {
+      this.$nextTick(function () {
+        this.$refs.projectCode.innerHTML = this.project.code;
+        if (
+          this.projectsFilter !== null &&
+          this.projectsFilter.name &&
+          this.$refs.projectCode
+        ) {
+          const newTitle = `${this.$refs.projectCode.innerHTML}`.replace(
+            new RegExp(this.projectsFilter.name, 'ig'),
+            `<span class="list-title_highlight">$&</span>`
+          );
+          this.$refs.projectCode.innerHTML = newTitle;
+        }
+      });
+    },
   },
   mounted() {
     this.getProjectTitle();
+    this.getProjectCode();
   },
   updated() {
     this.getProjectTitle();
+    this.getProjectCode();
   },
 };
 </script>

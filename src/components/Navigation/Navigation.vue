@@ -132,6 +132,7 @@ export default {
       'projectsSort',
       'tasksSort',
       'usersSort',
+      'tasksFilter',
     ]),
 
     defaultUserAvatar() {
@@ -156,6 +157,7 @@ export default {
             type: this.tasksSort.type,
             author: this.currentUser.id,
             projectId: null,
+            name: this.tasksFilter.name,
           },
         };
       } else if (navBtn.id === 'projects') {

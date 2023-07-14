@@ -27,6 +27,10 @@
         v-bind:filterBtn="filterBtn"
         v-bind:isAscSort="isAscSort"
         v-on:toggle-sort="toggleSort"
+        errorText="Ничего не найдено"
+        :isErrorVisible="!tasksSearchResult"
+        v-on:search-on-enter="searchTask"
+        v-model="model.searchValue"
       />
 
       <TaskItem
@@ -58,7 +62,7 @@
         v-model="model.pageValue"
       />
     </div>
-    <noContent v-else to="tasks/create" text="Не создана ни одна задача" />
+    <noContent v-else to="create" text="Не создана ни одна задача" />
   </div>
 </template>
 
@@ -81,6 +85,7 @@ export default {
       deletedTaskTitle: '',
       model: {
         pageValue: '',
+        searchValue: '',
       },
       addTaskBtn: {
         id: 'task-add-btn',
@@ -137,7 +142,7 @@ export default {
       'tasksPage',
       'tasksSort',
       'tasksFilter',
-      'usersMaxLimit',
+      'tasksSearchResult',
       'allUsers',
       'currentUser',
     ]),
@@ -206,8 +211,18 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['SET_UPD_TS_PAGES', 'SET_TS_SORT', 'SET_TS_FILTER']),
-    ...mapActions(['fetchTasks', 'fetchUsers', 'removeTask']),
+    ...mapMutations([
+      'SET_UPD_TS_PAGES',
+      'SET_TS_SORT',
+      'SET_TS_FILTER',
+      'SET_TS_SEARCH_RESULT',
+    ]),
+    ...mapActions([
+      'fetchTasks',
+      'fetchUsers',
+      'removeTask',
+      'fetchTasksSearch',
+    ]),
     closeDeleteModal() {
       this.isDeleteModalOpen = false;
     },
@@ -220,7 +235,6 @@ export default {
     deleteTask() {
       this.removeTask({
         page: this.tasksPage,
-        limit: this.usersMaxLimit,
         sort: {
           field: this.tasksSort.field,
           type: this.tasksSort.type,
@@ -230,11 +244,30 @@ export default {
       });
       this.isDeleteModalOpen = false;
     },
+    searchTask() {
+      if (this.model.searchValue !== this.tasksFilter?.name) {
+        this.SET_TS_FILTER({
+          ...this.tasksFilter,
+          name: this.model.searchValue.trim(),
+        });
+        this.fetchTasksSearch({
+          page: 1,
+          sort: this.tasksSort,
+          filter: this.tasksFilter,
+        });
+        this.$router.push({
+          query: {
+            page: this.tasksPage,
+            ...this.tasksSort,
+            ...this.tasksFilter,
+          },
+        });
+      }
+    },
     goPage(page) {
       this.SET_UPD_TS_PAGES(page.num);
       this.fetchTasks({
         page: page.num,
-        limit: this.usersMaxLimit,
         sort: this.tasksSort,
         filter: this.tasksFilter,
       });
@@ -252,7 +285,6 @@ export default {
       this.SET_UPD_TS_PAGES(page.num);
       this.fetchTasks({
         page: page.num,
-        limit: this.usersMaxLimit,
         sort: this.tasksSort,
         filter: this.tasksFilter,
       });
@@ -270,7 +302,6 @@ export default {
       this.SET_UPD_TS_PAGES(page.num);
       this.fetchTasks({
         page: page.num,
-        limit: this.usersMaxLimit,
         sort: this.tasksSort,
         filter: this.tasksFilter,
       });
@@ -297,7 +328,6 @@ export default {
         this.SET_UPD_TS_PAGES(this.model.pageValue);
         this.fetchTasks({
           page: pageValue,
-          limit: this.usersMaxLimit,
           sort: this.tasksSort,
           filter: this.tasksFilter,
         });
@@ -318,7 +348,6 @@ export default {
       this.SET_UPD_TS_PAGES(this.tasksPage - 1);
       this.fetchTasks({
         page: this.tasksPage,
-        limit: this.usersMaxLimit,
         sort: this.tasksSort,
         filter: this.tasksFilter,
       });
@@ -336,7 +365,6 @@ export default {
       this.SET_UPD_TS_PAGES(this.tasksPage + 1);
       this.fetchTasks({
         page: this.tasksPage,
-        limit: this.usersMaxLimit,
         sort: this.tasksSort,
         filter: this.tasksFilter,
       });
@@ -368,7 +396,6 @@ export default {
 
       this.fetchTasks({
         page: this.tasksPage,
-        limit: this.usersMaxLimit,
         sort: this.tasksSort,
         filter: this.tasksFilter,
       });
@@ -399,7 +426,6 @@ export default {
 
       this.fetchTasks({
         page: 1,
-        limit: this.usersMaxLimit,
         sort: this.tasksSort,
         filter: this.tasksFilter,
       });
@@ -431,15 +457,11 @@ export default {
     },
   },
   //-------------------------
-  beforeMount() {
-    this.fetchUsers({
-      page: 1,
-      sort: 'asc',
-      filter: null,
-    });
-  },
-
   mounted() {
+    if (!this.tasksSearchResult) {
+      this.SET_TS_SEARCH_RESULT(true);
+    }
+
     if (this.$route.query.page) {
       const sortValue = this.sortTasksSelect.find(
         (el) => el.value === this.$route.query.field
@@ -458,7 +480,6 @@ export default {
 
       this.fetchTasks({
         page: this.$route.query.page,
-        limit: this.usersMaxLimit,
         sort: { field: this.$route.query.field, type: this.$route.query.type },
         filter: {
           author: this.$route.query.author,
@@ -468,7 +489,6 @@ export default {
     } else {
       this.fetchTasks({
         page: this.tasksPage,
-        limit: this.usersMaxLimit,
         sort: {
           field: this.tasksSort.field,
           type: this.tasksSort.type,

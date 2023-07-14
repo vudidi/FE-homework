@@ -188,7 +188,6 @@ export default {
       'projectsSort',
       'projectsFilter',
       'projectsSearchResult',
-      'usersMaxLimit',
       'allUsers',
     ]),
     isPagination() {
@@ -280,7 +279,6 @@ export default {
     deleteProject() {
       this.removeProject({
         page: this.projectsPage,
-        limit: this.usersMaxLimit,
         sort: {
           field: this.projectsSort.field,
           type: this.projectsSort.type,
@@ -295,7 +293,6 @@ export default {
         this.SET_PR_FILTER({ name: this.model.searchValue.trim() });
         this.fetchProjectsSearch({
           page: 1,
-          limit: this.usersMaxLimit,
           sort: this.projectsSort,
           filter: this.projectsFilter,
         });
@@ -312,7 +309,6 @@ export default {
       this.SET_UPD_PR_PAGES(page.num);
       this.fetchProjects({
         page: page.num,
-        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: this.projectsFilter,
       });
@@ -329,7 +325,6 @@ export default {
       this.SET_UPD_PR_PAGES(page.num);
       this.fetchProjects({
         page: page.num,
-        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: this.projectsFilter,
       });
@@ -346,7 +341,6 @@ export default {
       this.SET_UPD_PR_PAGES(page.num);
       this.fetchProjects({
         page: page.num,
-        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: this.projectsFilter,
       });
@@ -372,7 +366,6 @@ export default {
         this.SET_UPD_PR_PAGES(this.model.pageValue);
         this.fetchProjects({
           page: pageValue,
-          limit: this.usersMaxLimit,
           sort: this.projectsSort,
           filter: this.projectsFilter,
         });
@@ -392,7 +385,6 @@ export default {
       this.SET_UPD_PR_PAGES(this.projectsPage - 1);
       this.fetchProjects({
         page: this.projectsPage,
-        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: this.projectsFilter,
       });
@@ -409,7 +401,6 @@ export default {
       this.SET_UPD_PR_PAGES(this.projectsPage + 1);
       this.fetchProjects({
         page: this.projectsPage,
-        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: this.projectsFilter,
       });
@@ -439,7 +430,6 @@ export default {
 
       this.fetchProjects({
         page: this.projectsPage,
-        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: this.projectsFilter,
       });
@@ -468,7 +458,6 @@ export default {
 
       this.fetchProjects({
         page: 1,
-        limit: this.usersMaxLimit,
         sort: this.projectsSort,
         filter: this.projectsFilter,
       });
@@ -520,13 +509,6 @@ export default {
     }
     next();
   },
-  beforeMount() {
-    this.fetchUsers({
-      page: 1,
-      sort: 'asc',
-      filter: null,
-    });
-  },
   mounted() {
     if (this.projectsFilter !== null) {
       this.model.searchValue = this.projectsFilter.name;
@@ -549,14 +531,12 @@ export default {
 
       this.fetchProjects({
         page: this.$route.query.page,
-        limit: this.usersMaxLimit,
         sort: { field: this.$route.query.field, type: this.$route.query.type },
         filter: this.projectsFilter,
       });
     } else {
       this.fetchProjects({
         page: this.projectsPage,
-        limit: this.usersMaxLimit,
         sort: {
           field: this.projectsSort.field,
           type: this.projectsSort.type,

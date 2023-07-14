@@ -3,7 +3,9 @@
     <li class="list-item">
       <div class="list-wrapper">
         <div class="list-container">
-          <h3 class="list-title">{{ task.name }}</h3>
+          <h3 class="list-title">
+            <div ref="taskTitle">{{ task.name }}</div>
+          </h3>
           <div class="tooltip tooltip__title">
             <div class="tooltip__content">{{ task.name }}</div>
           </div>
@@ -115,19 +117,8 @@ export default {
       },
     };
   },
-  methods: {
-    mouseOver() {
-      this.isHover = true;
-    },
-    mouseLeave() {
-      this.isHover = false;
-    },
-    clickOutside() {
-      this.$emit('click-outside', this.task.id);
-    },
-  },
   computed: {
-    ...mapGetters(['currentUser']),
+    ...mapGetters(['currentUser', 'tasksFilter']),
     isOwnerOrAdmin() {
       if (
         this.currentUser.id === this.task.authorId ||
@@ -185,6 +176,39 @@ export default {
         return '';
       }
     },
+  },
+  methods: {
+    mouseOver() {
+      this.isHover = true;
+    },
+    mouseLeave() {
+      this.isHover = false;
+    },
+    clickOutside() {
+      this.$emit('click-outside', this.task.id);
+    },
+    getTaskTitle() {
+      this.$nextTick(function () {
+        this.$refs.taskTitle.innerHTML = this.task.name;
+        if (
+          this.tasksFilter !== null &&
+          this.tasksFilter.name &&
+          this.$refs.taskTitle
+        ) {
+          const newTitle = `${this.$refs.taskTitle.innerHTML}`.replace(
+            new RegExp(this.tasksFilter.name, 'ig'),
+            `<span class="list-title_highlight">$&</span>`
+          );
+          this.$refs.taskTitle.innerHTML = newTitle;
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getTaskTitle();
+  },
+  updated() {
+    this.getTaskTitle();
   },
 };
 </script>

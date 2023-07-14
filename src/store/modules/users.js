@@ -8,7 +8,6 @@ export const mutation = {
   SET_US_SORT: 'SET_US_SORT',
   SET_US_FILTER: 'SET_US_FILTER',
   SET_US_SEARCH_RESULT: 'SET_US_SEARCH_RESULT',
-  SET_US_MAX_LIMIT: 'SET_US_MAX_LIMIT',
 };
 
 export default {
@@ -20,7 +19,6 @@ export default {
     sort: 'asc',
     filter: null,
     isSearchResults: false,
-    maxLimit: '100000',
   },
   getters: {
     allUsers(state) {
@@ -70,9 +68,6 @@ export default {
     usersSearchResult(state) {
       return state.isSearchResults;
     },
-    usersMaxLimit(state) {
-      return state.maxLimit;
-    },
   },
   mutations: {
     [mutation.SET_USERS]: (state, payload) => {
@@ -101,9 +96,6 @@ export default {
     },
     [mutation.SET_US_SEARCH_RESULT]: (state, payload) => {
       state.isSearchResults = payload;
-    },
-    [mutation.SET_US_MAX_LIMIT]: (state, payload) => {
-      state.maxLimit = payload;
     },
   },
   actions: {

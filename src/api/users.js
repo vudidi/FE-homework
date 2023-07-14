@@ -78,7 +78,6 @@ export function getUsers(context, params) {
         'SET_TOTAL_US_PAGES',
         getPagPages(res.data.total, params.page)
       );
-      context.commit('SET_US_MAX_LIMIT', res.data.limit * res.data.total);
     })
 
     .catch((err) => {
@@ -149,12 +148,12 @@ export function deleteUser(context, params) {
     });
 }
 
-export function getAllUsers(params) {
+export function getAllUsers() {
   return axios.post(
     `${url}/users/search`,
     {
       page: 1,
-      limit: params.limit,
+      limit: 100000,
       sort: 'asc',
     },
     {
@@ -167,6 +166,8 @@ export function getAllUsers(params) {
 }
 
 export function searchUsers(context, params) {
+  context.commit('SET_US_LOADING', true);
+
   axios
     .post(
       `${url}/users/search`,
@@ -186,8 +187,10 @@ export function searchUsers(context, params) {
     .then((res) => {
       if (res.data.users.length < 1) {
         context.commit('SET_US_SEARCH_RESULT', false);
+        context.commit('SET_US_LOADING', false);
       } else {
         context.commit('SET_US_SEARCH_RESULT', true);
+        context.commit('SET_US_LOADING', false);
 
         const users = [];
 
@@ -220,7 +223,6 @@ export function searchUsers(context, params) {
           'SET_TOTAL_US_PAGES',
           getPagPages(res.data.total, params.page)
         );
-        context.commit('SET_US_MAX_LIMIT', res.data.limit * res.data.total);
       }
     })
     .catch((err) => {
