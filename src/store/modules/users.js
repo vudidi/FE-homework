@@ -1,3 +1,4 @@
+import { createUser } from '@/api/user';
 import { getUsers, deleteUser, searchUsers } from '@/api/users';
 
 export const mutation = {
@@ -107,6 +108,9 @@ export default {
     },
     fetchUsersSearch(context, params) {
       searchUsers(context, params);
+    },
+    addUser(context, params) {
+      createUser(context, params);
     },
   },
 };

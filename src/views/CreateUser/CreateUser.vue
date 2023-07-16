@@ -1,7 +1,21 @@
 <template>
   <div class="action-page">
     <h1 class="action-page__title">Создание профиля сотрудника</h1>
-    <form ref="createUserForm" class="action-page__form">
+    <form
+      autocomplete="off"
+      v-on:submit.prevent="addNewUser"
+      ref="addUserForm"
+      id="add-user-form"
+      class="form action-page__form"
+      novalidate
+    >
+      <span
+        :class="[
+          'action-page__formError',
+          { 'action-page__formError_visible': isFormError },
+        ]"
+        >Заполните форму корректными значениями</span
+      >
       <fieldset class="action-page__fieldset">
         <div class="action-page__container">
           <div class="action-page__line">
@@ -14,12 +28,15 @@
             </label>
 
             <Input
+              id="userName"
+              inputErrorClass="userName-error"
               placeholder="Введите ФИО"
               type="text"
               :defaultInput="true"
               v-bind:class="['action-page__input', 'profile-input']"
               :maxlength="256"
               :minlength="3"
+              required
               v-model="model.fullname"
             />
           </div>
@@ -34,12 +51,16 @@
             </label>
 
             <Input
+              pattern="^[A-Za-z0-9 @_\-\.]+$"
+              id="userLogin"
+              inputErrorClass="userLogin-error"
               placeholder="Введите логин"
               type="text"
               :defaultInput="true"
               v-bind:class="['action-page__input', 'profile-input']"
-              :maxlength="256"
+              :maxlength="15"
               :minlength="3"
+              required
               v-model="model.login"
             />
           </div>
@@ -54,12 +75,15 @@
             </label>
 
             <Input
+              id="userPassword"
+              inputErrorClass="userPassword-error"
               placeholder="Введите пароль"
               :type="passwordInputType"
               :defaultInput="true"
               v-bind:class="['action-page__input', 'profile-input']"
-              :maxlength="256"
-              :minlength="3"
+              :maxlength="15"
+              :minlength="6"
+              required
               v-model="model.password"
               ><svg-icon
                 v-on:click-svg="changePasswordVisability"
@@ -80,6 +104,7 @@
             <label class="action-page__label profile-label">О себе</label>
             <textarea
               class="action-page__textarea profile-input"
+              :maxlength="2048"
               v-model="model.about"
             ></textarea>
           </div>
@@ -136,10 +161,16 @@
           v-bind:class="['button', 'secondary-button', 'action-page__button']"
           v-on:click-btn="goBack"
         />
-        <Button
-          v-bind:button="createBtn"
-          v-bind:class="['button', 'primary-button', 'action-page__button']"
-          v-on:click-btn="getFormData"
+        <SubmitButton
+          type="submit"
+          :id="createBtn.id"
+          :title="createBtn.title"
+          v-bind:class="[
+            'button',
+            'form__button',
+            'primary-button',
+            'action-page__button',
+          ]"
         />
       </div>
     </form>
@@ -147,18 +178,17 @@
 </template>
 
 <script>
-import { uploadAvatar } from '@/api/admin/user';
 import formatFileSize from '@/helpers/formatFileSize';
 import validateFile from '@/helpers/validateFile';
-
-const TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OGFmMGQ1MDNjOGZmNGE0MDYwNzE3NyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTY4ODQ3ODI2NSwiZXhwIjoxNjg4NTY0NjY1fQ.1kVX7309goWN40zYu6gZzHrrs78t-dEyHTD07MXvyl4';
-const ID = '648af15b7287972ce8676eca';
+import enableValidation from '@/helpers/validation';
+import { validationSet } from '@/helpers/constants';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {},
   data() {
     return {
+      isFormError: false,
       isPasswordHidden: true,
       isDragover: false,
       model: {
@@ -180,46 +210,8 @@ export default {
       },
     };
   },
-  methods: {
-    changePasswordVisability() {
-      this.isPasswordHidden = !this.isPasswordHidden;
-    },
-    checkRadioBtn(value) {
-      this.model.role = value;
-    },
-    deletePhoto() {
-      this.model.avatar = null;
-    },
-    uploadFile(event) {
-      this.model.avatar = event.target.files[0];
-    },
-    dragoverFile() {
-      this.isDragover = true;
-    },
-    dropFile(event) {
-      this.model.avatar = event.dataTransfer.files[0];
-    },
-    dragleaveFile() {
-      this.isDragover = false;
-    },
-    getFormData() {
-      // console.log({
-      //   role: this.model.role,
-      //   isActive: this.model.isActive,
-      //   fullname: this.model.fullname,
-      //   login: this.model.login,
-      //   password: this.model.password,
-      //   about: this.model.about,
-      // });
-      uploadAvatar(ID, this.model.avatar);
-      // getUsers(TOKEN);
-      // this.$refs.createUserForm.reset();
-    },
-    goBack() {
-      this.$router.go(-1);
-    },
-  },
   computed: {
+    ...mapGetters(['usersSort']),
     passwordInputType() {
       if (this.isPasswordHidden) {
         return 'password';
@@ -254,7 +246,78 @@ export default {
       return file;
     },
   },
-  mounted() {},
+  methods: {
+    ...mapActions(['addUser', 'fetchUsers']),
+    changePasswordVisability() {
+      this.isPasswordHidden = !this.isPasswordHidden;
+    },
+    checkRadioBtn(value) {
+      this.model.role = value;
+    },
+    deletePhoto() {
+      this.model.avatar = null;
+    },
+    uploadFile(event) {
+      this.model.avatar = event.target.files[0];
+    },
+    dragoverFile() {
+      this.isDragover = true;
+    },
+    dropFile(event) {
+      this.model.avatar = event.dataTransfer.files[0];
+    },
+    dragleaveFile() {
+      this.isDragover = false;
+    },
+    addNewUser() {
+      const userStatus = this.model.isActive === true ? 'ACTIVE' : 'BLOCKED';
+      console.log({
+        picture: this.model.avatar,
+      });
+
+      const formValidity = this.$refs.addUserForm.checkValidity();
+
+      if (
+        this.model.fullname.trim().length < 3 ||
+        this.model.login.trim().length < 3 ||
+        this.model.password.trim().length < 6
+      ) {
+        this.isFormError = true;
+      } else if (formValidity) {
+        this.addUser({
+          name: this.model.fullname,
+          login: this.model.login,
+          password: this.model.password,
+          description: this.model.about.trim(),
+          role: this.model.role,
+          status: userStatus,
+          formData: this.model.avatar,
+          page: 1,
+          limit: 10,
+          sort: 'asc',
+          filter: null,
+        });
+
+        this.$router.push({
+          name: 'users',
+          query: {
+            page: 1,
+            sort: 'asc',
+          },
+        });
+
+        this.isFormError = false;
+      } else {
+        enableValidation(validationSet);
+      }
+    },
+    goBack() {
+      this.$router.go(-1);
+    },
+  },
+  mounted() {
+    enableValidation(validationSet);
+  },
 };
 </script>
 

@@ -54,7 +54,7 @@
             'primary-button',
             'search-panel__addUserBtn',
           ]"
-          to="users/create"
+          :to="{ name: 'user-create' }"
         />
       </div>
       <UserItem
@@ -86,7 +86,13 @@
         v-model="model.pageValue"
       />
     </div>
-    <noContent v-else text="Нет ни одного пользователя" />
+    <noContent
+      v-else
+      :to="{
+        name: 'user-create',
+      }"
+      text="Нет ни одного пользователя"
+    />
   </div>
 </template>
 
@@ -95,6 +101,7 @@ import { mapGetters, mapMutations, mapActions } from 'vuex';
 import UserItem from '@/components/UserItem/UserItem.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import PreloadModal from '@/components/PreloadModal/PreloadModal.vue';
+import store from '@/store';
 
 export default {
   components: {

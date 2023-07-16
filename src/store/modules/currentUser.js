@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/api/users';
-import { uploadCurrentAvatar } from '@/api/admin/user';
+import { uploadCurrentAvatar } from '@/api/user';
 
 const url = 'http://45.12.239.156:8081';
 

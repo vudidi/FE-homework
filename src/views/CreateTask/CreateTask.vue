@@ -126,6 +126,7 @@ export default {
       model: {
         titleValue: '',
         descriptionValue: '',
+        projectValue: 'Выберите значение...',
         projectValueId: '',
         executorValueId: '',
       },
@@ -194,6 +195,7 @@ export default {
       'fetchProjectsForSelect',
     ]),
     updateProjectValue(name, item) {
+      this.model.projectValue = name;
       this.model.projectValueId = item.value;
       this.isErrorSelect = false;
 
@@ -228,12 +230,6 @@ export default {
         this.isFormError = true;
         this.isErrorSelect = true;
       } else if (formValidity) {
-        console.log({
-          name: this.model.titleValue,
-          description: this.model.descriptionValue,
-          projectId: this.model.projectValueId,
-          executor: this.model.executorValueId,
-        });
         this.appendTask({
           name: this.model.titleValue,
           description: this.model.descriptionValue,

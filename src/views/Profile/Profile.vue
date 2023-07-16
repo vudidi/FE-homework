@@ -167,10 +167,7 @@
       </div>
       <h2 class="profile__subtitle">О себе&#58;</h2>
       <p class="profile__about">
-        {{
-          updatedUserProfile.descripton ||
-          'Пользователь пока ничего не рассказал о себе'
-        }}
+        {{ userAbout }}
       </p>
     </div>
   </section>
@@ -261,6 +258,11 @@ export default {
       return this.updatedUserProfile.status === 'ACTIVE'
         ? 'Активен'
         : 'Не активен';
+    },
+    userAbout() {
+      return !!this.updatedUserProfile.description === false
+        ? 'Пользователь пока ничего не рассказал о себе'
+        : this.updatedUserProfile.description;
     },
     defaultImageInitials() {
       return getUserInitials(this.updatedUserProfile.name);
