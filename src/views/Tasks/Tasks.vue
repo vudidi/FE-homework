@@ -62,7 +62,14 @@
         v-model="model.pageValue"
       />
     </div>
-    <noContent v-else to="create" text="Не создана ни одна задача" />
+    <noContent
+      v-else
+      :to="{
+        name: 'tasks-create',
+        params: { projectId: tasksFilter.projectId },
+      }"
+      text="Не создана ни одна задача"
+    />
   </div>
 </template>
 
@@ -90,7 +97,7 @@ export default {
       addTaskBtn: {
         id: 'task-add-btn',
         title: 'Добавить',
-        to: 'tasks/create',
+        to: { name: 'tasks-create' },
       },
       sortBtn: {
         id: 'task-sort-btn',

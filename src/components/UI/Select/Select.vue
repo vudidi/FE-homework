@@ -16,7 +16,11 @@
       v-on:click="toggleSelect"
     >
       <input
-        :class="['select__custom-trigger', { isFocused: isSelectOpen }]"
+        :class="[
+          'select__custom-trigger',
+          { isFocused: isSelectOpen },
+          { 'select__custom-trigger_error': isErrorInput },
+        ]"
         :value="defaultValue"
         readonly
       />
@@ -27,10 +31,10 @@
             { isHover: item.value === activeOption },
           ]"
           v-for="item in items"
-          v-bind:key="item.name"
+          v-bind:key="item.value"
           v-bind:value="item.name"
           v-bind:data-value="item.value"
-          v-on:click="onSelectClick"
+          v-on:click="$emit('click-select', $event.target.value, item)"
           readonly
         />
       </div>
@@ -69,6 +73,10 @@ export default {
     activeOption: {
       type: String,
     },
+    isErrorInput: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     toggleSelect() {
@@ -76,12 +84,6 @@ export default {
     },
     clickOutside() {
       this.isSelectOpen = false;
-    },
-    onSelectClick($event) {
-      this.$emit('click-select', $event.target.value);
-    },
-    onSelectEnter($event) {
-      this.$emit('enter-select', $event.target.value);
     },
   },
 };

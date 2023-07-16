@@ -86,6 +86,71 @@ export function getProjects(context, params) {
     });
 }
 
+function addItem(params) {
+  return axios.post(
+    `${url}/projects`,
+    {
+      name: params.name,
+      code: params.code,
+    },
+    {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+export function addProject(context, params) {
+  context.commit('SET_PR_LOADING', true);
+
+  addItem(params)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .then(() => {
+      getProjects(context, params);
+    })
+    .catch((err) => {
+      context.commit('SET_PR_LOADING', false);
+      console.log('error', err);
+    });
+}
+
+function editItem(params) {
+  return axios.put(
+    `${url}/projects`,
+    {
+      _id: params.id,
+      name: params.name,
+      code: params.code,
+    },
+    {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+export function editProject(context, params) {
+  context.commit('SET_PR_LOADING', true);
+
+  editItem(params)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .then(() => {
+      getProjects(context, params);
+    })
+    .catch((err) => {
+      context.commit('SET_PR_LOADING', false);
+      console.log('error', err);
+    });
+}
+
 function deleteItem(params) {
   return axios.delete(`${url}/projects/${params.id}`, {
     headers: {
@@ -172,6 +237,44 @@ export function searchProjects(context, params) {
     })
     .catch((err) => {
       context.commit('SET_PR_LOADING', false);
+      console.log('error', err);
+    });
+}
+
+export function getProjectsForSelect(context) {
+  axios
+    .post(
+      `${url}/projects/search`,
+      {
+        page: 1,
+        limit: 100000,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    .then((res) => {
+      const projects = [];
+
+      res.data.projects.forEach((el) => {
+        const project = {
+          name: '',
+          value: '',
+          isActive: false,
+        };
+
+        project.name = el.name;
+        project.value = el._id;
+
+        projects.push(project);
+      });
+
+      context.commit('SET_PROJECTS_FOR_SELECT', projects);
+    })
+    .catch((err) => {
       console.log('error', err);
     });
 }

@@ -6,9 +6,10 @@ import projects from './modules/projects';
 import tasks from './modules/tasks';
 import currentUser from './modules/currentUser';
 import userProfile from './modules/userProfile';
+import select from './modules/select';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules: { auth, users, projects, tasks, currentUser, userProfile },
+  modules: { auth, users, projects, tasks, currentUser, userProfile, select },
 });

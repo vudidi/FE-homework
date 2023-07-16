@@ -12,6 +12,9 @@
     left: 0;
     color: $fontError;
     font-size: 11px;
+    &_visible {
+      display: block;
+    }
   }
   &__search-error {
     display: none;

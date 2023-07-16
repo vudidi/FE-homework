@@ -2,6 +2,20 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  &-form {
+    position: relative;
+    &Error {
+      display: none;
+      position: absolute;
+      top: 6px;
+      left: 24px;
+      color: $fontError;
+      font-size: 14px;
+      &_visible {
+        display: block;
+      }
+    }
+  }
   &-item {
     z-index: 1;
     padding: 0 16px 8px;
@@ -47,8 +61,7 @@
     cursor: default;
     &_highlight {
       font-weight: 600;
-      // color: $bgPrimaryActive;
-      color: red;
+      color: $bgPrimaryActive;
     }
   }
   &__user-title {

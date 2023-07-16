@@ -40,7 +40,6 @@ export function getTasks(context, params) {
     .then(() => {
       getAllTasks(params)
         .then((res) => {
-          console.log(params);
           const tasks = [];
 
           res.data.tasks.forEach((el) => {
@@ -101,6 +100,40 @@ export function getTasks(context, params) {
           context.commit('SET_TS_LOADING', false);
           console.log('error', err);
         });
+    })
+    .catch((err) => {
+      context.commit('SET_TS_LOADING', false);
+      console.log('error', err);
+    });
+}
+
+function addItem(params) {
+  return axios.post(
+    `${url}/tasks`,
+    {
+      name: params.name,
+      description: params.description,
+      projectId: params.projectId,
+      executor: params.executor,
+    },
+    {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+export function addTask(context, params) {
+  context.commit('SET_TS_LOADING', true);
+
+  addItem(params)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .then(() => {
+      getTasks(context, params);
     })
     .catch((err) => {
       context.commit('SET_TS_LOADING', false);

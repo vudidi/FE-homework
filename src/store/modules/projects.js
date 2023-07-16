@@ -1,4 +1,10 @@
-import { getProjects, deleteProject, searchProjects } from '@/api/projects';
+import {
+  getProjects,
+  searchProjects,
+  addProject,
+  editProject,
+  deleteProject,
+} from '@/api/projects';
 
 export const mutation = {
   SET_PROJECTS: 'SET_PROJECTS',
@@ -106,11 +112,17 @@ export default {
     fetchProjects(context, params) {
       getProjects(context, params);
     },
-    removeProject(context, params) {
-      deleteProject(context, params);
-    },
     fetchProjectsSearch(context, params) {
       searchProjects(context, params);
+    },
+    appendProject(context, params) {
+      addProject(context, params);
+    },
+    updateProject(context, params) {
+      editProject(context, params);
+    },
+    removeProject(context, params) {
+      deleteProject(context, params);
     },
   },
 };

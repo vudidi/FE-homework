@@ -38,24 +38,27 @@ export default function enableValidation({
   submitButtonSelector,
   ...rest
 }) {
-  const form = document.querySelector(formSelector);
-  const buttonSubmit = form.querySelector(submitButtonSelector);
+  const forms = document.querySelectorAll(formSelector);
 
-  const inputList = form.querySelectorAll(inputSelector);
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', () => {
-      hideInputError(form, inputElement, rest);
-      buttonSubmit.removeAttribute('disabled');
-    });
-  });
-
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  forms.forEach((form) => {
+    const buttonSubmit = form.querySelector(submitButtonSelector);
 
     const inputList = form.querySelectorAll(inputSelector);
-
     inputList.forEach((inputElement) => {
-      isValid(form, inputElement, rest);
+      inputElement.addEventListener('input', () => {
+        hideInputError(form, inputElement, rest);
+        buttonSubmit.removeAttribute('disabled');
+      });
+    });
+
+    form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+
+      const inputList = form.querySelectorAll(inputSelector);
+
+      inputList.forEach((inputElement) => {
+        isValid(form, inputElement, rest);
+      });
     });
   });
 }

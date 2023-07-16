@@ -22,7 +22,7 @@
           </div>
 
           <Input
-            pattern="^[A-Za-z0-9@_\-\.]+$"
+            pattern="^[A-Za-z0-9 @_\-\.]+$"
             id="login"
             autocomplete="off"
             inputErrorClass="login-error"
@@ -46,7 +46,7 @@
           </div>
 
           <Input
-            pattern="^[A-Za-z0-9@_\-\.]+$"
+            pattern="^[A-Za-z0-9 @_\-\.]+$"
             id="password"
             autocomplete="new-password"
             inputErrorClass="password-error"

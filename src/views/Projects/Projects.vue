@@ -1,50 +1,175 @@
 <template>
   <div class="wrapper">
-    <Modal
-      v-on:click-cancel-btn="closeCreateModal"
-      v-bind:isOpen="isCreateModalOpen"
-      modalTitle="Создание проекта"
-      type="modal__container_type_create"
-      cancelBtnTitle="Отмена"
-      acceptBtnTitle="Создать проект"
-    >
-      <div class="modal__field">
-        <div class="modal__field-label">
-          Код
-          <svg-icon
-            v-bind:class="['modal__field-icon']"
-            name="require"
-          ></svg-icon>
-        </div>
+    <div :class="['modal', { modal_opened: isCreateModalOpen }]">
+      <div :class="['modal__container', 'modal__container_type_create']">
+        <h2 class="modal__title">Создание проекта</h2>
+        <form
+          autocomplete="off"
+          v-on:submit.prevent="createProject"
+          ref="addProjectForm"
+          id="add-project-form"
+          class="form list-form"
+          novalidate
+        >
+          <span
+            :class="[
+              'list-formError',
+              { 'list-formError_visible': isFormError },
+            ]"
+            >Заполните форму корректными значениями</span
+          >
+          <div class="modal__wrapper">
+            <div class="modal__field">
+              <div class="modal__field-label">
+                Код
+                <svg-icon
+                  v-bind:class="['modal__field-icon']"
+                  name="require"
+                ></svg-icon>
+              </div>
 
-        <Input
-          placeholder="Введите текст..."
-          type="text"
-          :defaultInput="true"
-          v-bind:class="['modal__field-input']"
-          :maxlength="64"
-          :minlength="3"
-        />
-      </div>
-      <div class="modal__field">
-        <div class="modal__field-label">
-          Название
-          <svg-icon
-            v-bind:class="['modal__field-icon']"
-            name="require"
-          ></svg-icon>
-        </div>
+              <Input
+                id="prCode"
+                inputErrorClass="prCode-error"
+                placeholder="Введите текст..."
+                type="text"
+                :defaultInput="true"
+                v-bind:class="['modal__field-input']"
+                :maxlength="64"
+                :minlength="3"
+                required
+                v-model="model.projectCode"
+              />
+            </div>
+            <div class="modal__field">
+              <div class="modal__field-label">
+                Название
+                <svg-icon
+                  v-bind:class="['modal__field-icon']"
+                  name="require"
+                ></svg-icon>
+              </div>
 
-        <Input
-          placeholder="Введите текст..."
-          type="text"
-          :defaultInput="true"
-          v-bind:class="['modal__field-input']"
-          :maxlength="256"
-          :minlength="3"
-        />
+              <Input
+                id="prName"
+                inputErrorClass="prName-error"
+                placeholder="Введите текст..."
+                type="text"
+                :defaultInput="true"
+                v-bind:class="['modal__field-input']"
+                :maxlength="256"
+                :minlength="3"
+                required
+                v-model="model.projectName"
+              />
+            </div>
+          </div>
+          <div class="modal__buttons">
+            <Button
+              v-on:click-btn="closeCreateModal"
+              v-bind:button="cancelCreateProjectBtn"
+              v-bind:class="['button', 'secondary-button', 'modal__button']"
+            />
+            <SubmitButton
+              type="submit"
+              :id="acceptCreateProjectBtn.id"
+              :title="acceptCreateProjectBtn.title"
+              v-bind:class="[
+                'button',
+                'form__button',
+                'primary-button',
+                'modal__button',
+              ]"
+            />
+          </div>
+        </form>
       </div>
-    </Modal>
+    </div>
+    <div :class="['modal', { modal_opened: isEditModalOpen }]">
+      <div :class="['modal__container', 'modal__container_type_create']">
+        <h2 class="modal__title">Редактирование проекта</h2>
+        <form
+          autocomplete="off"
+          v-on:submit.prevent="editProject"
+          ref="editProjectForm"
+          id="edit-project-form"
+          class="form list-form"
+          novalidate
+        >
+          <span
+            :class="[
+              'list-formError',
+              { 'list-formError_visible': isFormError },
+            ]"
+            >Заполните форму корректными значениями</span
+          >
+          <div class="modal__wrapper">
+            <div class="modal__field">
+              <div class="modal__field-label">
+                Код
+                <svg-icon
+                  v-bind:class="['modal__field-icon']"
+                  name="require"
+                ></svg-icon>
+              </div>
+
+              <Input
+                id="curPrCode"
+                inputErrorClass="curPrCode-error"
+                placeholder="Введите текст..."
+                type="text"
+                :defaultInput="true"
+                v-bind:class="['modal__field-input']"
+                :maxlength="64"
+                :minlength="3"
+                required
+                v-model="model.currentProjectCode"
+              />
+            </div>
+            <div class="modal__field">
+              <div class="modal__field-label">
+                Название
+                <svg-icon
+                  v-bind:class="['modal__field-icon']"
+                  name="require"
+                ></svg-icon>
+              </div>
+
+              <Input
+                id="curPrName"
+                inputErrorClass="curPrName-error"
+                placeholder="Введите текст..."
+                type="text"
+                :defaultInput="true"
+                v-bind:class="['modal__field-input']"
+                :maxlength="256"
+                :minlength="3"
+                required
+                v-model="model.currentProjectName"
+              />
+            </div>
+          </div>
+          <div class="modal__buttons">
+            <Button
+              v-on:click-btn="closeEditModal"
+              v-bind:button="cancelEditProjectBtn"
+              v-bind:class="['button', 'secondary-button', 'modal__button']"
+            />
+            <SubmitButton
+              type="submit"
+              :id="acceptEditProjectBtn.id"
+              :title="acceptEditProjectBtn.title"
+              v-bind:class="[
+                'button',
+                'form__button',
+                'primary-button',
+                'modal__button',
+              ]"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
     <Modal
       v-on:click-cancel-btn="closeDeleteModal"
       v-on:click-accept-btn="deleteProject"
@@ -84,6 +209,7 @@
         v-bind:project="project"
         v-on:open-dropdown="openDropdown"
         v-on:click-outside="clickOutsideDropdown"
+        v-on:edit-project="openEditModal"
         v-on:delete-project="confirmModalOpen"
       />
       <Pagination
@@ -122,6 +248,9 @@ import Pagination from '@/components/Pagination/Pagination.vue';
 import PreloadModal from '@/components/PreloadModal/PreloadModal.vue';
 import getOverflowValue from '@/helpers/showTooltip';
 import { tooltipClasses } from '@/helpers/constants';
+import enableValidation from '@/helpers/validation';
+import { validationSet } from '@/helpers/constants';
+import resetForm from '@/helpers/resetForm';
 import store from '@/store';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 
@@ -136,16 +265,43 @@ export default {
     return {
       isDeleteModalOpen: false,
       isCreateModalOpen: false,
+      isEditModalOpen: false,
+      isFormError: false,
       deletedProjectId: '',
       deletedProjectTitle: '',
       model: {
         pageValue: '',
         searchValue: '',
+        projectCode: '',
+        projectName: '',
+        currentProjectId: '',
+        currentProjectCode: '',
+        currentProjectName: '',
+      },
+      cancelCreateProjectBtn: {
+        id: 'cancel-create-project',
+        title: 'Отмена',
+      },
+      acceptCreateProjectBtn: {
+        id: 'accept-create-project',
+        title: 'Создать проект',
+      },
+      cancelEditProjectBtn: {
+        id: 'cancel-edit-project',
+        title: 'Отмена',
+      },
+      acceptEditProjectBtn: {
+        id: 'accept-edit-project',
+        title: 'Редактировать проект',
       },
       addProjectBtn: {
         id: 'project-add-btn',
         title: 'Добавить',
         to: '',
+      },
+      editProjectBtn: {
+        id: 'project-edit-btn',
+        title: 'Редактировать',
       },
       sortBtn: {
         id: 'project-sort-btn',
@@ -264,6 +420,8 @@ export default {
     ...mapActions([
       'fetchProjects',
       'fetchUsers',
+      'appendProject',
+      'updateProject',
       'removeProject',
       'fetchProjectsSearch',
     ]),
@@ -471,10 +629,112 @@ export default {
       });
     },
     openCreateModal() {
+      resetForm();
+      this.resetFormInputs();
       this.isCreateModalOpen = true;
+    },
+    openEditModal(project) {
+      resetForm();
+      this.isEditModalOpen = true;
+      this.model.currentProjectId = project.id;
+      this.model.currentProjectCode = project.code;
+      this.model.currentProjectName = project.name;
+    },
+    resetFormInputs() {
+      this.model.projectCode = '';
+      this.model.projectName = '';
     },
     closeCreateModal() {
       this.isCreateModalOpen = false;
+    },
+    closeEditModal() {
+      this.isEditModalOpen = false;
+    },
+    createProject() {
+      const formValidity = this.$refs.addProjectForm.checkValidity();
+      if (
+        this.model.projectCode.trim().length < 3 ||
+        this.model.projectName.trim().length < 3
+      ) {
+        this.isFormError = true;
+      } else if (formValidity) {
+        this.appendProject({
+          code: this.model.projectCode.trim(),
+          name: this.model.projectName.trim(),
+          page: 1,
+          sort: {
+            field: 'dateCreated',
+            type: 'desc',
+            value: 'По дате создания',
+          },
+          filter: null,
+        });
+
+        this.$router.push({
+          query: {
+            page: 1,
+            field: 'dateCreated',
+            type: 'desc',
+          },
+        });
+
+        this.closeCreateModal();
+
+        this.SET_PR_SORT({
+          field: 'dateCreated',
+          type: 'desc',
+          value: 'По дате создания',
+        });
+        this.SET_PR_FILTER(null);
+        this.isFormError = false;
+        this.model.searchValue = '';
+      } else {
+        this.isFormError = false;
+        enableValidation(validationSet);
+      }
+    },
+    editProject() {
+      const formValidity = this.$refs.editProjectForm.checkValidity();
+      if (
+        this.model.currentProjectCode.trim().length < 3 ||
+        this.model.currentProjectName.trim().length < 3
+      ) {
+        this.isFormError = true;
+      } else if (formValidity) {
+        this.updateProject({
+          id: this.model.currentProjectId,
+          code: this.model.currentProjectCode.trim(),
+          name: this.model.currentProjectName.trim(),
+          page: 1,
+          sort: {
+            field: 'dateEdited',
+            type: 'desc',
+          },
+          filter: null,
+        });
+
+        this.$router.push({
+          query: {
+            page: 1,
+            field: 'dateEdited',
+            type: 'desc',
+          },
+        });
+
+        this.closeEditModal();
+
+        this.SET_PR_SORT({
+          field: 'dateEdited',
+          type: 'desc',
+          value: 'По дате обновления',
+        });
+        this.SET_PR_FILTER(null);
+        this.isFormError = false;
+        this.model.searchValue = '';
+      } else {
+        this.isFormError = false;
+        enableValidation(validationSet);
+      }
     },
     openDropdown(id) {
       this.allProjects.forEach((project) => {
@@ -510,6 +770,8 @@ export default {
     next();
   },
   mounted() {
+    enableValidation(validationSet);
+
     if (this.projectsFilter !== null) {
       this.model.searchValue = this.projectsFilter.name;
     }

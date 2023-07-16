@@ -230,3 +230,41 @@ export function searchUsers(context, params) {
       console.log('error', err);
     });
 }
+
+export function getUsersForSelect(context) {
+  axios
+    .post(
+      `${url}/users/search`,
+      {
+        page: 1,
+        limit: 100000,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    .then((res) => {
+      const users = [];
+
+      res.data.users.forEach((el) => {
+        const user = {
+          name: '',
+          value: '',
+          isActive: false,
+        };
+
+        user.name = el.name;
+        user.value = el._id;
+
+        users.push(user);
+      });
+
+      context.commit('SET_USERS_FOR_SELECT', users);
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
+}

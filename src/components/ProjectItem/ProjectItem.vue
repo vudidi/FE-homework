@@ -78,7 +78,12 @@
           </Button>
           <ul class="dropdown-menu" v-if="project.isDropdownOpen">
             <li class="dropdown-menu__item">
-              <a class="dropdown-menu__link" href="#">Редактировать</a>
+              <button
+                v-on:click="$emit('edit-project', project)"
+                class="dropdown-menu__link"
+              >
+                Редактировать
+              </button>
             </li>
             <li class="dropdown-menu__item">
               <button

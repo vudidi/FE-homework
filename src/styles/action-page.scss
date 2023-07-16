@@ -11,9 +11,21 @@
     font-weight: 600;
   }
   &__form {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
+    &Error {
+      display: none;
+      position: absolute;
+      top: 38px;
+      left: 0px;
+      color: $fontError;
+      font-size: 14px;
+      &_visible {
+        display: block;
+      }
+    }
   }
   &__fieldset {
     flex: 1;
@@ -124,6 +136,14 @@
 .profile-label {
   margin: 0 5px 0 0;
   color: $fontDisabled;
+}
+
+.textarea {
+  width: 100%;
+  position: relative;
+  &__error {
+    top: 104px !important;
+  }
 }
 
 @media screen and (max-width: 1600px) {
