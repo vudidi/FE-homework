@@ -1,0 +1,208 @@
+.list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  &-form {
+    position: relative;
+    &Error {
+      display: none;
+      position: absolute;
+      top: 6px;
+      left: 24px;
+      color: $fontError;
+      font-size: 14px;
+      &_visible {
+        display: block;
+      }
+    }
+  }
+  &-item {
+    z-index: 1;
+    padding: 0 16px 8px;
+    margin: 0 0 30px;
+    border-bottom: 1px solid $borderActive;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &:hover .list-menu {
+      display: block;
+    }
+  }
+  &-wrapper {
+    width: 100%;
+  }
+  &-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  &__user-container {
+    align-items: center;
+  }
+  &-tooltip {
+    position: relative;
+    &:last-child {
+      margin: 0 0 0 auto;
+    }
+  }
+  &-title {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontPrimary;
+    margin: 0 16px 6px 0;
+    display: block;
+    display: -webkit-box;
+    height: 38px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+    &_highlight {
+      font-weight: 600;
+      color: $bgPrimaryActive;
+    }
+  }
+  &__user-title {
+    margin: 0 32px 0 0;
+    height: 19px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+  &__link-title {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+  &__defaultAvatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $bgSecondaryActive;
+    margin: 0 0 0 auto;
+    &-initials {
+      color: $fontDisabled;
+      font-size: 10.24px;
+      font-weight: 600;
+      letter-spacing: 0.205px;
+      text-transform: uppercase;
+    }
+  }
+  &-userAvatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    margin: 0 0 0 auto;
+  }
+  &__user-userAvatar {
+    margin: 0 8px 0 0;
+  }
+  &-code {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontPrimary;
+    max-width: 215px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+  &-create {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontDisabled;
+    margin: 0 16px;
+    max-width: 320px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+  &-update {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontDisabled;
+    max-width: 320px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+  &-status {
+    font-size: 14px;
+    line-height: 19px;
+    color: $fontSecondary;
+    padding: 0 8px;
+    border-radius: 4px;
+    margin: 0 16px 0 0;
+    &_type {
+      &_draft {
+        background-color: $borderBronze;
+      }
+      &_main {
+        background-color: $bgPrimaryDefault;
+      }
+      &_error {
+        background-color: $fontError;
+      }
+      &_off {
+        background-color: $fontDisabled;
+      }
+    }
+  }
+  &-menu {
+    display: none;
+    position: relative;
+    &_visible {
+      display: block;
+    }
+  }
+
+  &-button {
+    margin: 0 0 0 16px;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .list {
+    &-create {
+      max-width: 220px;
+    }
+    &-update {
+      max-width: 220px;
+    }
+  }
+}
+
+.users {
+  width: 100%;
+}
+
+.user {
+  &__defaultImg {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $bgSecondaryActive;
+    margin: 0 14px 0 0;
+    &-initials {
+      color: $fontDisabled;
+      font-size: 10.24px;
+      font-weight: 600;
+      letter-spacing: 0.205px;
+      text-transform: uppercase;
+    }
+  }
+}

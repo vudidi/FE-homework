@@ -1,0 +1,47 @@
+.pag-button {
+  padding: 4px !important;
+  width: 34px;
+  height: 34px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  margin: 0 8px 0 0;
+  font-size: 14px;
+  color: $fontPrimary;
+  border-radius: 4px;
+  border: 1px solid $borderDefault;
+  background-color: $bgSecondaryDefault;
+  transition: none !important;
+  &:hover {
+    border: 1px solid $borderHover;
+    background-color: $bgSecondaryHover;
+  }
+  &_active {
+    color: $fontSecondary;
+    border: 1px solid $bgPrimaryDefault;
+    background-color: $bgPrimaryDefault;
+    cursor: default;
+    pointer-events: none;
+    &:hover {
+      border: 1px solid $bgPrimaryDefault;
+      background-color: $bgPrimaryDefault;
+    }
+  }
+  &_disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+  &__icon {
+    width: 24px;
+    height: 24px;
+    color: $fontPrimary;
+    &_disabled {
+      color: $fontDisabled;
+    }
+    &_type {
+      &_forward {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

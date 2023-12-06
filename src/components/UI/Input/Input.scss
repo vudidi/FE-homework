@@ -1,0 +1,115 @@
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  &_disabled {
+    pointer-events: none;
+  }
+  &__error {
+    display: none;
+    position: absolute;
+    top: 46px;
+    left: 0;
+    color: $fontError;
+    font-size: 11px;
+    &_visible {
+      display: block;
+    }
+  }
+  &__search-error {
+    display: none;
+    position: absolute;
+    top: 46px;
+    left: 0;
+    color: $fontError;
+    font-size: 14px;
+    &_visible {
+      display: block;
+    }
+  }
+  &__icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    padding: 1px;
+    color: $fontDisabled;
+  }
+  &__input {
+    width: 100%;
+    padding: 11px 34px 11px 12px;
+    background-color: $bgSecondaryDefault;
+    color: $fontPrimary;
+    font-size: 14px;
+    line-height: 18px;
+    transition: all ease 0.5s;
+    &_default {
+      border-radius: 4px;
+      border: 1px solid $borderDefault;
+      &:focus {
+        border: 1px solid $borderActive;
+      }
+      &-error {
+        border: 1px solid $borderError;
+        &:focus {
+          border: 1px solid $borderError;
+        }
+      }
+    }
+    &_flushed {
+      border-bottom: 1px solid $borderDefault;
+      &:focus {
+        border-bottom: 1px solid $borderActive;
+      }
+    }
+    &::placeholder {
+      color: $fontPlaceholder;
+      font-size: 14px;
+    }
+  }
+}
+
+.field__input_default.field__input_type_error {
+  border: 1px solid $borderError;
+  &:focus {
+    border: 1px solid $borderError;
+  }
+}
+
+.field__input_flushed.field__input_type_error {
+  border-bottom: 1px solid $borderError;
+  &:focus {
+    border-bottom: 1px solid $borderError;
+  }
+}
+
+.field__input_default.field__input_type_disabled {
+  pointer-events: none;
+  border: 1px solid $borderDisabled;
+  background-color: $bgSecondaryActive;
+  &::placeholder {
+    color: transparent;
+  }
+}
+
+.field__input_flushed.field__input_type_disabled {
+  pointer-events: none;
+  border-bottom: 1px solid $borderDisabled;
+  &::placeholder {
+    color: transparent;
+  }
+  & + .field__icon {
+    color: $fontPlaceholder;
+  }
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'><path d='M8.00004 1.33337C4.31337 1.33337 1.33337 4.31337 1.33337 8.00004C1.33337 11.6867 4.31337 14.6667 8.00004 14.6667C11.6867 14.6667 14.6667 11.6867 14.6667 8.00004C14.6667 4.31337 11.6867 1.33337 8.00004 1.33337ZM11.3334 10.3934L10.3934 11.3334L8.00004 8.94004L5.60671 11.3334L4.66671 10.3934L7.06004 8.00004L4.66671 5.60671L5.60671 4.66671L8.00004 7.06004L10.3934 4.66671L11.3334 5.60671L8.94004 8.00004L11.3334 10.3934Z' fill='currentColor'/></svg>");
+  background-position: center;
+  background-size: cover;
+  background-color: $borderDefault;
+  width: 18px;
+  height: 18px;
+}
