@@ -1,2 +1,2 @@
 # FE-homework
-Домашние задания для школы Frontend-разработки Digital Design
+Итоговое задание для школы Frontend-разработки Digital Design
